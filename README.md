@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="_docs/assets/kodiko-logo-text.png" alt="kodiko logo" style="width: 300px;"></img>
+  <img src="public/assets/kodiko-logo-text.png" alt="kodiko logo" style="width: 300px;"></img>
 </p>
 
 # Kodiko

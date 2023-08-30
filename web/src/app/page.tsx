@@ -1,5 +1,5 @@
 import Image from 'next/image'
-import logo from '../../../_docs/assets/kodiko-logo-text.png'
+import logo from '../../../public/assets/kodiko-logo-text.png'
 
 export default function Home() {
   return (
