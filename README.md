@@ -4,4 +4,4 @@
 
 # Kodiko
 
-Dead simple online coding IDE
+Dead simple online IDE
