@@ -8,7 +8,6 @@ export default function Home() {
               src={logo}
               alt="Kodiko Logo"
               width={300}
-              height={100}
               priority
             /> 
     </main>
