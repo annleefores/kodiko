@@ -2,32 +2,39 @@ name: kodiko
 
 services:
 
-  backend:
-    env_file:
-      - ./server/backend/.env
-    image: backend
-    container_name: backend
-    build: ./server/backend
-    ports:
-      - 8000:8000
-    networks:
-      - kodiko
-    volumes:
-      - ./server/backend:/app
+  # backend:
+  #   env_file:
+  #     - ./server/backend/.env
+  #   image: backend
+  #   container_name: backend
+  #   build: ./server/backend
+  #   ports:
+  #     - 8000:8000
+  #   networks:
+  #     - kodiko
+  #   volumes:
+  #     - ./server/backend:/app
 
   openvscode:
+    env_file:
+      - ./server/openvscode/.env
     image: openvscode
     container_name: openvscode
     build: ./server/openvscode
     init: true
     ports:
       - 3000:3000
+      - 8000:8000
     networks:
       - kodiko
     volumes:
-      - ./server/openvscode/workspace:/home/workspace
+      - vscodedata:/home/workspace
 
 networks:
   kodiko:
     driver: bridge
     name: kodiko
+
+volumes:
+  vscodedata:
+    driver: local

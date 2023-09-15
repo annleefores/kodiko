@@ -36,3 +36,5 @@ RUN \
     )\
     # Install the $exts
     && for ext in "${exts[@]}"; do ${OPENVSCODE} --install-extension "${ext}"; done
+
+ENV PATH=/home/workspace/.local/bin:$PATH
