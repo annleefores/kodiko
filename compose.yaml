@@ -1,5 +1,7 @@
 name: kodiko
+
 services:
+
   backend:
     env_file:
       - ./server/backend/.env
@@ -23,7 +25,7 @@ services:
     networks:
       - kodiko
     volumes:
-      - ./server/openvscode:/home/workspace
+      - ./server/openvscode/workspace:/home/workspace
 
 networks:
   kodiko:

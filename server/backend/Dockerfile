@@ -32,8 +32,7 @@ WORKDIR /app
 # the application crashes without emitting any logs due to buffering.
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
-    VIRTUAL_ENV=/app/.venv \
-    PATH="/app/.venv/bin:$PATH"
+    PATH="/opt/.venv/bin:$PATH"
 
 # Create a non-privileged user that the app will run under.
 # See https://docs.docker.com/develop/develop-images/dockerfile_best-practices/#user
@@ -51,7 +50,7 @@ RUN adduser \
 USER appuser
 
 # copy deps from build image
-COPY --from=build ${VIRTUAL_ENV} ${VIRTUAL_ENV}
+COPY --from=build /app/.venv /opt/.venv
 
 # Copy the source code into the container.
 COPY . .
