@@ -1,6 +1,6 @@
 'use client'
-
-import Xterm from "./components/Xterm";
+import dynamic from 'next/dynamic'
+const Xterm = dynamic(() => import('./components/Xterm'), { ssr: false })
 
 const Home = () => {
     return (
