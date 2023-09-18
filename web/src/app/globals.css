@@ -25,3 +25,8 @@ body {
     )
     rgb(var(--background-start-rgb));
 }
+
+/* remove xtermjs scrollbar */
+.xterm-viewport::-webkit-scrollbar {
+  display: none;
+}

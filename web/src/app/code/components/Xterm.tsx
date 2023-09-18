@@ -8,7 +8,7 @@ import ansiColors from 'ansi-colors';
 const Xterm: React.FC = () => {
 
   const xtermjsTheme = {
-    background: "#282a36",
+    background: "#fffff",
     foreground: "#f8f8f2",
     cyan: "#8be9fd",
     green: "#50fa7b",
@@ -27,13 +27,22 @@ const Xterm: React.FC = () => {
       fontSize: 16,
       fontFamily: "Ubuntu Mono, monospace",
       theme: xtermjsTheme,
-      scrollback: 0
+      ignoreBracketedPasteMode: true
+
     })
+
     term.open(termRef.current!);
+
+    // fit terminal dimension to containing element
+
     let fitAddon = new FitAddon();
     term.loadAddon(fitAddon);
-    term.write(`${ansiColors.green('kodiko')} $ `)
+    term.write(` \n`)
+    term.write(` ${ansiColors.green('kodiko')} $ `)
+
     fitAddon.fit();
+
+    // remove terminal from dom on refresh
     return () => {
       term.dispose();
     };
@@ -41,7 +50,7 @@ const Xterm: React.FC = () => {
 
 
   return (
-    <div id='terminal' ref={termRef} />
+    <div id='terminal' className='w-full h-full' ref={termRef} />
   )
 
 };
