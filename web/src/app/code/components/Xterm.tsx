@@ -1,9 +1,12 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Terminal } from "xterm";
 import { FitAddon } from 'xterm-addon-fit';
 import { WebLinksAddon } from 'xterm-addon-web-links';
 import "xterm/css/xterm.css";
 import ansiColors from 'ansi-colors';
+import { AttachAddon } from 'xterm-addon-attach';
+import { WebglAddon } from 'xterm-addon-webgl';
+import { CanvasAddon } from 'xterm-addon-canvas';
 
 const Xterm: React.FC = () => {
 
@@ -18,33 +21,48 @@ const Xterm: React.FC = () => {
     cursorAccent: "#282a36",
   }
 
+  const xtermjsconfig = {
+    cursorBlink: true,
+    convertEol: true,
+    fontSize: 16,
+    fontFamily: "Ubuntu Mono, monospace",
+    theme: xtermjsTheme,
+    ignoreBracketedPasteMode: true
+
+  }
+
   const termRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const term = new Terminal({
-      cursorBlink: true,
-      convertEol: true,
-      fontSize: 16,
-      fontFamily: "Ubuntu Mono, monospace",
-      theme: xtermjsTheme,
-      ignoreBracketedPasteMode: true
+    const term = new Terminal(xtermjsconfig)
 
-    })
+    // create WebSocket connection.
+    const ws = new WebSocket(`${process.env.NEXT_PUBLIC_CODEPOD_WS}`)
+
+    // fit terminal dimension to containing element and use xterm-addon-attach for websocket comms 
+    let fitAddon = new FitAddon();
+
+    const attachAddon = new AttachAddon(ws);
+    const addon = new WebglAddon();
+    addon.onContextLoss(e => {
+      addon.dispose();
+    });
+
+    term.loadAddon(fitAddon);
+    term.loadAddon(attachAddon);
+    term.loadAddon(new WebLinksAddon());
+    term.loadAddon(addon);
+    term.loadAddon(new CanvasAddon());
 
     term.open(termRef.current!);
 
-    // fit terminal dimension to containing element
-
-    let fitAddon = new FitAddon();
-    term.loadAddon(fitAddon);
-    term.write(` \n`)
-    term.write(` ${ansiColors.green('kodiko')} $ `)
-
     fitAddon.fit();
 
-    // remove terminal from dom on refresh
+
+    // remove terminal from dom on refresh and close ws connection
     return () => {
       term.dispose();
+      ws.close()
     };
   }, [])
 
