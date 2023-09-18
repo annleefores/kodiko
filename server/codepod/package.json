@@ -7,7 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "clean": "rm -rf node_modules",
     "start": "node dist/server.js",
-    "build": "webpack --mode production",
+    "build": "webpack --mode production --stats-error-details",
     "dev": "concurrently \"webpack --mode development --watch\" \"nodemon -q dist/server.js\""
   },
   "author": "",

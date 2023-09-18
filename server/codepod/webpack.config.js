@@ -16,6 +16,16 @@ module.exports = {
             },
         ],
     },
+    ignoreWarnings: [
+        {
+            module: /\.\/node_modules\/express\/lib\/view\.js\?[34]/, // A RegExp
+        },
+        {
+            message: /the warning/,
+        },
+
+        (warning) => true,
+    ],
 
     resolve: {
         extensions: ['.tsx', '.ts', '.js'],
