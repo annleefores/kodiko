@@ -1,7 +1,6 @@
 name: kodiko
 
 services:
-
   backend:
     env_file:
       - ./server/backend/.env
@@ -16,8 +15,6 @@ services:
       - ./server/backend:/app
 
   codepod:
-    env_file:
-      - ./server/codepod/.env
     image: codepod
     container_name: codepod
     build:

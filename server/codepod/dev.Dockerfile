@@ -2,7 +2,7 @@ FROM node:18-alpine
 
 WORKDIR /app
 
-RUN apt install -y make python build-essential
+# RUN apt update && apt install -y make python3 build-essential
 
 COPY package.json .
 # Download dependencies as a separate step to take advantage of Docker's caching.

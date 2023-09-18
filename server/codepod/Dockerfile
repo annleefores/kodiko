@@ -17,6 +17,8 @@ FROM base as deps
 # Set working directory for all build stages.
 WORKDIR /app
 
+RUN apt update && apt install -y make python3 build-essential
+
 # Download dependencies as a separate step to take advantage of Docker's caching.
 # Leverage a cache mount to /root/.npm to speed up subsequent builds.
 # Leverage bind mounts to package.json and package-lock.json to avoid having to copy them
@@ -33,8 +35,7 @@ FROM deps as build
 # Copy the rest of the source files into the image.
 COPY . .
 # Run the build script.
-RUN apt update && apt install -y make python3 build-essential \
-    && npm run build
+RUN npm run build
 
 ################################################################################
 # Create a new stage to run the application with minimal runtime dependencies
@@ -50,7 +51,7 @@ RUN adduser --system --uid 1001 expressjs
 # COPY --from=build /app/public ./public
 
 # Automatically leverage output traces to reduce image size
-COPY --from=build /app/build ./
+COPY --from=build /app/dist ./
 
 USER expressjs
 
