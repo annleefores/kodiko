@@ -5,7 +5,7 @@ const Xterm = dynamic(() => import('./components/Xterm'), { ssr: false })
 const Home = () => {
     return (
         <>
-            <div className="flex justify-center items-center h-screen w-full">
+            <div className="flex justify-center items-center h-full w-full bg-white">
                 <Xterm />
             </div>
         </>

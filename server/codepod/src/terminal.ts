@@ -23,17 +23,17 @@ export class Pty {
       env: process.env,
     });
 
-    this.ptyProcess.onData((data: string) => {
+    this.ptyProcess.onData((data: any) => {
       this.sendToClient(data);
     });
   }
 
-  write(data: string): void {
+  write(data: any): void {
     if (this.ptyProcess) {
       this.ptyProcess.write(data);
     }
   }
-  sendToClient(data: string): void {
-    this.socket.emit("output", data);
+  sendToClient(data: any): void {
+    this.socket.send(data);
   }
 }

@@ -47,16 +47,14 @@ const Xterm: React.FC = () => {
     addon.onContextLoss(e => {
       addon.dispose();
     });
-
+    term.open(termRef.current!);
     term.loadAddon(fitAddon);
     term.loadAddon(attachAddon);
     term.loadAddon(new WebLinksAddon());
     term.loadAddon(addon);
     term.loadAddon(new CanvasAddon());
 
-    term.open(termRef.current!);
-
-    fitAddon.fit();
+    fitAddon.fit()
 
 
     // remove terminal from dom on refresh and close ws connection
@@ -68,7 +66,9 @@ const Xterm: React.FC = () => {
 
 
   return (
+
     <div id='terminal' className='w-full h-full' ref={termRef} />
+
   )
 
 };

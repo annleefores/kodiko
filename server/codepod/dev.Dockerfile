@@ -12,7 +12,9 @@ RUN --mount=type=cache,target=/root/.npm \
 
 COPY . .
 
+EXPOSE 5000
 # make tini run as main process to handle signals correctly
 ENTRYPOINT ["tini", "--"]
 
 CMD ["npm", "run", "dev"]
+

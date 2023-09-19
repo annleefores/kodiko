@@ -31,8 +31,8 @@ export class wsService {
 
       this.pty = new Pty(this.ws);
 
-      this.ws.on("message", (input: string) => {
-        console.log("input", input);
+      this.ws.on("message", (input: any) => {
+        // console.log("input", input);
         this.pty?.write(input);
       });
     });
