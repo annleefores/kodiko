@@ -19,6 +19,8 @@ export class Pty {
   startPtyProcess() {
     this.ptyProcess = pty.spawn(this.shell, [], {
       name: "xterm-color",
+      cols: 80,
+      rows: 30,
       cwd: process.env.HOME,
       env: process.env,
     });
@@ -35,5 +37,11 @@ export class Pty {
   }
   sendToClient(data: any): void {
     this.socket.send(data);
+  }
+
+  reSize(cols: number, rows: number): void {
+    if (this.ptyProcess) {
+      this.ptyProcess.resize(cols, rows);
+    }
   }
 }

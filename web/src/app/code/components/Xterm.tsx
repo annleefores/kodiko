@@ -43,24 +43,32 @@ const Xterm: React.FC = () => {
     let fitAddon = new FitAddon();
 
     const attachAddon = new AttachAddon(ws);
-    const addon = new WebglAddon();
-    addon.onContextLoss(e => {
-      addon.dispose();
-    });
+
     term.open(termRef.current!);
+    console.log(termRef.current)
     term.loadAddon(fitAddon);
     term.loadAddon(attachAddon);
     term.loadAddon(new WebLinksAddon());
-    term.loadAddon(addon);
     term.loadAddon(new CanvasAddon());
 
     fitAddon.fit()
 
+    // Send the terminal size to the server whenever it changes
+    const handleResize = () => {
+      const { rows, cols } = term;
+      const size = { rows, cols };
+      console.log(size)
+      ws.send("\x04" + JSON.stringify(size));
+    };
+
+    // Add resize event listener
+    window.addEventListener('resize', handleResize);
 
     // remove terminal from dom on refresh and close ws connection
     return () => {
       term.dispose();
       ws.close()
+      window.removeEventListener('resize', handleResize);
     };
   }, [])
 

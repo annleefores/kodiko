@@ -32,8 +32,14 @@ export class wsService {
       this.pty = new Pty(this.ws);
 
       this.ws.on("message", (input: any) => {
-        // console.log("input", input);
-        this.pty?.write(input);
+        const inputString = input.toString();
+
+        if (inputString.startsWith("\x04")) {
+          console.log(inputString);
+          this.pty?.reSize(Number(inputString.cols), Number(inputString.rows));
+        } else {
+          this.pty?.write(inputString);
+        }
       });
     });
   }
