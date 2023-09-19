@@ -14,6 +14,7 @@
   "license": "ISC",
   "dependencies": {
     "express": "^4.18.2",
+    "node-pty": "^1.0.0",
     "ws": "^8.14.1"
   },
   "optionalDependencies": {
@@ -25,6 +26,7 @@
     "@types/node": "^20.6.2",
     "@types/ws": "^8.5.5",
     "concurrently": "^8.2.1",
+    "copy-webpack-plugin": "^11.0.0",
     "nodemon": "^3.0.1",
     "ts-loader": "^9.4.4",
     "typescript": "^5.2.2",
