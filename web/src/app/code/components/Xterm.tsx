@@ -1,15 +1,11 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from "react";
 import { Terminal } from "xterm";
-import { FitAddon } from 'xterm-addon-fit';
-import { WebLinksAddon } from 'xterm-addon-web-links';
-import "xterm/css/xterm.css";
-import ansiColors from 'ansi-colors';
-import { AttachAddon } from 'xterm-addon-attach';
-import { WebglAddon } from 'xterm-addon-webgl';
-import { CanvasAddon } from 'xterm-addon-canvas';
+import { FitAddon } from "xterm-addon-fit";
+import { WebLinksAddon } from "xterm-addon-web-links";
+import { AttachAddon } from "xterm-addon-attach";
+import { CanvasAddon } from "xterm-addon-canvas";
 
 const Xterm: React.FC = () => {
-
   const xtermjsTheme = {
     background: "#fffff",
     foreground: "#f8f8f2",
@@ -19,7 +15,7 @@ const Xterm: React.FC = () => {
     red: "#ff5555",
     cursor: "#f8f8f2",
     cursorAccent: "#282a36",
-  }
+  };
 
   const xtermjsconfig = {
     cursorBlink: true,
@@ -27,58 +23,51 @@ const Xterm: React.FC = () => {
     fontSize: 16,
     fontFamily: "Ubuntu Mono, monospace",
     theme: xtermjsTheme,
-    ignoreBracketedPasteMode: true
-
-  }
+    ignoreBracketedPasteMode: true,
+  };
 
   const termRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const term = new Terminal(xtermjsconfig)
+    const term = new Terminal(xtermjsconfig);
 
     // create WebSocket connection.
-    const ws = new WebSocket(`${process.env.NEXT_PUBLIC_CODEPOD_WS}`)
+    const ws = new WebSocket(`${process.env.NEXT_PUBLIC_CODEPOD_WS}`);
 
-    // fit terminal dimension to containing element and use xterm-addon-attach for websocket comms 
+    // fit terminal dimension to containing element and use xterm-addon-attach for websocket comms
     let fitAddon = new FitAddon();
 
     const attachAddon = new AttachAddon(ws);
 
     term.open(termRef.current!);
-    console.log(termRef.current)
+    console.log(termRef.current);
     term.loadAddon(fitAddon);
     term.loadAddon(attachAddon);
     term.loadAddon(new WebLinksAddon());
     term.loadAddon(new CanvasAddon());
 
-    fitAddon.fit()
+    fitAddon.fit();
 
     // Send the terminal size to the server whenever it changes
     const handleResize = () => {
       const { rows, cols } = term;
       const size = { rows, cols };
-      console.log(size)
+      console.log(size);
       ws.send("\x04" + JSON.stringify(size));
     };
 
     // Add resize event listener
-    window.addEventListener('resize', handleResize);
+    window.addEventListener("resize", handleResize);
 
     // remove terminal from dom on refresh and close ws connection
     return () => {
       term.dispose();
-      ws.close()
-      window.removeEventListener('resize', handleResize);
+      ws.close();
+      window.removeEventListener("resize", handleResize);
     };
-  }, [])
+  }, []);
 
-
-  return (
-
-    <div id='terminal' className='w-full h-full' ref={termRef} />
-
-  )
-
+  return <div id="terminal" className="flex-1 my-4" ref={termRef} />;
 };
 
 export default Xterm;
