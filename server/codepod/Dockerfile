@@ -59,6 +59,6 @@ USER expressjs
 EXPOSE 5000
 
 # make tini run as main process to handle signals correctly
-ENTRYPOINT ["/tini", "--"]
+ENTRYPOINT ["tini", "--"]
 
 CMD ["node", "server.js"]

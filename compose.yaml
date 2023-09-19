@@ -14,6 +14,17 @@ services:
     volumes:
       - ./server/backend:/app
 
+  frontend:
+    image: frontend
+    container_name: frontend
+    build:
+      context: web
+      dockerfile: dev.Dockerfile
+    ports:
+      - 3000:3000
+    volumes:
+      - ./web:/app
+
   codepod:
     image: codepod
     container_name: codepod
