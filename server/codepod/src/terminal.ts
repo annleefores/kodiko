@@ -19,8 +19,8 @@ export class Pty {
   startPtyProcess() {
     this.ptyProcess = pty.spawn(this.shell, [], {
       name: "xterm-color",
-      cols: 80,
-      rows: 30,
+      cols: 200,
+      rows: 110,
       cwd: process.env.HOME,
       env: process.env,
     });

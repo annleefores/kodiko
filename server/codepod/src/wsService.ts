@@ -36,7 +36,7 @@ export class wsService {
 
         if (inputString.startsWith("\x04")) {
           console.log(inputString);
-          this.pty?.reSize(Number(inputString.cols), Number(inputString.rows));
+          // this.pty?.reSize(Number(inputString.cols), Number(inputString.rows));
         } else {
           this.pty?.write(inputString);
         }
