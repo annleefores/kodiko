@@ -23,6 +23,7 @@
 **/docker-compose*
 **/compose*
 **/Dockerfile*
+**/dev.Dockerfile*
 **/node_modules
 **/npm-debug.log
 **/obj

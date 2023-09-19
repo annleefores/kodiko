@@ -10,6 +10,8 @@ ARG NODE_VERSION=18
 # Use node image for base image for all stages.
 FROM node:${NODE_VERSION}-bookworm-slim as base
 
+RUN apt update && apt install tini
+
 ################################################################################
 # Create a stage for installing production dependecies.
 FROM base as deps
@@ -17,7 +19,7 @@ FROM base as deps
 # Set working directory for all build stages.
 WORKDIR /app
 
-RUN apt update && apt install -y make python3 build-essential
+RUN apt install -y make python3 build-essential
 
 # Download dependencies as a separate step to take advantage of Docker's caching.
 # Leverage a cache mount to /root/.npm to speed up subsequent builds.
@@ -40,7 +42,7 @@ RUN npm run build
 ################################################################################
 # Create a new stage to run the application with minimal runtime dependencies
 # where the necessary files are copied from the build stage.
-FROM node:${NODE_VERSION}-alpine
+FROM base
 
 WORKDIR /app
 
@@ -48,7 +50,6 @@ ENV NODE_ENV production
 
 RUN adduser --system --uid 1001 expressjs
 
-# COPY --from=build /app/public ./public
 
 # Automatically leverage output traces to reduce image size
 COPY --from=build /app/dist ./
@@ -56,5 +57,8 @@ COPY --from=build /app/dist ./
 USER expressjs
 
 EXPOSE 5000
+
+# make tini run as main process to handle signals correctly
+ENTRYPOINT ["/tini", "--"]
 
 CMD ["node", "server.js"]
