@@ -35,8 +35,9 @@ export class wsService {
         const inputString = input.toString();
 
         if (inputString.startsWith("\x04")) {
-          console.log(inputString);
-          // this.pty?.reSize(Number(inputString.cols), Number(inputString.rows));
+          const jsonData = JSON.parse(inputString.replace(/\x04/g, ""));
+          console.log(jsonData);
+          this.pty?.reSize(jsonData.cols, jsonData.rows);
         } else {
           this.pty?.write(inputString);
         }

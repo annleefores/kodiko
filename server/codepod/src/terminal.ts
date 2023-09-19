@@ -19,8 +19,6 @@ export class Pty {
   startPtyProcess() {
     this.ptyProcess = pty.spawn(this.shell, [], {
       name: "xterm-color",
-      cols: 200,
-      rows: 110,
       cwd: process.env.HOME,
       env: process.env,
     });
@@ -40,6 +38,11 @@ export class Pty {
   }
 
   reSize(cols: number, rows: number): void {
+    if (isNaN(cols) || isNaN(rows) || cols <= 0 || rows <= 0) {
+      console.error("Invalid values for cols and rows:", cols, rows);
+      return;
+    }
+
     if (this.ptyProcess) {
       this.ptyProcess.resize(cols, rows);
     }

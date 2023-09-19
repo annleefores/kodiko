@@ -48,17 +48,20 @@ const Xterm: React.FC = () => {
 
     fitAddon.fit();
 
-    // Send the terminal size to the server whenever it changes
+    // Update terminal size on change and send changes to server
     const handleResize = () => {
+      fitAddon.fit();
       const { rows, cols } = term;
       const size = { rows, cols };
-      console.log(size);
       ws.send("\x04" + JSON.stringify(size));
     };
 
     // Add resize event listener
     window.addEventListener("resize", handleResize);
 
+    ws.onopen = () => {
+      handleResize();
+    };
     // remove terminal from dom on refresh and close ws connection
     return () => {
       term.dispose();
