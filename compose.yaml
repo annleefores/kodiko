@@ -26,8 +26,8 @@ services:
       - ./web:/app
 
   codepod:
-    image: codepod
-    container_name: codepod
+    image: codepod-dev
+    container_name: codepod-dev
     build:
       context: server/codepod
       dockerfile: dev.Dockerfile
@@ -35,6 +35,8 @@ services:
       - 5000:5000
     volumes:
       - ./server/codepod:/home/.kodiko
+    profiles:
+      - cp
 
 networks:
   kodiko:
