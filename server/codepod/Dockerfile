@@ -10,14 +10,13 @@ ARG NODE_VERSION=18
 # Use node image for base image for all stages.
 FROM node:${NODE_VERSION}-bookworm-slim as base
 
-RUN apt update && apt install tini
+RUN apt update && apt -y install tini git sudo htop
+
+WORKDIR /home/
 
 ################################################################################
-# Create a stage for installing production dependecies.
-FROM base as deps
-
-# Set working directory for all build stages.
-WORKDIR /app
+# Create a stage for installing production dependecies and building.
+FROM base as build
 
 RUN apt install -y make python3 build-essential
 
@@ -30,10 +29,6 @@ RUN --mount=type=bind,source=package.json,target=package.json \
     --mount=type=cache,target=/root/.npm \
     npm ci
 
-################################################################################
-# Create a stage for building the application.
-FROM deps as build
-
 # Copy the rest of the source files into the image.
 COPY . .
 # Run the build script.
@@ -44,21 +39,34 @@ RUN npm run build
 # where the necessary files are copied from the build stage.
 FROM base
 
-WORKDIR /app
+ARG USERNAME=kodiko
+ARG USER_UID=10001
+ARG USER_GID=$USER_UID
+ARG KODIKO_SERVER_ROOT="/home/.kodiko"
 
-ENV NODE_ENV production
+# Creating the user and usergroup
+RUN groupadd --gid $USER_GID $USERNAME \
+    && useradd --uid $USER_UID --gid $USERNAME -m -s /bin/bash $USERNAME \
+    && echo $USERNAME ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/$USERNAME \
+    && chmod 0440 /etc/sudoers.d/$USERNAME
 
-RUN adduser --system --uid 1001 expressjs
+RUN chmod g+rw /home && \
+    mkdir -p /home/kodiko ${KODIKO_SERVER_ROOT} && \
+    chown -R $USERNAME:$USERNAME /home/kodiko && \
+    chown -R $USERNAME:$USERNAME ${KODIKO_SERVER_ROOT}
 
+ENV LANG=C.UTF-8 \
+    LC_ALL=C.UTF-8 \
+    HOME=/home/kodiko \
+    KODIKO_SERVER_ROOT=${KODIKO_SERVER_ROOT}
+
+USER kodiko
 
 # Automatically leverage output traces to reduce image size
-COPY --from=build /app/dist ./
-
-USER expressjs
+COPY --from=build /home/dist /home/.kodiko
 
 EXPOSE 5000
 
 # make tini run as main process to handle signals correctly
 ENTRYPOINT ["tini", "--"]
-
-CMD ["node", "server.js"]
+CMD ["node", "/home/.kodiko/server.js" ]
