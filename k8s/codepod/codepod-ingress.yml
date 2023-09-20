@@ -13,7 +13,7 @@ spec:
   - http:
       paths:
       - pathType: Prefix
-        path: /ws
+        path: /ws/
         backend:
           service:
             name: codepod
