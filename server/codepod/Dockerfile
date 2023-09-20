@@ -1,25 +1,8 @@
-# syntax=docker/dockerfile:1
+# Stage for installing production dependecies and building.
 
-# Comments are provided throughout this file to help you get started.
-# If you need more help, visit the Dockerfile reference guide at
-# https://docs.docker.com/engine/reference/builder/
-
-ARG NODE_VERSION=18
-
-################################################################################
-# Use node image for base image for all stages.
-FROM node:${NODE_VERSION}-bookworm-slim as base
-
-RUN apt update && apt -y install tini git sudo htop
+FROM annleefores/codepod-build:1.0.0 as build
 
 WORKDIR /home/
-
-################################################################################
-# Create a stage for installing production dependecies and building.
-FROM base as build
-
-RUN apt install -y make python3 build-essential
-
 # Download dependencies as a separate step to take advantage of Docker's caching.
 # Leverage a cache mount to /root/.npm to speed up subsequent builds.
 # Leverage bind mounts to package.json and package-lock.json to avoid having to copy them
@@ -35,9 +18,10 @@ COPY . .
 RUN npm run build
 
 ################################################################################
-# Create a new stage to run the application with minimal runtime dependencies
-# where the necessary files are copied from the build stage.
-FROM base
+
+FROM annleefores/codepod-deploy:1.0.0 as base
+
+WORKDIR /home/
 
 ARG USERNAME=kodiko
 ARG USER_UID=10001
