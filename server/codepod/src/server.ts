@@ -10,7 +10,7 @@ const server = http.createServer(app);
 const PORT = 5000;
 const HOST = "0.0.0.0";
 
-//start our server
+//start server and attach websocket
 server.listen(PORT, HOST, () => {
   console.log(`Server started on http://${HOST}:${PORT}`);
   const socket = new wsService();

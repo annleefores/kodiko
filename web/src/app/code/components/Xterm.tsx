@@ -37,6 +37,7 @@ const Xterm: React.FC = () => {
     // fit terminal dimension to containing element and use xterm-addon-attach for websocket comms
     let fitAddon = new FitAddon();
 
+    // xterm addon attach for ws comms from client side
     const attachAddon = new AttachAddon(ws);
 
     term.open(termRef.current!);

@@ -32,9 +32,11 @@ export class wsService {
       this.pty = new Pty(this.ws);
 
       this.ws.on("message", (input: any) => {
+        // convert buffer to string
         const inputString = input.toString();
 
         if (inputString.startsWith("\x04")) {
+          // Remove ASCII character and convert string to JSON
           const jsonData = JSON.parse(inputString.replace(/\x04/g, ""));
           console.log(jsonData);
           this.pty?.reSize(jsonData.cols, jsonData.rows);

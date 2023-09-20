@@ -38,6 +38,7 @@ export class Pty {
   }
 
   reSize(cols: number, rows: number): void {
+    // validate cols and rows are positive number
     if (isNaN(cols) || isNaN(rows) || cols <= 0 || rows <= 0) {
       console.error("Invalid values for cols and rows:", cols, rows);
       return;
