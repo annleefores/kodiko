@@ -1,9 +1,9 @@
 apiVersion: v1
 kind: Pod
 metadata:
-  name: codpod
+  name: codepod
   labels:
-    app: codpod
+    app: codepod
 spec:
   containers:
   - name: codepod
@@ -23,7 +23,7 @@ metadata:
 spec:
   selector:
     app: codepod
-  type: LoadBalancer
+  type: ClusterIP
   ports:
   - port: 5000
     targetPort: 5000

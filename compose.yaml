@@ -25,6 +25,7 @@ services:
     volumes:
       - ./web:/app
 
+  # use this option --profile cp to run this service
   codepod:
     image: codepod-dev
     container_name: codepod-dev

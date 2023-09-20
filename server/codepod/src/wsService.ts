@@ -16,7 +16,7 @@ export class wsService {
     }
 
     //initialize the WebSocket server instance
-    const wss = new WebSocket.Server({ server });
+    const wss = new WebSocket.Server({ server: server, path: "/ws" });
 
     console.log("Created socket server, waiting for connection");
 
