@@ -1,5 +1,3 @@
-# Stage for installing production dependecies and building.
-
 FROM annleefores/codepod-build:1.0.0 as build
 
 WORKDIR /home/
@@ -12,9 +10,8 @@ RUN --mount=type=bind,source=package.json,target=package.json \
     --mount=type=cache,target=/root/.npm \
     npm ci
 
-# Copy the rest of the source files into the image.
 COPY . .
-# Run the build script.
+
 RUN npm run build
 
 ################################################################################
@@ -46,7 +43,6 @@ ENV LANG=C.UTF-8 \
 
 USER kodiko
 
-# Automatically leverage output traces to reduce image size
 COPY --from=build /home/dist /home/.kodiko
 
 EXPOSE 5000

@@ -34,7 +34,7 @@ services:
     ports:
       - 5000:5000
     volumes:
-      - ./server/codepod:/app
+      - ./server/codepod:/home/.kodiko
 
 networks:
   kodiko:
