@@ -1,8 +1,9 @@
 # /usr/bin/python3
 
+from typing import Annotated
 import typer
 import os
-import subprocess
+from helper.helper import execute, execute_kube, execute_build_push
 
 
 app = typer.Typer(
@@ -13,28 +14,34 @@ path = os.path.abspath(os.path.join(__file__, "../../../"))
 os.chdir(path)
 
 
-def execute(docker: str, k8s: str):
-    subprocess.run(
-        f"docker compose -f compose.yml -f k8s.compose.yml {docker}".split(" ")
-    )
-    os.chdir("k8s/codepod")
-    subprocess.run(f"kubectl {k8s} -f ./".split(" "))
-
-
 @app.command()
-def up() -> None:
+def up(
+    local: Annotated[
+        bool, typer.Option(help="Create local version of docker-compose")
+    ] = False
+) -> None:
     """
     Start docker compose and K8s applications
     """
-    execute("up -d", "apply")
+    if local:
+        execute("up -d")
+    else:
+        execute_kube("up -d", "apply")
 
 
 @app.command()
-def down() -> None:
+def down(
+    local: Annotated[
+        bool, typer.Option(help="Destroy local version of docker-compose")
+    ] = False
+) -> None:
     """
     Stop docker compose and K8s applications
     """
-    execute("down", "delete")
+    if local:
+        execute("down")
+    else:
+        execute_kube("down", "delete")
 
 
 @app.command("push-cp")
@@ -44,20 +51,10 @@ def build_push_codepod() -> None:
     """
     os.chdir("scripts/docker/codepod")
     # build and push codepod-build image
-    subprocess.run(
-        "docker build -f build.Dockerfile -t annleefores/codepod-build:1.0.0 .".split(
-            " "
-        )
-    )
-    subprocess.run("docker push annleefores/codepod-build:1.0.0".split(" "))
+    execute_build_push("build")
 
     # build and push codepod-deploy image
-    subprocess.run(
-        "docker build -f deploy.Dockerfile -t annleefores/codepod-deploy:1.0.0 .".split(
-            " "
-        )
-    )
-    subprocess.run("docker push annleefores/codepod-deploy:1.0.0".split(" "))
+    execute_build_push("deploy")
 
 
 @app.callback(invoke_without_command=True)
