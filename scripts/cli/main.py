@@ -44,8 +44,8 @@ def down(
         execute_kube("down", "delete")
 
 
-@app.command("push-cp")
-def build_push_codepod() -> None:
+@app.command()
+def push_cp() -> None:
     """
     Build and Push codepod build and deploy base images
     """
