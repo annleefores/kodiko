@@ -1,0 +1,15 @@
+services:
+  frontend:
+    extends:
+      file: compose.yml
+      service: frontend
+    env_file:
+      - ./web/.env.stage
+
+  # this should be disabled
+  codepod:
+    extends:
+      file: compose.yml
+      service: codepod
+    profiles:
+     - disable

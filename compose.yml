@@ -15,6 +15,8 @@ services:
       - ./server/backend:/app
 
   frontend:
+    env_file:
+      - ./web/.env.local
     image: frontend
     container_name: frontend
     build:
@@ -25,7 +27,6 @@ services:
     volumes:
       - ./web:/app
 
-  # use this option --profile cp to run this service
   codepod:
     image: codepod-dev
     container_name: codepod-dev
@@ -36,8 +37,6 @@ services:
       - 5000:5000
     volumes:
       - ./server/codepod:/home/.kodiko
-    profiles:
-      - cp
 
 networks:
   kodiko:
