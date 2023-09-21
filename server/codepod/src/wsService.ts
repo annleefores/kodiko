@@ -35,6 +35,8 @@ export class wsService {
         // convert buffer to string
         const inputString = input.toString();
 
+        console.log("input-string", inputString);
+
         if (inputString.startsWith("\x04")) {
           // Remove ASCII character and convert string to JSON
           const jsonData = JSON.parse(inputString.replace(/\x04/g, ""));
