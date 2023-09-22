@@ -2,23 +2,27 @@
 kind: ClusterRole
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
-  name: pods-list
+  name: cp-create-rbac
 rules:
 - apiGroups: [""]
-  resources: ["pods"]
-  verbs: ["list"]
+  resources: ["pods", "services"]
+  verbs: ["list", "watch", "create", "update", "patch", "delete", "get"]
+- apiGroups: ["", "networking.k8s.io"]
+  resources: ["ingresses"]
+  verbs: ["create", "update", "patch", "delete"]
+
 
 ---
 kind: ClusterRoleBinding
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
-  name: pods-list
+  name: cp-create-rbac
 subjects:
 - kind: ServiceAccount
   name: default
   namespace: default
 roleRef:
   kind: ClusterRole
-  name: pods-list
+  name: cp-create-rbac
   apiGroup: rbac.authorization.k8s.io
   
