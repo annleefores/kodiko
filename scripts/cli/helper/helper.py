@@ -1,5 +1,4 @@
 import subprocess
-import os
 
 
 def execute_build_push(name: str) -> None:
@@ -12,11 +11,23 @@ def execute_build_push(name: str) -> None:
 
 
 def execute_kube(docker: str, k8s: str):
+    if k8s == "apply":
+        # Build codepod-prod image
+        subprocess.run(
+            "docker build -f ./server/codepod/Dockerfile -t annleefores/codepod-prod:1.0.0 ./server/codepod/".split(
+                " "
+            )
+        )
+        # Build backend image
+        subprocess.run(
+            "docker build -f ./server/backend/Dockerfile -t annleefores/backend:1.0.0 ./server/backend/".split(
+                " "
+            )
+        )
+    subprocess.run(f"kubectl {k8s} -f ./k8s/backend".split(" "))
     subprocess.run(
         f"docker compose -f compose.yml -f k8s.compose.yml {docker}".split(" ")
     )
-    os.chdir("k8s/codepod")
-    subprocess.run(f"kubectl {k8s} -f ./".split(" "))
 
 
 def execute(docker: str) -> None:

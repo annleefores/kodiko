@@ -24,9 +24,9 @@ def up(
     Start docker compose and K8s applications
     """
     if local:
-        execute("up -d")
+        execute("up")
     else:
-        execute_kube("up -d", "apply")
+        execute_kube("up", "apply")
 
 
 @app.command()
