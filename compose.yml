@@ -13,6 +13,7 @@ services:
       - kodiko
     volumes:
       - ./server/backend:/app
+      - ~/.kube/config:/kube/config
 
   frontend:
     env_file:

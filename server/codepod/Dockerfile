@@ -1,6 +1,6 @@
 FROM annleefores/codepod-build:1.0.0 as build
 
-WORKDIR /home/
+WORKDIR /home
 # Download dependencies as a separate step to take advantage of Docker's caching.
 # Leverage a cache mount to /root/.npm to speed up subsequent builds.
 # Leverage bind mounts to package.json and package-lock.json to avoid having to copy them
@@ -18,7 +18,7 @@ RUN npm run build
 
 FROM annleefores/codepod-deploy:1.0.0 as base
 
-WORKDIR /home/
+WORKDIR /home
 
 ARG USERNAME=kodiko
 ARG USER_UID=10001

@@ -1,4 +1,11 @@
 services:
+  backend:
+    extends:
+      file: compose.yml
+      service: backend
+    profiles:
+     - disable
+     
   frontend:
     extends:
       file: compose.yml
