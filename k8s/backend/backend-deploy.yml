@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: backend
-          image: backend
+          image: annleefores/backend:1.0.0
           resources:
             limits:
               memory: "128Mi"
