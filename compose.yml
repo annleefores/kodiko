@@ -9,11 +9,13 @@ services:
     build: ./server/backend
     ports:
       - 8000:8000
+    command: "python3 -m uvicorn main:app --port 8000 --host 0.0.0.0 --reload"
     networks:
       - kodiko
     volumes:
       - ./server/backend:/app
-      - ~/.kube/config:/kube/config
+      - ~/.kube/config:/home/.kube/config
+    restart: on-failure
 
   frontend:
     env_file:
@@ -27,6 +29,7 @@ services:
       - 3000:3000
     volumes:
       - ./web:/app
+    restart: on-failure
 
   codepod:
     image: codepod-dev
@@ -38,6 +41,7 @@ services:
       - 5000:5000
     volumes:
       - ./server/codepod:/home/.kodiko
+    restart: on-failure
 
 networks:
   kodiko:
