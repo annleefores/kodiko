@@ -1,13 +1,18 @@
-from typing import Union, Dict
+from typing import Dict
 import uvicorn
-from fastapi import FastAPI
+from fastapi import FastAPI, status
+from codepod_kube.codepod_kube import main
+from dotenv import load_dotenv
+
+load_dotenv()
 
 app = FastAPI()
 
 
-@app.get("/")
-def read_root(name: str) -> Dict[str, str]:
-    return {"Hello": name}
+@app.get("/", status_code=status.HTTP_201_CREATED)
+def read_root() -> Dict[str, str]:
+    main()
+    return {"success": "codepod created successfully"}
 
 
 if __name__ == "__main__":
