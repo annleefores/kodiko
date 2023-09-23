@@ -50,14 +50,9 @@ def delete_pod(name: str):
 
     print(f"Deleting {name} pod....")
 
-    del_resp = None
+    resp = v1.delete_namespaced_pod(namespace="default", name=name)
 
-    try:
-        del_resp = v1.delete_namespaced_pod(namespace="default", name=name)
-    except ApiException as e:
-        raise Exception
-
-    return del_resp
+    return resp
 
 
 def create_svc(name: str):
@@ -95,13 +90,9 @@ def delete_svc(name: str):
 
     print(f"Deleting {name} svc....")
 
-    del_resp = None
-    try:
-        del_resp = v1.delete_namespaced_service(namespace="default", name=name)
-    except ApiException as e:
-        raise Exception
+    resp = v1.delete_namespaced_service(namespace="default", name=name)
 
-    return del_resp
+    return resp
 
 
 def create_ingress(name: str):
@@ -167,14 +158,9 @@ def delete_ingress(name: str):
 
     print(f"Deleting {name} ingress....")
 
-    del_resp = None
+    resp = v1.delete_namespaced_ingress(namespace="default", name=name)
 
-    try:
-        del_resp = v1.delete_namespaced_ingress(namespace="default", name=name)
-    except ApiException as e:
-        raise Exception
-
-    return del_resp
+    return resp
 
 
 def read_resources(

@@ -25,9 +25,6 @@ def execute_kube(docker: str, k8s: str):
             )
         )
 
-    if k8s == "delete":
-        subprocess.run(f"kubectl {k8s} -f ./server/backend/manifest".split(" "))
-
     subprocess.run(f"kubectl {k8s} -f ./k8s/backend".split(" "))
     subprocess.run(
         f"docker compose -f compose.yml -f k8s.compose.yml {docker}".split(" ")

@@ -19,10 +19,12 @@ from codepod_kube.codepod_kube import (
 
 app = FastAPI()
 
+# TODO: Refactor k8s function call
+
 
 @app.get("/create", status_code=status.HTTP_201_CREATED)
 def create_codepod() -> Dict[str, str]:
-    # add randomness to pod name
+    # TODO: add randomness to pod name
     name = "codepod"
 
     exceptions = {
@@ -56,6 +58,8 @@ def create_codepod() -> Dict[str, str]:
         )
         exceptions["create_ingress"] = True
 
+    # Todo: Add some error fixing logic
+    # print which function had errors
     for func, stat in exceptions.items():
         if stat:
             print(f"{func} caused an error")
@@ -65,7 +69,7 @@ def create_codepod() -> Dict[str, str]:
 
 @app.get("/delete", status_code=status.HTTP_201_CREATED)
 def delete_codepod() -> Dict[str, str]:
-    # get name from client
+    # TODO: Get name from client request
     name = "codepod"
 
     exceptions = {
@@ -96,6 +100,8 @@ def delete_codepod() -> Dict[str, str]:
 
         exceptions["delete_ingress"] = True
 
+    # Todo: Add some error fixing logic
+    # print which function had errors
     for func, stat in exceptions.items():
         if stat:
             print(f"{func} caused an error")
