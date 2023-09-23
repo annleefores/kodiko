@@ -15,6 +15,7 @@ export class wsService {
       throw new Error("Server not found");
     }
 
+    // TODO: Change ws path
     //initialize the WebSocket server instance
     const wss = new WebSocket.Server({ server: server, path: "/ws/" });
 
@@ -34,6 +35,8 @@ export class wsService {
       this.ws.on("message", (input: any) => {
         // convert buffer to string
         const inputString = input.toString();
+
+        // TODO: fix CTRL+D error
 
         console.log("input-string", inputString);
 
