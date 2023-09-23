@@ -1,5 +1,6 @@
 from typing import Dict
 from fastapi import FastAPI, status
+from fastapi.middleware.cors import CORSMiddleware
 from dotenv import load_dotenv
 import uvicorn
 from kubernetes.client.rest import ApiException
@@ -19,10 +20,23 @@ from codepod_kube.codepod_kube import (
 
 app = FastAPI()
 
+
+origins = [
+    "http://localhost:3000",
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 # TODO: Refactor k8s function call
 
 
-@app.get("/create", status_code=status.HTTP_201_CREATED)
+@app.get("/api/create", status_code=status.HTTP_200_OK)
 def create_codepod() -> Dict[str, str]:
     # TODO: add randomness to pod name
     name = "codepod"
@@ -67,7 +81,7 @@ def create_codepod() -> Dict[str, str]:
     return {"success": "codepod created successfully", "pod_name": name}
 
 
-@app.get("/delete", status_code=status.HTTP_201_CREATED)
+@app.get("/api/delete", status_code=status.HTTP_200_OK)
 def delete_codepod() -> Dict[str, str]:
     # TODO: Get name from client request
     name = "codepod"
