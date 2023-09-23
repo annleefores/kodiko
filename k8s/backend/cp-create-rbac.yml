@@ -9,7 +9,7 @@ rules:
   verbs: ["list", "watch", "create", "update", "patch", "delete", "get"]
 - apiGroups: ["", "networking.k8s.io"]
   resources: ["ingresses"]
-  verbs: ["create", "update", "patch", "delete"]
+  verbs: ["create", "update", "patch", "delete", "get"]
 
 
 ---

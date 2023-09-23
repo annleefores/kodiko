@@ -3,7 +3,7 @@ kind: Ingress
 metadata:
   name: codepod-nginx
   labels:
-    name: codepod-nginx
+    app: codepod
   annotations:
     nginx.ingress.kubernetes.io/proxy-read-timeout: "3600"
     nginx.ingress.kubernetes.io/proxy-send-timeout: "3600"
