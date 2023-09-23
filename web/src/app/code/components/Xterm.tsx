@@ -49,6 +49,8 @@ const Xterm: React.FC = () => {
 
     fitAddon.fit();
 
+    // TODO: fix resizing issue when shrinking
+
     // Update terminal size on change and send changes to server
     const handleResize = () => {
       fitAddon.fit();
