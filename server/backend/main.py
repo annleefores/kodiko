@@ -6,8 +6,10 @@ import uvicorn
 from kubernetes.client.rest import ApiException
 import logging
 
+
 load_dotenv()
 
+from utils.utils import generate_random_string, uuid_gen
 from codepod_kube.codepod_kube import (
     create_ingress,
     create_pod,
@@ -38,8 +40,7 @@ app.add_middleware(
 
 @app.get("/api/create", status_code=status.HTTP_200_OK)
 def create_codepod() -> Dict[str, str]:
-    # TODO: add randomness to pod name
-    name = "codepod"
+    name = f"codepod-{generate_random_string(8)}"
 
     exceptions = {
         "create_pod": False,
@@ -78,7 +79,11 @@ def create_codepod() -> Dict[str, str]:
         if stat:
             print(f"{func} caused an error")
 
-    return {"success": "codepod created successfully", "pod_name": name}
+    return {
+        "success": "codepod created successfully",
+        "pod_name": name,
+        "pod_id": str(uuid_gen(name)),
+    }
 
 
 @app.get("/api/delete", status_code=status.HTTP_200_OK)
