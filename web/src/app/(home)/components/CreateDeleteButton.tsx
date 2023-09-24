@@ -12,10 +12,10 @@ const CreateDeleteButton = () => {
         `${process.env.NEXT_PUBLIC_BACKEND}/create`
       );
       console.log(response.data);
-      router.push("/code");
     } catch (error) {
       console.log(error);
     }
+    router.push("/code");
   };
   const deletePod = async () => {
     try {

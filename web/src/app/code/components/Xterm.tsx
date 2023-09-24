@@ -41,7 +41,6 @@ const Xterm: React.FC = () => {
     const attachAddon = new AttachAddon(ws);
 
     term.open(termRef.current!);
-    console.log(termRef.current);
     term.loadAddon(fitAddon);
     term.loadAddon(attachAddon);
     term.loadAddon(new WebLinksAddon());
@@ -67,9 +66,11 @@ const Xterm: React.FC = () => {
     };
     // remove terminal from dom on refresh and close ws connection
     return () => {
-      term.dispose();
       ws.close();
       window.removeEventListener("resize", handleResize);
+      try {
+        term?.dispose();
+      } catch (error) {}
     };
   }, []);
 
