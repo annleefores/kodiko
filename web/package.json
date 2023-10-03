@@ -17,6 +17,7 @@
     "eslint": "8.48.0",
     "eslint-config-next": "13.4.19",
     "next": "13.4.19",
+    "next-auth": "^4.23.2",
     "postcss": "8.4.29",
     "react": "18.2.0",
     "react-dom": "18.2.0",
@@ -26,6 +27,7 @@
     "xterm-addon-attach": "^0.9.0",
     "xterm-addon-canvas": "^0.5.0",
     "xterm-addon-fit": "^0.8.0",
-    "xterm-addon-web-links": "^0.9.0"
+    "xterm-addon-web-links": "^0.9.0",
+    "zod": "^3.22.2"
   }
 }
