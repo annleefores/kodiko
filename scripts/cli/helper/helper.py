@@ -11,7 +11,7 @@ def execute_build_push(name: str) -> None:
 
 
 def execute_kube(docker: str, k8s: str):
-    if k8s == "apply":
+    if k8s == "install":
         # Build codepod-prod image
         subprocess.run(
             "docker build -f ./server/codepod/Dockerfile -t annleefores/codepod-prod:1.0.0 ./server/codepod/".split(
@@ -24,8 +24,10 @@ def execute_kube(docker: str, k8s: str):
                 " "
             )
         )
+        subprocess.run(f"helm {k8s} backend ./k8s".split(" "))
+    else:
+        subprocess.run(f"helm {k8s} backend".split(" "))
 
-    subprocess.run(f"kubectl {k8s} -f ./k8s/backend".split(" "))
     subprocess.run(
         f"docker compose -f compose.yml -f k8s.compose.yml {docker}".split(" ")
     )
