@@ -5,6 +5,7 @@ from dotenv import load_dotenv
 import uvicorn
 from kubernetes.client.rest import ApiException
 import logging
+from pydantic import BaseModel
 
 
 load_dotenv()
@@ -18,6 +19,10 @@ from codepod_kube.codepod_kube import (
     delete_pod,
     delete_svc,
 )
+
+
+class Item(BaseModel):
+    name: str
 
 
 app = FastAPI()
@@ -38,26 +43,34 @@ app.add_middleware(
 # TODO: Refactor k8s function call
 
 
-@app.get("/api/create", status_code=status.HTTP_200_OK)
-def create_codepod() -> Dict[str, str]:
+@app.post("/api/create", status_code=status.HTTP_200_OK)
+def create_codepod(item: Item) -> Dict[str, str]:
+    # To check if user has a codepod running
+    prev_name = item.name
+
     name = f"codepod-{generate_random_string(8)}"
 
     exceptions = {
         "create_pod": False,
         "create_svc": False,
         "create_ingress": False,
+        "pod_already_exists": 0,
     }
 
     # create pod
     try:
-        created_pod_resp = create_pod(name=name)
+        created_pod_resp = create_pod(name=name, prev_name=prev_name)
+        if not created_pod_resp:
+            exceptions["pod_already_exists"] += 1
     except ApiException as e:
         logging.exception("Exception when calling CoreV1Api->create_namespaced_pod:")
         exceptions["create_pod"] = True
 
     # create svc
     try:
-        created_svc_resp = create_svc(name=name)
+        created_svc_resp = create_svc(name=name, prev_name=prev_name)
+        if not created_svc_resp:
+            exceptions["pod_already_exists"] += 1
     except ApiException as e:
         logging.exception(
             "Exception when calling CoreV1Api->create_namespaced_service:"
@@ -66,7 +79,9 @@ def create_codepod() -> Dict[str, str]:
 
     # create ingress
     try:
-        created_ingress_resp = create_ingress(name=name)
+        created_ingress_resp = create_ingress(name=name, prev_name=prev_name)
+        if not created_ingress_resp:
+            exceptions["pod_already_exists"] += 1
     except ApiException as e:
         logging.exception(
             "Exception when calling NetworkingV1Api->create_namespaced_ingress:",
@@ -77,7 +92,11 @@ def create_codepod() -> Dict[str, str]:
     # print which function had errors
     for func, stat in exceptions.items():
         if stat:
-            print(f"{func} caused an error")
+            print(f"{func} encountered an issue")
+
+    # if user has a codepod already running, send back previous details
+    if exceptions["pod_already_exists"] == 3:
+        name = prev_name
 
     return {
         "success": "codepod created successfully",
@@ -86,8 +105,10 @@ def create_codepod() -> Dict[str, str]:
     }
 
 
-@app.get("/api/delete", status_code=status.HTTP_200_OK)
-def delete_codepod(name: str) -> Dict[str, str]:
+@app.post("/api/delete", status_code=status.HTTP_200_OK)
+def delete_codepod(item: Item) -> Dict[str, str]:
+    name = item.name
+
     exceptions = {
         "delete_pod": False,
         "delete_svc": False,

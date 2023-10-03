@@ -9,12 +9,12 @@ else:
     config.load_incluster_config()
 
 
-def create_pod(name: str):
+def create_pod(name: str, prev_name: str):
     v1 = client.CoreV1Api()
 
-    if read_resources(v1, name, "pod"):
+    if read_resources(v1, name, "pod") or read_resources(v1, prev_name, "pod"):
         print(f"{name} pod already exists")
-        return 1
+        return False
 
     print(f"Creating {name} pod...")
 
@@ -38,7 +38,7 @@ def create_pod(name: str):
 
     resp = v1.create_namespaced_pod(namespace="default", body=pod_body)
 
-    return resp
+    return True
 
 
 def delete_pod(name: str):
@@ -55,12 +55,12 @@ def delete_pod(name: str):
     return resp
 
 
-def create_svc(name: str):
+def create_svc(name: str, prev_name: str):
     v1 = client.CoreV1Api()
 
-    if read_resources(v1, name, "service"):
+    if read_resources(v1, name, "service") or read_resources(v1, prev_name, "service"):
         print(f"{name} service already exists")
-        return 1
+        return False
 
     print(f"Creating {name} svc....")
 
@@ -78,7 +78,7 @@ def create_svc(name: str):
 
     resp = v1.create_namespaced_service(namespace="default", body=svc_body)
 
-    return resp
+    return True
 
 
 def delete_svc(name: str):
@@ -95,12 +95,12 @@ def delete_svc(name: str):
     return resp
 
 
-def create_ingress(name: str):
+def create_ingress(name: str, prev_name: str):
     v1 = client.NetworkingV1Api()
 
-    if read_resources(v1, name, "ingress"):
+    if read_resources(v1, name, "ingress") or read_resources(v1, prev_name, "ingress"):
         print(f"{name} ingress already exists")
-        return 1
+        return False
 
     print(f"Creating {name} ingress....")
 
@@ -146,7 +146,7 @@ def create_ingress(name: str):
 
     resp = v1.create_namespaced_ingress(namespace="default", body=ingress_body)
 
-    return resp
+    return True
 
 
 def delete_ingress(name: str):
