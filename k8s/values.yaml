@@ -1,3 +1,4 @@
+## backend
 
 replicas: 2
 container:
@@ -9,9 +10,9 @@ memory: "128Mi"
 cpu: "500m"
 imagePullPolicy: IfNotPresent
 
-
 type: ClusterIP
 
+# secret values retrieved from AWS parameter store using External Secrets Operator
 eso:
   UUID_NAMESPACE: /kodiko/backend/UUID_NAMESPACE
 
