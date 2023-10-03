@@ -1,0 +1,18 @@
+
+replicas: 2
+container:
+  name: backend
+  image:
+    name: annleefores/backend
+    version: 1.0.0
+memory: "128Mi"
+cpu: "500m"
+imagePullPolicy: IfNotPresent
+
+
+type: ClusterIP
+
+eso:
+  UUID_NAMESPACE: /kodiko/backend/UUID_NAMESPACE
+
+

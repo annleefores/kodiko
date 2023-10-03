@@ -87,10 +87,7 @@ def create_codepod() -> Dict[str, str]:
 
 
 @app.get("/api/delete", status_code=status.HTTP_200_OK)
-def delete_codepod() -> Dict[str, str]:
-    # TODO: Get name from client request
-    name = "codepod"
-
+def delete_codepod(name: str) -> Dict[str, str]:
     exceptions = {
         "delete_pod": False,
         "delete_svc": False,

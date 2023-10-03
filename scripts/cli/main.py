@@ -26,7 +26,7 @@ def up(
     if local:
         execute("up --build")
     else:
-        execute_kube("up --build", "apply")
+        execute_kube("up --build", "install")
 
 
 @app.command()
@@ -41,7 +41,7 @@ def down(
     if local:
         execute("down")
     else:
-        execute_kube("down", "delete")
+        execute_kube("down", "uninstall")
 
 
 @app.command()

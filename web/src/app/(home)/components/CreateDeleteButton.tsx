@@ -1,26 +1,37 @@
 "use client";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 
 const CreateDeleteButton = () => {
   const router = useRouter();
+
+  const [podName, setpodName] = useState<String>("");
+
   // TODO: Add auth
+
+  useEffect(() => {
+    const podName = localStorage.getItem("podName") || "";
+    setpodName(podName);
+  }, []);
+
   const createPod = async () => {
     try {
       const response = await axios.get(
         `${process.env.NEXT_PUBLIC_BACKEND}/create`
       );
       console.log(response.data);
+      localStorage.setItem("podName", response.data.pod_name);
     } catch (error) {
       console.log(error);
     }
     router.push("/code");
   };
+
   const deletePod = async () => {
     try {
       const response = await axios.get(
-        `${process.env.NEXT_PUBLIC_BACKEND}/delete`
+        `${process.env.NEXT_PUBLIC_BACKEND}/delete/?name=${podName}`
       );
       console.log(response.data);
     } catch (error) {
