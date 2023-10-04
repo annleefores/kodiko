@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
+import { Button } from "@/components/ui/button";
 
 const CreateDeleteButton = () => {
   const router = useRouter();
@@ -43,18 +44,18 @@ const CreateDeleteButton = () => {
 
   return (
     <div className="flex flex-col gap-y-6">
-      <button
+      <Button
         onClick={createPod}
-        className="transition ease-in-out delay-150 bg-blue-500  hover:bg-indigo-500 duration-300 p-1 px-10 border rounded-md border-blue-500"
+        className="bg-blue-500 hover:bg-blue-500 px-6 text-white rounded"
       >
         Create
-      </button>
-      <button
+      </Button>
+      <Button
         onClick={deletePod}
-        className="transition ease-in-out delay-150 bg-red-500  hover:bg-red-600 duration-300 p-1 px-10 border rounded-md border-red-500"
+        className="rounded px-6 bg-red-800 text-white hover:bg-red-800"
       >
         Delete
-      </button>
+      </Button>
     </div>
   );
 };
