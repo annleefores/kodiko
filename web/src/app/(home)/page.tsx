@@ -4,7 +4,7 @@ import CreateDeleteButton from "./components/CreateDeleteButton";
 
 export default function Home() {
   return (
-    <main className="flex min-h-screen flex-col items-center gap-y-16  p-24">
+    <main className="flex flex-col items-center gap-y-16 mt-16">
       <Image src={logo} alt="Kodiko Logos" width={300} priority />
       <CreateDeleteButton />
     </main>

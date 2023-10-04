@@ -2,36 +2,42 @@
 import { signIn, signOut, useSession } from "next-auth/react";
 import user from "../../../public/user.png";
 import logo from "../../../public/kodiko-logo.png";
-import {
-  NavigationMenu,
-  NavigationMenuItem,
-  NavigationMenuList,
-} from "@/components/ui/navigation-menu";
+
 import Image from "next/image";
 
 const AuthButton = () => {
   const { data: session } = useSession();
 
   return (
-    <div className="flex flex-row items-center">
+    <div className="flex flex-row gap-x-2 items-center">
       <div>
         {session ? (
           <Image
             className="rounded-full"
             src={session?.user?.image || user}
-            width={35}
-            height={35}
+            width={26}
+            height={26}
             alt="profile picture"
           />
         ) : (
-          <div>Not signed in</div>
+          <></>
         )}
       </div>
       <div>
         {session ? (
-          <button onClick={() => signOut()}>Sign Out</button>
+          <button
+            onClick={() => signOut()}
+            className="text-sm transition ease-in-out delay-130 hover:text-neutral-300"
+          >
+            Sign Out
+          </button>
         ) : (
-          <button onClick={() => signIn()}>Sign In</button>
+          <button
+            onClick={() => signIn("github")}
+            className="text-sm transition ease-in-out delay-130 hover:text-neutral-300"
+          >
+            Sign in with GitHub
+          </button>
         )}
       </div>
     </div>
@@ -40,27 +46,21 @@ const AuthButton = () => {
 
 export const NavMenu = () => {
   return (
-    <div className="flex border-b p-1 px-3 w-full mt-2">
-      <NavigationMenu>
-        <NavigationMenuList>
-          <div className="flex justify-between items-center w-full ">
-            <div>
-              <NavigationMenuItem>
-                <Image
-                  className="rounded-full"
-                  src={logo}
-                  width={35}
-                  height={35}
-                  alt="profile picture"
-                />
-              </NavigationMenuItem>
-            </div>
-            <div>
-              <AuthButton />
-            </div>
-          </div>
-        </NavigationMenuList>
-      </NavigationMenu>
+    <div className="flex items-center border-b py-2.5 px-4 w-full">
+      <div className="flex justify-between  w-full ">
+        <div>
+          <Image
+            className="rounded-full"
+            src={logo}
+            width={26}
+            height={26}
+            alt="profile picture"
+          />
+        </div>
+        <div>
+          <AuthButton />
+        </div>
+      </div>
     </div>
   );
 };
