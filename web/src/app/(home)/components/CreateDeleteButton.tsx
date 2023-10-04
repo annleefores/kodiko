@@ -43,18 +43,18 @@ const CreateDeleteButton = () => {
   };
 
   return (
-    <div className="flex flex-col gap-y-6">
+    <div className="flex flex-col md:flex-row gap-y-6 md:gap-x-12">
       <Button
         onClick={createPod}
         className="bg-blue-500 hover:bg-blue-500 px-6 text-white rounded"
       >
-        Create
+        Create Codepod
       </Button>
       <Button
         onClick={deletePod}
         className="rounded px-6 bg-red-800 text-white hover:bg-red-800"
       >
-        Delete
+        Delete Codepod
       </Button>
     </div>
   );
