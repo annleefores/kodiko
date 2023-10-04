@@ -16,7 +16,7 @@ if (!result.success) {
 }
 
 const config = result.data;
-export const authOptions: NextAuthOptions = {
+const authOptions: NextAuthOptions = {
   // Configure one or more authentication providers
   providers: [
     GithubProvider({
