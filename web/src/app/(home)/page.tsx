@@ -5,6 +5,7 @@ import { getServerSession } from "next-auth";
 
 export default async function Home() {
   const session = await getServerSession();
+
   return (
     <main className="flex flex-col items-center gap-y-16 mt-16">
       <div className="flex flex-col justify-center items-center gap-y-6">
