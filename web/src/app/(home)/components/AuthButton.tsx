@@ -7,8 +7,6 @@ import user from "../../../../public/user.png";
 const AuthButton = () => {
   const { data: session } = useSession();
 
-  console.log(session);
-
   return (
     <div className="flex flex-row gap-x-2 items-center">
       <div>
