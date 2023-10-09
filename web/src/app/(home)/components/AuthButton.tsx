@@ -25,8 +25,6 @@ const AuthButton = () => {
     getProviders().then((providers) => setProviders(providers));
   }, []);
 
-  console.log(session);
-
   return (
     <div className="flex flex-row gap-x-2 items-center">
       <div>
