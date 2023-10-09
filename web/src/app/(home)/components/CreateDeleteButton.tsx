@@ -18,12 +18,16 @@ const CreateDeleteButton = () => {
     setpodName(podName);
   }, []);
 
+  const ax = axios.create({
+    baseURL: `${process.env.NEXT_PUBLIC_BACKEND}`,
+    headers: {
+      Authorization: `Bearer ${session?.accessToken}`,
+    },
+  });
+
   const createPod = async () => {
     try {
-      const response = await axios.post(
-        `${process.env.NEXT_PUBLIC_BACKEND}/create`,
-        { name: podName }
-      );
+      const response = await ax.post("/create", { name: podName });
       console.log(response.data);
       localStorage.setItem("podName", response.data.pod_name);
     } catch (error) {
@@ -34,10 +38,7 @@ const CreateDeleteButton = () => {
 
   const deletePod = async () => {
     try {
-      const response = await axios.post(
-        `${process.env.NEXT_PUBLIC_BACKEND}/delete`,
-        { name: podName }
-      );
+      const response = await ax.post("/delete", { name: podName });
       console.log(response.data);
     } catch (error) {
       console.log(error);

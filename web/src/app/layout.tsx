@@ -19,6 +19,7 @@ export default async function RootLayout({
   children: React.ReactNode;
 }) {
   const session = await getServerSession();
+
   return (
     <html lang="en">
       <body className={inter.className}>
