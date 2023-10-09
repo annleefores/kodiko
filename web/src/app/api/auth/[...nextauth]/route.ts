@@ -83,6 +83,7 @@ const authOptions: NextAuthOptions = {
     async jwt({ token, account, profile, user }) {
       if (account) {
         // This is an initial login, set JWT tokens.
+
         return {
           ...token,
           accessToken: account.access_token,
@@ -90,6 +91,7 @@ const authOptions: NextAuthOptions = {
           refreshToken: account.refresh_token,
           expiresAt: account.expires_at,
           tokenType: "Bearer",
+          picture: user.picture,
         };
       }
       if (Date.now() < token.expiresAt) {
@@ -130,7 +132,7 @@ const authOptions: NextAuthOptions = {
       }
     },
 
-    async session({ session, token }) {
+    async session({ session, token, user }) {
       /*
          Forward tokens to client in case you need to make authorized
          API calls to an AWS service directly from the front end.

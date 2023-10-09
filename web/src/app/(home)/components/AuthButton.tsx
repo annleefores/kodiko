@@ -25,6 +25,8 @@ const AuthButton = () => {
     getProviders().then((providers) => setProviders(providers));
   }, []);
 
+  console.log(session);
+
   return (
     <div className="flex flex-row gap-x-2 items-center">
       <div>
@@ -57,7 +59,7 @@ const AuthButton = () => {
             }}
             className="text-sm transition ease-in-out delay-130 hover:text-neutral-300"
           >
-            Sign in with GitHub
+            Sign in with Google
           </button>
         )}
       </div>
