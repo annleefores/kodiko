@@ -1,5 +1,5 @@
-from typing import Dict
-from fastapi import FastAPI, status
+from typing import Annotated, Dict
+from fastapi import FastAPI, status, Header
 from fastapi.middleware.cors import CORSMiddleware
 from dotenv import load_dotenv
 import uvicorn
@@ -44,8 +44,11 @@ app.add_middleware(
 
 
 @app.post("/api/create", status_code=status.HTTP_200_OK)
-def create_codepod(item: Item) -> Dict[str, str]:
+def create_codepod(
+    item: Item, Authorization: Annotated[str | None, Header()] = None
+) -> Dict[str, str]:
     # To check if user has a codepod running
+    print(Authorization)
     prev_name = item.name
 
     name = f"codepod-{generate_random_string(8)}"
