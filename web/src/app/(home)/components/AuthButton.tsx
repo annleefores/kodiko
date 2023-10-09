@@ -1,11 +1,29 @@
 "use client";
 import Image from "next/image";
-import React from "react";
-import { signIn, signOut, useSession } from "next-auth/react";
+import React, { useEffect, useState } from "react";
+import {
+  signIn,
+  signOut,
+  useSession,
+  getProviders,
+  LiteralUnion,
+  ClientSafeProvider,
+} from "next-auth/react";
 import user from "../../../../public/user.png";
+import { BuiltInProviderType } from "next-auth/providers/index";
 
 const AuthButton = () => {
   const { data: session } = useSession();
+  // state to hold custom providers
+  const [providers, setProviders] = useState<Record<
+    LiteralUnion<BuiltInProviderType, string>,
+    ClientSafeProvider
+  > | null>(null);
+
+  // Fetch providers on mount.
+  useEffect(() => {
+    getProviders().then((providers) => setProviders(providers));
+  }, []);
 
   return (
     <div className="flex flex-row gap-x-2 items-center">
@@ -32,7 +50,11 @@ const AuthButton = () => {
           </button>
         ) : (
           <button
-            onClick={() => signIn("github")}
+            onClick={() => {
+              if (providers) {
+                signIn(providers["cognito_google"].id);
+              }
+            }}
             className="text-sm transition ease-in-out delay-130 hover:text-neutral-300"
           >
             Sign in with GitHub
