@@ -3,9 +3,11 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
+import { useSession } from "next-auth/react";
 
 const CreateDeleteButton = () => {
   const router = useRouter();
+  const { data: session } = useSession();
 
   const [podName, setpodName] = useState<String>("");
 

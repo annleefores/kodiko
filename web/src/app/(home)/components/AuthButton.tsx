@@ -13,7 +13,7 @@ import user from "../../../../public/user.png";
 import { BuiltInProviderType } from "next-auth/providers/index";
 
 const AuthButton = () => {
-  const { data: session } = useSession();
+  const { data: session, update } = useSession();
   // state to hold custom providers
   const [providers, setProviders] = useState<Record<
     LiteralUnion<BuiltInProviderType, string>,
@@ -23,6 +23,8 @@ const AuthButton = () => {
   // Fetch providers on mount.
   useEffect(() => {
     getProviders().then((providers) => setProviders(providers));
+    // update nextauth session on mount to load additional data
+    update();
   }, []);
 
   return (

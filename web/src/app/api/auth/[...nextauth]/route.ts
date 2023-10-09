@@ -138,7 +138,7 @@ const authOptions: NextAuthOptions = {
          API calls to an AWS service directly from the front end.
       */
       session.accessToken = token.accessToken;
-      session.idToken = token.idToken;
+      // session.idToken = token.idToken;
       /* 
       If there is an error when refreshing tokens, include it so it can 
       be forwarded to the front end.
