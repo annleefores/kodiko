@@ -24,6 +24,8 @@ spec:
           envFrom:
             - secretRef:
                 name: backend-secret
+            - configMapRef:
+                name: backend-configmap
           imagePullPolicy: {{ .Values.imagePullPolicy }}
 ---
 apiVersion: v1

@@ -15,5 +15,10 @@ type: ClusterIP
 # secret values retrieved from AWS parameter store using External Secrets Operator
 eso:
   UUID_NAMESPACE: /kodiko/backend/UUID_NAMESPACE
+  REGION: /kodiko/backend/REGION
+  USERPOOL_ID: /kodiko/backend/USERPOOL_ID
+  APP_CLIENT_ID: /kodiko/backend/APP_CLIENT_ID
+
+
 
 
