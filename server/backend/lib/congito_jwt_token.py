@@ -7,15 +7,24 @@ from jose.utils import base64url_decode
 
 # Download public keys
 response = requests.get(
-    f'https://cognito-idp.{os.getenv("region")}.amazonaws.com/{os.getenv("userpool_id")}/.well-known/jwks.json'
+    f'https://cognito-idp.{os.getenv("REGION")}.amazonaws.com/{os.getenv("USERPOOL_ID")}/.well-known/jwks.json'
 )
 keys = response.json()["keys"]
 
 
 class CognitoJwtToken:
     def __init__(self, token: str) -> None:
-        self.token = token
+        self.bearer_token = token
+        self.token = ""
         self.key = None
+
+    def check_auth_type(self):
+        type, token = self.bearer_token.split(" ")
+
+        if type != "Bearer":
+            raise Exception("Token type must be Bearer")
+
+        self.token = token
 
     def public_key(self):
         # get the kid from the token header
@@ -62,12 +71,13 @@ class CognitoJwtToken:
 
         # and the Audience  (use claims['client_id'] if verifying an access token)
         audience = claims["aud"] if "aud" in claims else claims["client_id"]
-        if audience != os.getenv("app_client_id"):
+        if audience != os.getenv("APP_CLIENT_ID"):
             raise Exception("Token was not issued for this audience")
 
         return claims
 
     def verify(self):
+        self.check_auth_type()
         self.public_key()
         self.verify_signature()
         claims = self.return_verified_claim()

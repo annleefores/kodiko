@@ -1,11 +1,13 @@
-from typing import Annotated, Dict
-from fastapi import FastAPI, status, Header
+from typing import Dict
+from fastapi import FastAPI, status, Request
 from fastapi.middleware.cors import CORSMiddleware
 from dotenv import load_dotenv
 import uvicorn
 from kubernetes.client.rest import ApiException
 import logging
 from pydantic import BaseModel
+from fastapi.responses import JSONResponse
+import os
 
 
 load_dotenv()
@@ -43,26 +45,49 @@ app.add_middleware(
 
 # TODO: Refactor k8s function call
 
+unauth_routes = ["/docs", "/redoc", "/openapi.json"]
 
-@app.post("/verify", status_code=status.HTTP_200_OK)
-def verify_token(Authorization: Annotated[str | None, Header()] = None):
-    data = CognitoJwtToken(Authorization.split(" ")[1])
+
+@app.middleware("http")
+async def verify_token(request: Request, call_next):
+    token = request.headers.get("authorization")
+    print(request.headers)
+
+    # unauth routes
+    if os.getenv("ENV") == "DEV":
+        if request.url.path in unauth_routes:
+            # return response from path
+            response = await call_next(request)
+            return response
+
+    # auth routes
+    if token is None:
+        return JSONResponse(
+            status_code=status.HTTP_401_UNAUTHORIZED, content="Add a valid bearer token"
+        )
+
+    auth = CognitoJwtToken(token=token)
+
     try:
-        data.verify()
+        claims = auth.verify()
     except Exception as e:
-        return {"invalid token": str(e)}
+        return JSONResponse(status_code=status.HTTP_401_UNAUTHORIZED, content=str(e))
 
-    return "verified"
+    # return response from path
+    response = await call_next(request)
+
+    return response
+
+
+@app.post("/dummy", status_code=status.HTTP_200_OK)
+def dummy():
+    return "hello"
 
 
 @app.post("/api/create", status_code=status.HTTP_200_OK)
-def create_codepod(
-    item: Item, Authorization: Annotated[str | None, Header()] = None
-) -> Dict[str, str]:
+def create_codepod(item: Item) -> Dict[str, str]:
     # To check if user has a codepod running
     prev_name = item.name
-
-    print(Authorization.split(" ")[1])
 
     name = f"codepod-{generate_random_string(8)}"
 
