@@ -31,18 +31,6 @@ class Item(BaseModel):
 app = FastAPI()
 
 
-origins = [
-    "http://localhost:3000",
-]
-
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=origins,
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
-
 # TODO: Refactor k8s function call
 
 unauth_routes = ["/docs", "/redoc", "/openapi.json"]
@@ -51,7 +39,6 @@ unauth_routes = ["/docs", "/redoc", "/openapi.json"]
 @app.middleware("http")
 async def verify_token(request: Request, call_next):
     token = request.headers.get("authorization")
-    print(request.headers)
 
     # unauth routes
     if os.getenv("ENV") == "DEV":
@@ -186,6 +173,18 @@ def delete_codepod(item: Item) -> Dict[str, str]:
 
     return {"success": "codepod deleted successfully"}
 
+
+origins = [
+    "http://localhost:3000",
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=8000)
