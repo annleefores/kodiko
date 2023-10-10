@@ -12,10 +12,9 @@ uvicorn = {extras = ["standard"], version = "^0.23.2"}
 kubernetes = "^28.1.0"
 python-dotenv = "^1.0.0"
 python-jose = {extras = ["cryptography"], version = "^3.3.0"}
-requests = "^2.31.0"
 
 [tool.poetry.group.dev.dependencies]
-
+types-python-jose = "^3.3.4.8"
 
 [build-system]
 requires = ["poetry-core"]

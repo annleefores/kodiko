@@ -834,6 +834,31 @@ anyio = ">=3.4.0,<5"
 full = ["httpx (>=0.22.0)", "itsdangerous", "jinja2", "python-multipart", "pyyaml"]
 
 [[package]]
+name = "types-pyasn1"
+version = "0.5.0.0"
+description = "Typing stubs for pyasn1"
+optional = false
+python-versions = ">=3.7"
+files = [
+    {file = "types-pyasn1-0.5.0.0.tar.gz", hash = "sha256:4bfea6548206866302885c36aba945c0deaa40898a313112b5cff7f903a56d71"},
+    {file = "types_pyasn1-0.5.0.0-py3-none-any.whl", hash = "sha256:62f1ba64c9f8975de301014722e154ef1d6097463844de1ed733e719dfc87780"},
+]
+
+[[package]]
+name = "types-python-jose"
+version = "3.3.4.8"
+description = "Typing stubs for python-jose"
+optional = false
+python-versions = "*"
+files = [
+    {file = "types-python-jose-3.3.4.8.tar.gz", hash = "sha256:3c316675c3cee059ccb9aff87358254344915239fa7f19cee2787155a7db14ac"},
+    {file = "types_python_jose-3.3.4.8-py3-none-any.whl", hash = "sha256:95592273443b45dc5cc88f7c56aa5a97725428753fb738b794e63ccb4904954e"},
+]
+
+[package.dependencies]
+types-pyasn1 = "*"
+
+[[package]]
 name = "typing-extensions"
 version = "4.7.1"
 description = "Backported and Experimental Type Hints for Python 3.7+"
@@ -1062,4 +1087,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "e0f266ddaf15dd2a8b38d5d638dffa9729806c7c56ca1588f83bfb02f5b621b2"
+content-hash = "ba9590753226591600ca7e99a6e744721dd48d90a348ad3e896d16e1edc045a6"
