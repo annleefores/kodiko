@@ -10,7 +10,8 @@ from pydantic import BaseModel
 
 load_dotenv()
 
-from utils.utils import generate_random_string, uuid_gen
+from lib.utils import generate_random_string, uuid_gen
+from lib.congito_jwt_token import decode_verify_jwt
 from codepod_kube.codepod_kube import (
     create_ingress,
     create_pod,
@@ -43,12 +44,16 @@ app.add_middleware(
 # TODO: Refactor k8s function call
 
 
+@app.post("/verify", status_code=status.HTTP_200_OK)
+def verify_token(Authorization: Annotated[str | None, Header()] = None):
+    print(Authorization.split(" ")[1])
+    decode_verify_jwt(Authorization.split(" ")[1])
+    return "hello"
+
+
 @app.post("/api/create", status_code=status.HTTP_200_OK)
-def create_codepod(
-    item: Item, Authorization: Annotated[str | None, Header()] = None
-) -> Dict[str, str]:
+def create_codepod(item: Item) -> Dict[str, str]:
     # To check if user has a codepod running
-    print(Authorization)
     prev_name = item.name
 
     name = f"codepod-{generate_random_string(8)}"
