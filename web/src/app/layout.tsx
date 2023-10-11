@@ -1,6 +1,7 @@
 import "./globals.css";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
+import { Toaster } from "@/components/ui/toaster";
 
 import SessionProvider from "./(home)/components/SessionProvider";
 import { getServerSession } from "next-auth";
@@ -27,6 +28,7 @@ export default async function RootLayout({
           <div className="h-full w-full">
             <NavMenu />
             {children}
+            <Toaster />
           </div>
         </SessionProvider>
       </body>

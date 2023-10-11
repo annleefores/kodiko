@@ -41,8 +41,6 @@ unauth_routes = ["/docs", "/redoc", "/openapi.json"]
 async def verify_token(request: Request, call_next):
     token = request.headers.get("authorization")
 
-    print(token)
-
     # unauth routes
     if os.getenv("ENV") == "DEV":
         if request.url.path in unauth_routes:

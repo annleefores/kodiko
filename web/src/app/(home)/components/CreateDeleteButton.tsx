@@ -4,10 +4,12 @@ import axios from "axios";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { useSession } from "next-auth/react";
+import { useToast } from "@/components/ui/use-toast";
 
 const CreateDeleteButton = () => {
   const router = useRouter();
   const { data: session } = useSession();
+  const { toast } = useToast();
 
   interface podParams {
     pod_name: string;
@@ -18,8 +20,6 @@ const CreateDeleteButton = () => {
     pod_name: "",
     pod_id: "",
   });
-
-  // TODO: Add auth
 
   useEffect(() => {
     const podVal = localStorage.getItem("podData") || "";
@@ -33,19 +33,30 @@ const CreateDeleteButton = () => {
   const ax = axios.create({
     baseURL: `${process.env.NEXT_PUBLIC_BACKEND}`,
     headers: {
-      Authorization: `Bearer ${session?.accessToken}`,
+      // Authorization: `Bearer ${session?.accessToken}`,
     },
   });
+
+  const errorToast = () => {
+    toast({
+      variant: "destructive",
+      title: "Uh oh! Something went wrong.",
+      description: "There was a problem with your request.",
+    });
+  };
 
   const createPod = async () => {
     try {
       const response = await ax.post("/create", { name: podData?.pod_name });
       console.log(response.data);
       localStorage.setItem("podData", response.data.pod_data);
+      if (response.status === 200) {
+        router.push("/code");
+      }
     } catch (error) {
       console.log(error);
+      errorToast();
     }
-    router.push("/code");
   };
 
   const deletePod = async () => {
@@ -54,6 +65,7 @@ const CreateDeleteButton = () => {
       console.log(response.data);
     } catch (error) {
       console.log(error);
+      errorToast();
     }
   };
 
