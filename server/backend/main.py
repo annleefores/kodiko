@@ -12,7 +12,7 @@ import os
 
 load_dotenv()
 
-from lib.utils import generate_random_string, uuid_gen
+from lib.utils import base64_encoder_decoder, generate_random_string, uuid_gen
 from lib.congito_jwt_token import CognitoJwtToken
 from codepod_kube.codepod_kube import (
     create_ingress,
@@ -40,6 +40,8 @@ unauth_routes = ["/docs", "/redoc", "/openapi.json"]
 async def verify_token(request: Request, call_next):
     token = request.headers.get("authorization")
 
+    print(token)
+
     # unauth routes
     if os.getenv("ENV") == "DEV":
         if request.url.path in unauth_routes:
@@ -66,9 +68,14 @@ async def verify_token(request: Request, call_next):
     return response
 
 
-@app.post("/dummy", status_code=status.HTTP_200_OK)
-def dummy():
-    return "hello"
+@app.post("/api/dummy", status_code=status.HTTP_200_OK)
+def dummy(item: Item):
+    pod_data = {"pod_name": item.name, "pod_id": str(uuid_gen(item.name))}
+
+    return {
+        "success": "codepod created successfully",
+        "pod_data": base64_encoder_decoder(data=str(pod_data), to_encode=True),
+    }
 
 
 @app.post("/api/create", status_code=status.HTTP_200_OK)

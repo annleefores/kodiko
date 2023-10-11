@@ -15,7 +15,9 @@ const CreateDeleteButton = () => {
 
   useEffect(() => {
     const podName = localStorage.getItem("podName") || "";
-    setpodName(podName);
+    const decodedPodData = atob(podName);
+    console.log(decodedPodData);
+    setpodName(decodedPodData);
   }, []);
 
   const ax = axios.create({
@@ -27,9 +29,9 @@ const CreateDeleteButton = () => {
 
   const createPod = async () => {
     try {
-      const response = await ax.post("/create", { name: podName });
+      const response = await ax.post("/dummy", { name: podName });
       console.log(response.data);
-      localStorage.setItem("podName", response.data.pod_name);
+      localStorage.setItem("podName", response.data.pod_data);
     } catch (error) {
       console.log(error);
     }

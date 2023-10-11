@@ -1,7 +1,7 @@
 import os
 import secrets
 import string
-from base64 import urlsafe_b64encode, urlsafe_b64decode
+from base64 import b64decode, b64encode
 import uuid
 
 
@@ -18,9 +18,9 @@ def base64_encoder_decoder(data: str, to_encode: bool = False) -> str:
     data_bytes = str(data).encode("ascii")
 
     if to_encode:
-        base64_bytes = urlsafe_b64encode(data_bytes)
+        base64_bytes = b64encode(data_bytes)
     else:
-        base64_bytes = urlsafe_b64decode(data_bytes)
+        base64_bytes = b64decode(data_bytes)
 
     resp_data = base64_bytes.decode("ascii")
 
