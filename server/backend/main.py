@@ -69,16 +69,6 @@ async def verify_token(request: Request, call_next):
     return response
 
 
-@app.post("/api/dummy", status_code=status.HTTP_200_OK)
-def dummy(item: Item):
-    pod_data = {"pod_name": item.name, "pod_id": str(uuid_gen(item.name))}
-
-    return {
-        "success": "codepod created successfully",
-        "pod_data": base64_encoder_decoder(data=json.dumps(pod_data), to_encode=True),
-    }
-
-
 @app.post("/api/create", status_code=status.HTTP_200_OK)
 def create_codepod(item: Item) -> Dict[str, str]:
     # To check if user has a codepod running
@@ -134,10 +124,11 @@ def create_codepod(item: Item) -> Dict[str, str]:
     if exceptions["pod_already_exists"] == 3:
         name = prev_name
 
+    pod_data = {"pod_name": name, "pod_id": str(uuid_gen(name))}
+
     return {
         "success": "codepod created successfully",
-        "pod_name": name,
-        "pod_id": str(uuid_gen(name)),
+        "pod_data": base64_encoder_decoder(data=json.dumps(pod_data), to_encode=True),
     }
 
 

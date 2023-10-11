@@ -14,15 +14,20 @@ const CreateDeleteButton = () => {
     pod_id: string;
   }
 
-  const [podData, setpodData] = useState<podParams>();
+  const [podData, setpodData] = useState<podParams>({
+    pod_name: "",
+    pod_id: "",
+  });
 
   // TODO: Add auth
 
   useEffect(() => {
-    const podVal = localStorage.getItem("podName") || "";
-    // decode base64 and convert to json
-    const decodedPodData = JSON.parse(atob(podVal));
-    setpodData(decodedPodData);
+    const podVal = localStorage.getItem("podData") || "";
+    if (podVal !== "") {
+      // decode base64 and convert to json
+      const decodedPodData = JSON.parse(atob(podVal));
+      setpodData(decodedPodData);
+    }
   }, []);
 
   const ax = axios.create({
@@ -34,9 +39,9 @@ const CreateDeleteButton = () => {
 
   const createPod = async () => {
     try {
-      const response = await ax.post("/dummy", { name: podData?.pod_name });
+      const response = await ax.post("/create", { name: podData?.pod_name });
       console.log(response.data);
-      localStorage.setItem("podName", response.data.pod_data);
+      localStorage.setItem("podData", response.data.pod_data);
     } catch (error) {
       console.log(error);
     }
