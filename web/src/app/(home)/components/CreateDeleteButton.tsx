@@ -9,15 +9,20 @@ const CreateDeleteButton = () => {
   const router = useRouter();
   const { data: session } = useSession();
 
-  const [podName, setpodName] = useState<String>("");
+  interface podParams {
+    pod_name: string;
+    pod_id: string;
+  }
+
+  const [podData, setpodData] = useState<podParams>();
 
   // TODO: Add auth
 
   useEffect(() => {
-    const podName = localStorage.getItem("podName") || "";
-    const decodedPodData = atob(podName);
-    console.log(decodedPodData);
-    setpodName(decodedPodData);
+    const podVal = localStorage.getItem("podName") || "";
+    // decode base64 and convert to json
+    const decodedPodData = JSON.parse(atob(podVal));
+    setpodData(decodedPodData);
   }, []);
 
   const ax = axios.create({
@@ -29,7 +34,7 @@ const CreateDeleteButton = () => {
 
   const createPod = async () => {
     try {
-      const response = await ax.post("/dummy", { name: podName });
+      const response = await ax.post("/dummy", { name: podData?.pod_name });
       console.log(response.data);
       localStorage.setItem("podName", response.data.pod_data);
     } catch (error) {
@@ -40,7 +45,7 @@ const CreateDeleteButton = () => {
 
   const deletePod = async () => {
     try {
-      const response = await ax.post("/delete", { name: podName });
+      const response = await ax.post("/delete", { name: podData?.pod_name });
       console.log(response.data);
     } catch (error) {
       console.log(error);

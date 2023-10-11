@@ -1,3 +1,4 @@
+import json
 from typing import Dict
 from fastapi import FastAPI, status, Request
 from fastapi.middleware.cors import CORSMiddleware
@@ -74,7 +75,7 @@ def dummy(item: Item):
 
     return {
         "success": "codepod created successfully",
-        "pod_data": base64_encoder_decoder(data=str(pod_data), to_encode=True),
+        "pod_data": base64_encoder_decoder(data=json.dumps(pod_data), to_encode=True),
     }
 
 
