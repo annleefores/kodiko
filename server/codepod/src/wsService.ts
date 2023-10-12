@@ -21,10 +21,14 @@ export class wsService {
 
     console.log("Created socket server, waiting for connection");
 
-    wss.on("connection", (ws: WebSocket) => {
+    wss.on("connection", (ws: WebSocket, request) => {
       console.log("Client connected to socket");
 
+      console.log(request);
+
       this.ws = ws;
+
+      this.ws.on("error", console.error);
 
       this.ws.on("close", () => {
         console.log("Client disconnected");
@@ -38,12 +42,12 @@ export class wsService {
 
         // TODO: fix CTRL+D error
 
-        console.log("input-string", inputString);
+        // console.log("input-string", inputString);
 
         if (inputString.startsWith("\x04")) {
           // Remove ASCII character and convert string to JSON
           const jsonData = JSON.parse(inputString.replace(/\x04/g, ""));
-          console.log(jsonData);
+          // console.log(jsonData);
           this.pty?.reSize(jsonData.cols, jsonData.rows);
         } else {
           this.pty?.write(inputString);

@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { useSession } from "next-auth/react";
 import { useToast } from "@/components/ui/use-toast";
+import { Loader2 } from "lucide-react";
 
 const CreateDeleteButton = () => {
   const router = useRouter();
@@ -33,7 +34,7 @@ const CreateDeleteButton = () => {
   const ax = axios.create({
     baseURL: `${process.env.NEXT_PUBLIC_BACKEND}`,
     headers: {
-      // Authorization: `Bearer ${session?.accessToken}`,
+      Authorization: `Bearer ${session?.accessToken}`,
     },
   });
 
@@ -72,15 +73,27 @@ const CreateDeleteButton = () => {
   return (
     <div className="flex flex-col md:flex-row gap-y-6 md:gap-x-12">
       <Button
+        disabled={!session?.accessToken}
         onClick={createPod}
-        className="bg-blue-500 hover:bg-blue-500 px-6 text-white rounded"
+        className="bg-blue-500 hover:bg-blue-500 px-4 text-white rounded"
       >
+        {!session?.accessToken ? (
+          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+        ) : (
+          <></>
+        )}
         Create Codepod
       </Button>
       <Button
+        disabled={!session?.accessToken}
         onClick={deletePod}
-        className="rounded px-6 bg-red-800 text-white hover:bg-red-800"
+        className="rounded px-4 bg-red-800 text-white hover:bg-red-800"
       >
+        {!session?.accessToken ? (
+          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+        ) : (
+          <></>
+        )}
         Delete Codepod
       </Button>
     </div>
