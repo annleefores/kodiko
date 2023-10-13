@@ -16,9 +16,11 @@ load_dotenv()
 from lib.utils import base64_encoder_decoder, generate_random_string, uuid_gen
 from lib.congito_jwt_token import CognitoJwtToken
 from codepod_kube.codepod_kube import (
+    create_external_secret,
     create_ingress,
     create_pod,
     create_svc,
+    delete_external_secret,
     delete_ingress,
     delete_pod,
     delete_svc,
@@ -77,15 +79,16 @@ def create_codepod(item: Item) -> Dict[str, str]:
     exceptions = {
         "create_pod": False,
         "create_svc": False,
+        "create_ext_sec": False,
         "create_ingress": False,
-        "pod_already_exists": 0,
+        "obj_already_exists": 0,
     }
 
     # create pod
     try:
         created_pod_resp = create_pod(name=name, prev_name=prev_name)
         if not created_pod_resp:
-            exceptions["pod_already_exists"] += 1
+            exceptions["obj_already_exists"] += 1
     except ApiException as e:
         logging.exception("Exception when calling CoreV1Api->create_namespaced_pod:")
         exceptions["create_pod"] = True
@@ -94,18 +97,29 @@ def create_codepod(item: Item) -> Dict[str, str]:
     try:
         created_svc_resp = create_svc(name=name, prev_name=prev_name)
         if not created_svc_resp:
-            exceptions["pod_already_exists"] += 1
+            exceptions["obj_already_exists"] += 1
     except ApiException as e:
         logging.exception(
             "Exception when calling CoreV1Api->create_namespaced_service:"
         )
         exceptions["create_svc"] = True
 
+    # create ext_secret
+    try:
+        created_ext_sec_resp = create_external_secret(name=name, prev_name=prev_name)
+        if not created_ext_sec_resp:
+            exceptions["obj_already_exists"] += 1
+    except ApiException as e:
+        logging.exception(
+            "Exception when calling CustomObjectsApi->create_namespaced_custom_object:"
+        )
+        exceptions["create_ext_sec"] = True
+
     # create ingress
     try:
         created_ingress_resp = create_ingress(name=name, prev_name=prev_name)
         if not created_ingress_resp:
-            exceptions["pod_already_exists"] += 1
+            exceptions["obj_already_exists"] += 1
     except ApiException as e:
         logging.exception(
             "Exception when calling NetworkingV1Api->create_namespaced_ingress:",
@@ -119,7 +133,7 @@ def create_codepod(item: Item) -> Dict[str, str]:
             print(f"{func} encountered an issue")
 
     # if user has a codepod already running, send back previous details
-    if exceptions["pod_already_exists"] == 3:
+    if exceptions["obj_already_exists"] == 4:
         name = prev_name
 
     pod_data = {"pod_name": name, "pod_id": str(uuid_gen(name))}
@@ -138,6 +152,7 @@ def delete_codepod(item: Item) -> Dict[str, str]:
         "delete_pod": False,
         "delete_svc": False,
         "delete_ingress": False,
+        "delete_ext_sec": False,
     }
 
     # delete pod
@@ -153,6 +168,15 @@ def delete_codepod(item: Item) -> Dict[str, str]:
     except ApiException as e:
         logging.exception("Exception when calling CoreV1Api->delete_namespaced_service")
         exceptions["delete_svc"] = True
+
+    # delete svc
+    try:
+        deleted_ext_sec_resp = delete_external_secret(name=name)
+    except ApiException as e:
+        logging.exception(
+            "Exception when calling CustomObjectsApi->delete_namespaced_custom_object"
+        )
+        exceptions["delete_ext_sec"] = True
 
     # delete ingress
     try:

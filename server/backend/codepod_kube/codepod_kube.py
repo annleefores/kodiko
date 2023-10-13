@@ -2,6 +2,8 @@ from typing import Any
 from kubernetes import client, config
 from kubernetes.client.rest import ApiException
 import os
+from typing import List, Dict
+
 
 if os.getenv("BACKEND_ENV") == "kube":
     config.load_kube_config()
@@ -30,6 +32,7 @@ def create_pod(name: str, prev_name: str):
                 resources=client.V1ResourceRequirements(
                     limits={"memory": "500Mi", "cpu": "1000m"}
                 ),
+                env_from=[client.V1SecretEnvSource(name=name)],
             )
         ]
     )
@@ -95,6 +98,128 @@ def delete_svc(name: str):
     print(f"Deleting {name} svc....")
 
     resp = v1.delete_namespaced_service(namespace="default", name=name)
+
+    return resp
+
+
+# Ext Secret
+
+group = "external-secrets.io"
+version = "v1beta1"
+namespace = "default"
+plural = "externalsecrets"
+
+
+def get_external_secret(
+    v1: Any,
+    name: str,
+) -> bool:
+    resp = False
+
+    try:
+        resp = v1.get_namespaced_custom_object(
+            group=group, version=version, namespace=namespace, plural=plural, name=name
+        )
+    except ApiException as e:
+        if e.status != 404:
+            print(f"Unknown error: {e}")
+            exit(1)
+    # return None or some response
+    return resp
+
+
+def create_external_secret(name: str, prev_name: str):
+    v1 = client.CustomObjectsApi()
+
+    if get_external_secret(
+        v1=v1,
+        name=name,
+    ) or (get_external_secret(v1=v1, name=prev_name) if prev_name else False):
+        print(f"{name} service already exists")
+        return False
+
+    print(f"Creating {name} externalSecret....")
+
+    # NOTE name should be something like codepod-secret
+
+    # Add all AWS parameter store key vals here as dict
+    data = {
+        "COGNITO_CLIENT_ID": "/kodiko/backend/APP_CLIENT_ID",
+        "COGNITO_USER_POOL_ID": "/kodiko/backend/USERPOOL_ID",
+    }
+
+    # create data and data ref template for external secret
+
+    ## create key:key for template data
+    data_template = {}
+
+    ## type declaration
+    MyDictType = Dict[str, str | Dict[str, str]]
+    MyListType = List[MyDictType]
+
+    ## create external secretRef template
+    data_ref: MyListType = []
+
+    for key, val in data.items():
+        data_template[key] = key
+        ref = {
+            "secretKey": key,
+            "remoteRef": {"key": val},
+        }
+        data_ref.append(ref)
+
+    external_secret_body = {
+        "apiVersion": "external-secrets.io/v1beta1",
+        "kind": "ExternalSecret",
+        "metadata": {"name": f"{name}-ext"},
+        "spec": {
+            "refreshInterval": "0",
+            "secretStoreRef": {"name": "parameterstore", "kind": "SecretStore"},
+            "target": {
+                "name": name,
+                "template": {
+                    "engineVersion": "v2",
+                    "data": data_template,
+                },
+            },
+            "data": data_ref,
+        },
+    }
+
+    resp = v1.create_namespaced_custom_object(
+        group=group,
+        version=version,
+        namespace=namespace,
+        plural=plural,
+        body=external_secret_body,
+    )
+
+    return True
+
+
+def delete_external_secret(name: str):
+    v1 = client.CustomObjectsApi()
+
+    if (
+        get_external_secret(
+            v1=v1,
+            name=name,
+        )
+        is None
+    ):
+        print(f"{name} externalSecret does not exist or already deleted....")
+        return 1
+
+    print(f"Deleting {name} externalSecret....")
+
+    resp = v1.delete_namespaced_custom_object(
+        namespace="default",
+        name=f"{name}-ext",
+        group=group,
+        version=version,
+        plural=plural,
+        body=client.V1DeleteOptions(),
+    )
 
     return resp
 
@@ -175,7 +300,7 @@ def read_resources(
     resource: str,
     namespace: str = "default",
 ) -> bool:
-    resp = None
+    resp = False
 
     try:
         method_name = f"read_namespaced_{resource}"
