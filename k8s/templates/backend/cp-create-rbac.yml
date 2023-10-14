@@ -6,10 +6,13 @@ metadata:
 rules:
 - apiGroups: [""]
   resources: ["pods", "services"]
-  verbs: ["list", "watch", "create", "update", "patch", "delete", "get"]
+  verbs: ["create", "delete", "get"]
 - apiGroups: ["", "networking.k8s.io"]
   resources: ["ingresses"]
-  verbs: ["create", "update", "patch", "delete", "get"]
+  verbs: ["create", "delete", "get"]
+- apiGroups: ["external-secrets.io"]
+  resources: ["externalsecrets"]
+  verbs: ["create", "delete", "get"]
 
 
 ---

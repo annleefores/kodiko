@@ -32,7 +32,11 @@ def create_pod(name: str, prev_name: str):
                 resources=client.V1ResourceRequirements(
                     limits={"memory": "500Mi", "cpu": "1000m"}
                 ),
-                env_from=[client.V1SecretEnvSource(name=name)],
+                env_from=[
+                    client.V1EnvFromSource(
+                        secret_ref=client.V1SecretEnvSource(name=name)
+                    )
+                ],
             )
         ]
     )
@@ -106,14 +110,10 @@ def delete_svc(name: str):
 
 group = "external-secrets.io"
 version = "v1beta1"
-namespace = "default"
 plural = "externalsecrets"
 
 
-def get_external_secret(
-    v1: Any,
-    name: str,
-) -> bool:
+def get_external_secret(v1: Any, name: str, namespace: str = "default") -> bool:
     resp = False
 
     try:
@@ -161,7 +161,8 @@ def create_external_secret(name: str, prev_name: str):
     data_ref: MyListType = []
 
     for key, val in data.items():
-        data_template[key] = key
+        # the dict should be like this { "key" : "{{ .key }}" } for ext secret
+        data_template[key] = f"{{{{ .{key}  }}}}"
         ref = {
             "secretKey": key,
             "remoteRef": {"key": val},
@@ -171,7 +172,7 @@ def create_external_secret(name: str, prev_name: str):
     external_secret_body = {
         "apiVersion": "external-secrets.io/v1beta1",
         "kind": "ExternalSecret",
-        "metadata": {"name": f"{name}-ext"},
+        "metadata": {"name": name},
         "spec": {
             "refreshInterval": "0",
             "secretStoreRef": {"name": "parameterstore", "kind": "SecretStore"},
@@ -189,7 +190,7 @@ def create_external_secret(name: str, prev_name: str):
     resp = v1.create_namespaced_custom_object(
         group=group,
         version=version,
-        namespace=namespace,
+        namespace="default",
         plural=plural,
         body=external_secret_body,
     )
@@ -214,7 +215,7 @@ def delete_external_secret(name: str):
 
     resp = v1.delete_namespaced_custom_object(
         namespace="default",
-        name=f"{name}-ext",
+        name=name,
         group=group,
         version=version,
         plural=plural,
