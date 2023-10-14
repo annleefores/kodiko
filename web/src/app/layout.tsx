@@ -11,7 +11,7 @@ const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Kodiko",
-  description: "Dead simple cloud IDE",
+  description: "A simple cloud IDE",
 };
 
 export default async function RootLayout({

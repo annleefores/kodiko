@@ -4,4 +4,4 @@
 
 # Kodiko [wip]
 
-Dead simple cloud IDE
+A simple cloud IDE
