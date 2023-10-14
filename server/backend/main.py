@@ -195,6 +195,10 @@ def delete_codepod(item: Item) -> Dict[str, str]:
     return {"success": "codepod deleted successfully"}
 
 
+# This should be at the end. For some reason CORS only work when it's at the end
+# https://stackoverflow.com/questions/60680870/cors-issues-when-running-a-dockerised-fastapi-application
+
+
 origins = [
     "http://localhost:3000",
 ]
