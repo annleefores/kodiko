@@ -53,7 +53,7 @@ def create_pod(name: str, prev_name: str):
 def delete_pod(name: str):
     v1 = client.CoreV1Api()
 
-    if read_resources(v1, name, "pod") is None:
+    if read_resources(v1, name, "pod") is False:
         print(f"{name} pod does not exist or already deleted....")
         return 1
 
@@ -95,7 +95,7 @@ def create_svc(name: str, prev_name: str):
 def delete_svc(name: str):
     v1 = client.CoreV1Api()
 
-    if read_resources(v1, name, "service") is None:
+    if read_resources(v1, name, "service") is False:
         print(f"{name} service does not exist or already deleted....")
         return 1
 
@@ -135,7 +135,7 @@ def create_external_secret(name: str, prev_name: str):
         v1=v1,
         name=name,
     ) or (get_external_secret(v1=v1, name=prev_name) if prev_name else False):
-        print(f"{name} service already exists")
+        print(f"{name} extSecret already exists")
         return False
 
     print(f"Creating {name} externalSecret....")
@@ -206,7 +206,7 @@ def delete_external_secret(name: str):
             v1=v1,
             name=name,
         )
-        is None
+        is False
     ):
         print(f"{name} externalSecret does not exist or already deleted....")
         return 1
@@ -284,7 +284,7 @@ def create_ingress(name: str, prev_name: str):
 def delete_ingress(name: str):
     v1 = client.NetworkingV1Api()
 
-    if read_resources(v1, name, "ingress") is None:
+    if read_resources(v1, name, "ingress") is False:
         print(f"{name} ingress does not exist or already deleted....")
         return 1
 
