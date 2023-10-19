@@ -31,12 +31,12 @@ resource "aws_vpc" "kodiko_vpc" {
   }
 }
 
-resource "aws_subnet" "kodiko_public_subnet" {
-  vpc_id                  = aws_vpc.kodiko_vpc.id
-  cidr_block              = var.vpc_subnet_cidr_block
-  map_public_ip_on_launch = true
+resource "aws_internet_gateway" "kodiko-igw" {
+  vpc_id = aws_vpc.kodiko_vpc.id
 
   tags = {
     Name = var.name
   }
 }
+
+
