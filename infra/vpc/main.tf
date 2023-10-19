@@ -24,9 +24,19 @@ provider "aws" {
 
 # Create a VPC
 resource "aws_vpc" "kodiko_vpc" {
-  cidr_block = var.vpc_cidr_bloc
+  cidr_block = var.vpc_cidr_block
 
   tags = {
-    Name = "kodiko"
+    Name = var.name
+  }
+}
+
+resource "aws_subnet" "kodiko_public_subnet" {
+  vpc_id                  = aws_vpc.kodiko_vpc.id
+  cidr_block              = var.vpc_subnet_cidr_block
+  map_public_ip_on_launch = true
+
+  tags = {
+    Name = var.name
   }
 }
