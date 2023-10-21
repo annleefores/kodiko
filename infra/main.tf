@@ -6,8 +6,6 @@ terraform {
     }
   }
 
-
-
   backend "s3" {
     bucket         = "annlee-s3-state"
     key            = "kodiko/kodiko.tfstate"
@@ -26,4 +24,6 @@ provider "aws" {
 
 module "vpc" {
   source = "./vpc"
+
+  region = var.region
 }

@@ -4,4 +4,3 @@ metadata:
   name: backend-configmap
 data:
   ENV: PROD
-  UPDATE: ARGOCD

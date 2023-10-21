@@ -29,3 +29,8 @@ variable "name" {
   type    = string
   default = "kodiko"
 }
+
+variable "region" {
+  type    = string
+  default = "ap-south-1"
+}
