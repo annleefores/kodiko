@@ -49,7 +49,7 @@ def push_cp() -> None:
     """
     Build and Push codepod build and deploy base images
     """
-    os.chdir("scripts/docker/codepod")
+    os.chdir("utils/docker/codepod")
     # build and push codepod-build image
     execute_build_push("build")
 
