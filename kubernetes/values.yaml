@@ -16,8 +16,8 @@ type: ClusterIP
 eso:
   UUID_NAMESPACE: /kodiko/backend/UUID_NAMESPACE
   REGION: /kodiko/backend/REGION
-  USERPOOL_ID: /kodiko/backend/USERPOOL_ID
-  APP_CLIENT_ID: /kodiko/backend/APP_CLIENT_ID
+  COGNITO_USER_POOL_ID: /kodiko/backend/COGNITO_USER_POOL_ID
+  COGNITO_CLIENT_ID: /kodiko/backend/COGNITO_CLIENT_ID
 
 
 

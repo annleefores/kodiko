@@ -144,8 +144,8 @@ def create_external_secret(name: str, prev_name: str):
 
     # Add all AWS parameter store key vals here as dict
     data = {
-        "COGNITO_CLIENT_ID": "/kodiko/backend/APP_CLIENT_ID",
-        "COGNITO_USER_POOL_ID": "/kodiko/backend/USERPOOL_ID",
+        "COGNITO_CLIENT_ID": "/kodiko/backend/COGNITO_CLIENT_ID",
+        "COGNITO_USER_POOL_ID": "/kodiko/backend/COGNITO_USER_POOL_ID",
     }
 
     # create data and data ref template for external secret

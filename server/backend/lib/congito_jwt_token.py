@@ -7,7 +7,7 @@ from jose.utils import base64url_decode
 
 # Download public keys
 response = requests.get(
-    f'https://cognito-idp.{os.getenv("REGION")}.amazonaws.com/{os.getenv("USERPOOL_ID")}/.well-known/jwks.json'
+    f'https://cognito-idp.{os.getenv("REGION")}.amazonaws.com/{os.getenv("COGNITO_USER_POOL_ID")}/.well-known/jwks.json'
 )
 keys = response.json()["keys"]
 
@@ -71,7 +71,7 @@ class CognitoJwtToken:
 
         # and the Audience  (use claims['client_id'] if verifying an access token)
         audience = claims["aud"] if "aud" in claims else claims["client_id"]
-        if audience != os.getenv("APP_CLIENT_ID"):
+        if audience != os.getenv("COGNITO_CLIENT_ID"):
             raise Exception("Token was not issued for this audience")
 
         return claims
