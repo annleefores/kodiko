@@ -19,11 +19,18 @@ terraform {
 
 # Configure the AWS Provider
 provider "aws" {
-  region = "ap-south-1"
+  region = var.region
 }
 
 module "vpc" {
   source = "./vpc"
-
   region = var.region
+}
+
+module "auth" {
+  source               = "./auth"
+  region               = var.region
+  google_client_id     = var.google_client_id
+  google_client_secret = var.google_client_secret
+  google_callback_url  = var.google_callback_url
 }
