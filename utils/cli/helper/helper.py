@@ -24,7 +24,7 @@ def execute_kube(docker: str, k8s: str):
                 " "
             )
         )
-        subprocess.run(f"helm {k8s} backend ./kubernetes".split(" "))
+        subprocess.run(f"helm {k8s} backend ./kubernetes/backend".split(" "))
     else:
         subprocess.run(f"helm {k8s} backend".split(" "))
 

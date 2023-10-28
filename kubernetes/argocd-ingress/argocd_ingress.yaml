@@ -1,0 +1,27 @@
+  apiVersion: networking.k8s.io/v1
+  kind: Ingress
+  metadata:
+    name: argocd
+    namespace: argocd
+    annotations:
+      alb.ingress.kubernetes.io/scheme: "internet-facing"
+      alb.ingress.kubernetes.io/target-type: "ip"
+  spec:
+    ingressClassName: alb
+    rules:
+    - http:
+        paths:
+        - path: /
+          backend:
+            service:
+              name: argogrpc
+              port:
+                number: 8080
+          pathType: Prefix
+        - path: /
+          backend:
+            service:
+              name: argocd-server
+              port:
+                number: 8080
+          pathType: Prefix
