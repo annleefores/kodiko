@@ -63,7 +63,7 @@ def main(ctx: typer.Context):
     Manage dx related commands for Kodiko application development
     """
     if ctx.invoked_subcommand is None:
-        print("Initializing database")
+        print("Initializing Kodiko CLI")
 
 
 if __name__ == "__main__":

@@ -150,14 +150,14 @@ def create_external_secret(name: str, prev_name: str):
 
     # create data and data ref template for external secret
 
-    ## create key:key for template data
+    # create key:key for template data
     data_template = {}
 
-    ## type declaration
+    # type declaration
     MyDictType = Dict[str, str | Dict[str, str]]
     MyListType = List[MyDictType]
 
-    ## create external secretRef template
+    # create external secretRef template
     data_ref: MyListType = []
 
     for key, val in data.items():
