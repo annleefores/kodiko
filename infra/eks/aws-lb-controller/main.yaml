@@ -1,0 +1,28 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: main-ingress
+  namespace: default
+  labels:
+    app: main-ingress
+  annotations:
+    alb.ingress.kubernetes.io/scheme: "internet-facing"
+    alb.ingress.kubernetes.io/target-type: "ip"
+    alb.ingress.kubernetes.io/load-balancer-name: "kodiko-alb"
+    alb.ingress.kubernetes.io/group.name: "kodiko-main"
+    alb.ingress.kubernetes.io/group.order: '100'
+    alb.ingress.kubernetes.io/ssl-redirect: '443'
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS":443}]'
+    alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:ap-south-1:303578645961:certificate/a6f5b204-c359-483a-8bb7-94a7aaabada4
+    alb.ingress.kubernetes.io/actions.response-404: >
+      {"type":"fixed-response","fixedResponseConfig":{"contentType":"text/plain","statusCode":"404","messageBody":"404 not found"}}
+spec:
+  ingressClassName: alb
+  tls:
+  - hosts:
+    - '*.kodiko.xyz'
+  defaultBackend:
+    service:
+      name: response-404
+      port:
+        name: use-annotation

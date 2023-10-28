@@ -1,0 +1,30 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: nginx-aws-lb-ingress
+  namespace: ingress-nginx
+  labels:
+    app: nginx-aws-lb-ingress
+  annotations:
+    alb.ingress.kubernetes.io/scheme: "internet-facing"
+    alb.ingress.kubernetes.io/target-type: "ip"
+    alb.ingress.kubernetes.io/load-balancer-name: "kodiko-alb"
+    alb.ingress.kubernetes.io/group.name: "kodiko-main"
+    alb.ingress.kubernetes.io/group.order: '1'
+    alb.ingress.kubernetes.io/ssl-redirect: '443'
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS":443}]'
+    alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:ap-south-1:303578645961:certificate/a6f5b204-c359-483a-8bb7-94a7aaabada4
+    alb.ingress.kubernetes.io/tags: Name=nginx-aws-lb-ingress
+spec:
+  ingressClassName: alb
+  rules:
+    - host: 'api.kodiko.xyz'
+      http:
+        paths:
+          - pathType: Prefix
+            path: /
+            backend:
+              service:
+                name: ingress-nginx-controller
+                port:
+                  number: 80
