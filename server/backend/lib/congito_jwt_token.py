@@ -1,20 +1,14 @@
 import time
 import os
 import requests
-from requests import ConnectionError
 from jose import jwk, jwt
 from jose.exceptions import JOSEError
 from jose.utils import base64url_decode
 
 # Download public keys
-try:
-    response = requests.get(
-        f'https://cognito-idp.{os.getenv("REGION")}.amazonaws.com/{os.getenv("COGNITO_USER_POOL_ID")}/.well-known/jwks.json'
-    )
-except ConnectionError as e:
-    raise Exception("Connection Error, Unable to download jwks", str(e))
-
-
+response = requests.get(
+    f'https://cognito-idp.{os.getenv("REGION")}.amazonaws.com/{os.getenv("COGNITO_USER_POOL_ID")}/.well-known/jwks.json'
+)
 keys = response.json()["keys"]
 
 
