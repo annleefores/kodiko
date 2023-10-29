@@ -1,10 +1,10 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: nginx-aws-lb-ingress
+  name: nginx-main-ingress
   namespace: ingress-nginx
   labels:
-    app: nginx-aws-lb-ingress
+    app: nginx-main-ingress
   annotations:
     alb.ingress.kubernetes.io/scheme: "internet-facing"
     alb.ingress.kubernetes.io/target-type: "ip"
