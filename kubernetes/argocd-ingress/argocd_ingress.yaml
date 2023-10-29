@@ -38,6 +38,3 @@
                   name: argocd-server
                   port:
                     number: 443
-    # tls:
-    # - hosts:
-    #   - argocd.kodiko.xyz
