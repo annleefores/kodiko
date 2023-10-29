@@ -1,21 +1,21 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: aws-lb-argocd-ingress
+  name: main-ingress
   namespace: argocd
   finalizers:
     - resources-finalizer.argocd.argoproj.io
   labels:
-    name: aws-lb-argocd-ingress
+    name: main-ingress
 spec:
   project: default
   source:
     repoURL: https://github.com/annleefores/kodiko.git
     targetRevision: dev
-    path: kubernetes/system-config/manifests/argocd-ingress
+    path: kubernetes/system-config/manifests/main-ingress
   destination:
     server: https://kubernetes.default.svc
-    namespace: argocd
+    namespace: default
   syncPolicy:
     automated:
         prune: true
