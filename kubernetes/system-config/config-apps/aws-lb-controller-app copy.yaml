@@ -1,0 +1,32 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: aws-load-balancer-controller
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+  labels:
+    name: aws-load-balancer-controller
+spec:
+  project: default
+  source:
+    repoURL: https://aws.github.io/eks-charts
+    targetRevision: v1.6.2
+    chart: aws-load-balancer-controller
+    helm:
+        releaseName: aws-load-balancer-controller
+        valuesObject:
+            clusterName: kodiko 
+            serviceAccount:
+                create: false
+                name: aws-load-balancer-controller
+            region: ap-south-1
+            vpcId: vpc-0b56119acaccfad0b
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: kube-system
+  syncPolicy:
+    automated:
+        prune: true
+        selfHeal: true
+    
