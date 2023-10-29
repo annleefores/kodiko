@@ -6,6 +6,15 @@
 
 🚀 Kodiko is a work-in-progress project aiming to create a Cloud IDE powered by Kubernetes. The project is designed to leverage the capabilities of Kubernetes and make use of DevOps practices and tools to make ongoing incremental development smooth.
 
+#### DevOps & Cloud
+- AWS
+- EKS
+- Terraform
+- Kubernetes
+- ArgoCD
+- Helm
+- Cognito
+
 #### Frontend
 - Next.js
 - TailwindCSS
@@ -21,9 +30,3 @@
 - node-pty
 - ws (websocket)
 - Typer CLI
-
-#### DevOps & Cloud
-- AWS
-- Terraform
-- Kubernetes
-- Cognito
