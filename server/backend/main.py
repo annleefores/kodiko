@@ -199,9 +199,7 @@ def delete_codepod(item: Item) -> Dict[str, str]:
 # https://stackoverflow.com/questions/60680870/cors-issues-when-running-a-dockerised-fastapi-application
 
 
-origins = [
-    "http://localhost:3000",
-]
+origins = ["http://localhost:3000", "https://kodiko.xyz"]
 
 app.add_middleware(
     CORSMiddleware,
