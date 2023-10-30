@@ -14,6 +14,7 @@
 - ArgoCD
 - Helm
 - Cognito
+- SST
 
 #### Frontend
 - Next.js
