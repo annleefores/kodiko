@@ -24,6 +24,7 @@ jobs:
   deploy-kodiko-frontend:
     name: Build and Deploy Kodiko fronend
     runs-on: ubuntu-latest
+    environment: production
     defaults:
         run:
           working-directory: ./web/
