@@ -66,7 +66,7 @@ jobs:
         with:
           role-to-assume: arn:aws:iam::${{ vars.ACCOUNT_ID }}:role/GitHub
           role-duration-seconds: 7200 # adjust as needed for your build time
-          aws-region: ${{ vars.REGION }}
+          aws-region: ap-south-1
 
       - name: Build and deploy app
         run: |
