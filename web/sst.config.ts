@@ -11,6 +11,7 @@ export default {
   },
   stacks(app) {
     app.stack(function Site({ stack }) {
+      // Custom domain config - https://docs.sst.dev/constructs/NextjsSite#configuring-custom-domains
       const site = new NextjsSite(stack, "site", {
         customDomain: {
           domainName: process.env.DOMAIN_NAME || "",
