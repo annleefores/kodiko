@@ -5,6 +5,10 @@ import { getServerSession } from "next-auth";
 
 export default async function Home() {
   const session = await getServerSession();
+
+  // temporary feature flag
+  const enable_button = process.env.ENABLE_BUTTON === "true" || false;
+
   return (
     <main className="flex flex-col items-center gap-y-16 mt-16">
       <div className="flex flex-col justify-center items-center gap-y-6">
@@ -17,7 +21,7 @@ export default async function Home() {
           </p>
         </div>
       </div>
-      {session ? <CreateDeleteButton /> : <></>}
+      {session && enable_button ? <CreateDeleteButton /> : <></>}
     </main>
   );
 }
