@@ -37,5 +37,5 @@ yarn-error.log*
 next-env.d.ts
 .sst
 .open-next
-cdk.context.json
+
 
