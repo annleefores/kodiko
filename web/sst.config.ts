@@ -26,6 +26,10 @@ export default {
           },
         },
       });
+      // per route logging
+      new NextjsSite(stack, "log", {
+        logging: "per-route",
+      });
 
       stack.addOutputs({
         SiteUrl: site.url,
