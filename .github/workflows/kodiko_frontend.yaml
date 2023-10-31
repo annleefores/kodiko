@@ -12,10 +12,6 @@ on:
         paths:
         - "web/**"
 
-# Concurrency group name ensures concurrent workflow runs wait for any in-progress job to finish
-concurrency:
-  group: merge-${{ github.ref }}
-
 permissions:
   id-token: write # This is required for requesting the JWT
   contents: read # This is required for actions/checkout
@@ -51,6 +47,7 @@ jobs:
 
 
       - name: Build and deploy app
+        run: npx sst deploy --stage prod
         env:
           ENV_NAME: ${{ secrets.ENV_NAME }}
           NEXT_PUBLIC_CODEPOD_WS: ${{ secrets.NEXT_PUBLIC_CODEPOD_WS }}
@@ -67,6 +64,4 @@ jobs:
           DOMAIN_NAME: ${{ secrets.DOMAIN_NAME }}
           CERT_ARN: ${{ secrets.CERT_ARN }}
           ENABLE_BUTTON: ${{ secrets.ENABLE_BUTTON }}
-        run: |
-          npx sst deploy --stage prod
           
