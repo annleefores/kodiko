@@ -28,25 +28,7 @@ jobs:
     defaults:
         run:
           working-directory: ./web/
-    env:
-    # Define your envs needed for static generation:
-        ENV_NAME: ${{ secrets.ENV_NAME }}
-        NEXT_PUBLIC_CODEPOD_WS: ${{ secrets.NEXT_PUBLIC_CODEPOD_WS }}
-        NEXT_PUBLIC_BACKEND: ${{ secrets.NEXT_PUBLIC_BACKEND }}
-        NEXTAUTH_URL: ${{ secrets.NEXTAUTH_URL }}
-        NEXTAUTH_SECRET: ${{ secrets.NEXTAUTH_SECRET }}
-        REGION: ${{ secrets.REGION }}
-        COGNITO_REGION: ${{ secrets.COGNITO_REGION }}
-        COGNITO_DOMAIN: ${{ secrets.COGNITO_DOMAIN }}
-        COGNITO_CLIENT_ID: ${{ secrets.COGNITO_CLIENT_ID }}
-        COGNITO_USER_POOL_ID: ${{ secrets.COGNITO_USER_POOL_ID }}
-        COGNITO_CLIENT_SECRET: ${{ secrets.COGNITO_CLIENT_SECRET }}
-        HOSTED_ZONE_NAME: ${{ secrets.HOSTED_ZONE_NAME }}
-        DOMAIN_NAME: ${{ secrets.DOMAIN_NAME }}
-        CERT_ARN: ${{ secrets.CERT_ARN }}
-        ACCOUNT_ID: ${{ secrets.ACCOUNT_ID }}
-        
-
+    
     steps:
       - name: Git clone the repository
         uses: actions/checkout@v3
@@ -66,7 +48,27 @@ jobs:
         with:
           role-to-assume: arn:aws:iam::${{ env.ACCOUNT_ID }}:role/GitHub
           aws-region: ${{ env.REGION }}
+        env:
+          REGION: ${{ secrets.REGION }}
+          ACCOUNT_ID: ${{ secrets.ACCOUNT_ID }}
 
       - name: Build and deploy app
+        env:
+          ENV_NAME: ${{ secrets.ENV_NAME }}
+          NEXT_PUBLIC_CODEPOD_WS: ${{ secrets.NEXT_PUBLIC_CODEPOD_WS }}
+          NEXT_PUBLIC_BACKEND: ${{ secrets.NEXT_PUBLIC_BACKEND }}
+          NEXTAUTH_URL: ${{ secrets.NEXTAUTH_URL }}
+          NEXTAUTH_SECRET: ${{ secrets.NEXTAUTH_SECRET }}
+          REGION: ${{ secrets.REGION }}
+          COGNITO_REGION: ${{ secrets.COGNITO_REGION }}
+          COGNITO_DOMAIN: ${{ secrets.COGNITO_DOMAIN }}
+          COGNITO_CLIENT_ID: ${{ secrets.COGNITO_CLIENT_ID }}
+          COGNITO_USER_POOL_ID: ${{ secrets.COGNITO_USER_POOL_ID }}
+          COGNITO_CLIENT_SECRET: ${{ secrets.COGNITO_CLIENT_SECRET }}
+          HOSTED_ZONE_NAME: ${{ secrets.HOSTED_ZONE_NAME }}
+          DOMAIN_NAME: ${{ secrets.DOMAIN_NAME }}
+          CERT_ARN: ${{ secrets.CERT_ARN }}
+          ENABLE_BUTTON: ${{ secrets.ENABLE_BUTTON }}
         run: |
           npx sst deploy --stage prod
+          
