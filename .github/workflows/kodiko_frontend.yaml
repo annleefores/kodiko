@@ -54,6 +54,7 @@ jobs:
 
       - name: Build and deploy app
         env:
+          CI: false
           ENV_NAME: ${{ secrets.ENV_NAME }}
           NEXT_PUBLIC_CODEPOD_WS: ${{ secrets.NEXT_PUBLIC_CODEPOD_WS }}
           NEXT_PUBLIC_BACKEND: ${{ secrets.NEXT_PUBLIC_BACKEND }}
@@ -70,7 +71,5 @@ jobs:
           CERT_ARN: ${{ secrets.CERT_ARN }}
           ENABLE_BUTTON: ${{ secrets.ENABLE_BUTTON }}
         run: |
-          echo "Something"
-          echo $NEXTAUTH_URL
           npx sst deploy --stage prod
           
