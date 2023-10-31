@@ -6,6 +6,8 @@
 
 🚀 Kodiko is a work-in-progress project aiming to create a Cloud IDE powered by Kubernetes. The project is designed to leverage the capabilities of Kubernetes and make use of DevOps practices and tools to make ongoing incremental development smooth.
 
+[![kodiko-frontend](https://github.com/annleefores/kodiko/actions/workflows/kodiko_frontend.yaml/badge.svg?branch=main)](https://github.com/annleefores/kodiko/actions/workflows/kodiko_frontend.yaml)
+
 #### DevOps & Cloud
 - AWS
 - EKS
