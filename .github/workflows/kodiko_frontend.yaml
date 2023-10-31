@@ -49,7 +49,6 @@ jobs:
       - name: Build and deploy app
         run: npx sst deploy --stage prod
         env:
-          ENV_NAME: ${{ secrets.ENV_NAME }}
           NEXT_PUBLIC_CODEPOD_WS: ${{ secrets.NEXT_PUBLIC_CODEPOD_WS }}
           NEXT_PUBLIC_BACKEND: ${{ secrets.NEXT_PUBLIC_BACKEND }}
           NEXTAUTH_URL: ${{ secrets.NEXTAUTH_URL }}
@@ -63,5 +62,6 @@ jobs:
           HOSTED_ZONE_NAME: ${{ secrets.HOSTED_ZONE_NAME }}
           DOMAIN_NAME: ${{ secrets.DOMAIN_NAME }}
           CERT_ARN: ${{ secrets.CERT_ARN }}
+          ENV_NAME: ${{ secrets.ENV_NAME }}
           ENABLE_BUTTON: ${{ secrets.ENABLE_BUTTON }}
           
