@@ -41,20 +41,17 @@ jobs:
           cache-dependency-path: ./web/package-lock.json
 
       - name: Install dependencies
-        run: npm ci
+        run: npm i
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          role-to-assume: arn:aws:iam::${{ env.ACCOUNT_ID }}:role/GitHub
-          aws-region: ${{ env.REGION }}
-        env:
-          REGION: ${{ secrets.REGION }}
-          ACCOUNT_ID: ${{ secrets.ACCOUNT_ID }}
+          role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
+          aws-region: ${{ secrets.REGION }}
+
 
       - name: Build and deploy app
         env:
-          CI: false
           ENV_NAME: ${{ secrets.ENV_NAME }}
           NEXT_PUBLIC_CODEPOD_WS: ${{ secrets.NEXT_PUBLIC_CODEPOD_WS }}
           NEXT_PUBLIC_BACKEND: ${{ secrets.NEXT_PUBLIC_BACKEND }}
