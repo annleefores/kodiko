@@ -45,21 +45,23 @@ jobs:
           role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
           aws-region: ${{ secrets.REGION }}
       
-      # For some reason NEXTAUTH_SECRET is not loaded from GitHub Secrets env
+      # For some reason NEXTAUTH Variables is not loaded from GitHub Secrets env
       # Going through NextAuth codebase to figure out exact reason
       # Temporary solution by creating .env from GitHub Secrets
 
       - name: Generate .env for NEXTAUTH_SECRET
-        run: echo "NEXTAUTH_SECRET=$NEXTAUTH_SECRET" > .env
+        run: |
+          echo "NEXTAUTH_SECRET=$NEXTAUTH_SECRET" > .env
+          echo "NEXTAUTH_URL=$NEXTAUTH_URL" >> .env
         env:
           NEXTAUTH_SECRET: ${{ secrets.NEXTAUTH_SECRET }}
+          NEXTAUTH_URL: ${{ secrets.NEXTAUTH_URL }}
 
       - name: Build and deploy app
         run: npx sst deploy --stage prod
         env:
           NEXT_PUBLIC_CODEPOD_WS: ${{ secrets.NEXT_PUBLIC_CODEPOD_WS }}
           NEXT_PUBLIC_BACKEND: ${{ secrets.NEXT_PUBLIC_BACKEND }}
-          NEXTAUTH_URL: ${{ secrets.NEXTAUTH_URL }}
           REGION: ${{ secrets.REGION }}
           COGNITO_REGION: ${{ secrets.COGNITO_REGION }}
           COGNITO_DOMAIN: ${{ secrets.COGNITO_DOMAIN }}
