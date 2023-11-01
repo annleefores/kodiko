@@ -10,7 +10,6 @@ const {
   COGNITO_CLIENT_ID,
   COGNITO_USER_POOL_ID,
   COGNITO_CLIENT_SECRET,
-  NEXTAUTH_SECRET,
 } = process.env;
 
 function getProvider(provider: string): Provider {
@@ -68,7 +67,8 @@ function getProvider(provider: string): Provider {
 const authOptions: NextAuthOptions = {
   // Configure one or more authentication providers
   providers: [...["Google"].map((provider: string) => getProvider(provider))],
-  secret: NEXTAUTH_SECRET,
+
+  secret: process.env.NEXTAUTH_SECRET,
   callbacks: {
     async signIn({ user, account, profile }) {
       // Return true to allow sign in and false to block sign in.
