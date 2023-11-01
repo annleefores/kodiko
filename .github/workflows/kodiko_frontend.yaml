@@ -45,7 +45,7 @@ jobs:
           role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
           aws-region: ${{ secrets.REGION }}
       
-      # For some reason NEXTAUTH_SECRET is not loaded from env
+      # For some reason NEXTAUTH_SECRET is not loaded from GitHub Secrets env
       # Going through NextAuth codebase to figure out exact reason
       # Temporary solution by creating .env from GitHub Secrets
 
