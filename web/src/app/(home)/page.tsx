@@ -2,6 +2,7 @@ import Image from "next/image";
 import logo from "../../../public/kodiko-logo-text.png";
 import CreateDeleteButton from "./components/CreateDeleteButton";
 import { getServerSession } from "next-auth";
+import LaunchingSoon from "./components/LaunchingSoon";
 
 export default async function Home() {
   const session = await getServerSession();
@@ -22,6 +23,7 @@ export default async function Home() {
         </div>
       </div>
       {session && enable_button ? <CreateDeleteButton /> : <></>}
+      {enable_button ? <></> : <LaunchingSoon />}
     </main>
   );
 }
