@@ -45,34 +45,28 @@ jobs:
           role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
           aws-region: ${{ secrets.REGION }}
       
-      # For some reason NEXTAUTH Variables is not loaded from GitHub Secrets env
-      # Going through NextAuth codebase to figure out exact reason
-      # Temporary solution by creating .env from GitHub Secrets
-
-      - name: Generate .env for NEXTAUTH_SECRET
+      - name: Generate .env 
         run: |
-          echo "NEXTAUTH_SECRET=$NEXTAUTH_SECRET" > .env
-          echo "NEXTAUTH_URL=$NEXTAUTH_URL" >> .env
-        env:
-          NEXTAUTH_SECRET: ${{ secrets.NEXTAUTH_SECRET }}
-          NEXTAUTH_URL: ${{ secrets.NEXTAUTH_URL }}
+          cat > .env << EOF
+          NEXTAUTH_SECRET=${{ secrets.NEXTAUTH_SECRET }}
+          NEXTAUTH_URL=${{ secrets.NEXTAUTH_URL }}
+          NEXT_PUBLIC_CODEPOD_WS=${{ secrets.NEXT_PUBLIC_CODEPOD_WS }}
+          NEXT_PUBLIC_BACKEND=${{ secrets.NEXT_PUBLIC_BACKEND }}
+          REGION=${{ secrets.REGION }}
+          COGNITO_REGION=${{ secrets.COGNITO_REGION }}
+          COGNITO_DOMAIN=${{ secrets.COGNITO_DOMAIN }}
+          COGNITO_CLIENT_ID=${{ secrets.COGNITO_CLIENT_ID }}
+          COGNITO_USER_POOL_ID=${{ secrets.COGNITO_USER_POOL_ID }}
+          COGNITO_CLIENT_SECRET=${{ secrets.COGNITO_CLIENT_SECRET }}
+          HOSTED_ZONE_NAME=${{ secrets.HOSTED_ZONE_NAME }}
+          DOMAIN_NAME=${{ secrets.DOMAIN_NAME }}
+          CERT_ARN=${{ secrets.CERT_ARN }}
+          ENV_NAME=${{ secrets.ENV_NAME }}
+          ENABLE_BUTTON=${{ secrets.ENABLE_BUTTON }}
+          EOF
 
       - name: Build and deploy app
         run: npx sst deploy --stage prod
-        env:
-          NEXT_PUBLIC_CODEPOD_WS: ${{ secrets.NEXT_PUBLIC_CODEPOD_WS }}
-          NEXT_PUBLIC_BACKEND: ${{ secrets.NEXT_PUBLIC_BACKEND }}
-          REGION: ${{ secrets.REGION }}
-          COGNITO_REGION: ${{ secrets.COGNITO_REGION }}
-          COGNITO_DOMAIN: ${{ secrets.COGNITO_DOMAIN }}
-          COGNITO_CLIENT_ID: ${{ secrets.COGNITO_CLIENT_ID }}
-          COGNITO_USER_POOL_ID: ${{ secrets.COGNITO_USER_POOL_ID }}
-          COGNITO_CLIENT_SECRET: ${{ secrets.COGNITO_CLIENT_SECRET }}
-          HOSTED_ZONE_NAME: ${{ secrets.HOSTED_ZONE_NAME }}
-          DOMAIN_NAME: ${{ secrets.DOMAIN_NAME }}
-          CERT_ARN: ${{ secrets.CERT_ARN }}
-          ENV_NAME: ${{ secrets.ENV_NAME }}
-          ENABLE_BUTTON: ${{ secrets.ENABLE_BUTTON }}
 
       - name: Remove .env
         run: rm .env
