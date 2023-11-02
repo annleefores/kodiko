@@ -15,7 +15,7 @@ spec:
     path: kubernetes/application/helm-chart
   destination:
     server: https://kubernetes.default.svc
-    namespace: default
+    namespace: kodiko-backend
   syncPolicy:
     automated:
         prune: true
