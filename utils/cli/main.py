@@ -4,7 +4,7 @@ from typing import Annotated
 import typer
 import os
 from helper.helper import execute, execute_kube, execute_build_push
-from helper.kube_helper import KubeCMD
+from helper.kube_helper import HelmCMD, KubeCMD
 
 
 app = typer.Typer(
@@ -12,6 +12,7 @@ app = typer.Typer(
 )
 
 # set application home path
+# all path should be relative to home path
 path = os.path.abspath(os.path.join(__file__, "../../../"))
 os.chdir(path)
 
@@ -107,6 +108,28 @@ def uninstall_argocd() -> None:
     )
 
     k.delete(obj="ns", obj_name="argocd")
+
+
+@app.command()
+def install_sysconfig() -> None:
+    """
+    Install System Config
+    """
+    k = HelmCMD()
+    k.install(
+        release_name="system-config-main",
+        HelmPath="kubernetes/system-config/system-config-main",
+        ns="argocd",
+    )
+
+
+@app.command()
+def uninstall_sysconfig() -> None:
+    """
+    Uninstall System Config
+    """
+    k = HelmCMD()
+    k.uninstall(release_name="system-config-main", ns="argocd")
 
 
 @app.callback(invoke_without_command=True)

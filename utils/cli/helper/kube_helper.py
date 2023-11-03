@@ -32,17 +32,49 @@ class KubeBase:
         self.cmd += ["--type", "merge"]
 
 
+class HelmCMD(KubeBase):
+    def __init__(self, cmd: str = "helm") -> None:
+        self.cmd_start = cmd
+
+    def release_name(self, release_name: str):
+        self.cmd.append(release_name)
+
+    def values(self, valueFile: str):
+        if valueFile != "":
+            self.cmd += ["--values", valueFile]
+
+    def install(
+        self, release_name: str, HelmPath: str, valFile: str = "", ns: str = ""
+    ) -> None:
+        """
+        install for helm
+        """
+
+        self.method_init("install")
+        self.release_name(release_name)
+        self.ns(ns)
+        self.values(valFile)
+        self.cmd.append(f"./{HelmPath}")
+        subprocess.run(self.cmd)
+
+    def uninstall(self, release_name: str, ns: str = "") -> None:
+        """
+        uninstall for helm
+        """
+
+        self.method_init("uninstall")
+        self.release_name(release_name)
+        self.ns(ns)
+        subprocess.run(self.cmd)
+
+
 class KubeCMD(KubeBase):
     def __init__(self, cmd: str = "kubectl") -> None:
         self.cmd_start = cmd
 
-    @classmethod
-    def helm(cls):
-        return cls("helm")
-
     def create(self, obj: str, obj_name: str) -> None:
         """
-        create for kubectk
+        create for kubectl
         """
 
         self.method_init("create")
