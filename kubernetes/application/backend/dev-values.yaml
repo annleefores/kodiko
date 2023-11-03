@@ -1,7 +1,7 @@
 ## backend
 
 # dev or prod: bool
-dev: false
+dev: true
 
 replicas: 2
 container:

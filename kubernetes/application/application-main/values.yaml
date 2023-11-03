@@ -1,3 +1,6 @@
+# dev or prod: bool
+dev: true
+
 spec:
   source:
     branch: dev

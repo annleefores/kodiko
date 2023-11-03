@@ -111,7 +111,9 @@ def uninstall_argocd() -> None:
 
 
 @app.command()
-def install_sysconfig() -> None:
+def install_sysconfig(
+    local: Annotated[bool, typer.Option(help="Patch SVC type for local argocd")] = False
+) -> None:
     """
     Install System Config
     """
@@ -124,7 +126,9 @@ def install_sysconfig() -> None:
 
 
 @app.command()
-def uninstall_sysconfig() -> None:
+def uninstall_sysconfig(
+    local: Annotated[bool, typer.Option(help="Patch SVC type for local argocd")] = False
+) -> None:
     """
     Uninstall System Config
     """
