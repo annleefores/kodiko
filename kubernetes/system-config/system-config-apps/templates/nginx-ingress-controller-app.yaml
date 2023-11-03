@@ -24,8 +24,8 @@ spec:
         valuesObject:
             controller:
               extraArgs:
-                http-port: {{ .controller.extraArgs.http-port }}
-                https-port: {{ .controller.extraArgs.https-port }}
+                http-port: {{ .controller.extraArgs.http }}
+                https-port: {{ .controller.extraArgs.https }}
 
               containerPort:
                 http: {{ .controller.containerPort.http }}
