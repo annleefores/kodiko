@@ -1,0 +1,4 @@
+# disable tls for dev
+
+data:
+  server.insecure: "true"

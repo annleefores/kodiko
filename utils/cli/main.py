@@ -87,6 +87,12 @@ def install_argocd(
             namespace="argocd",
             strategy="merge",
         )
+        k.patch(
+            obj="cm",
+            obj_name="argocd-cmd-params-cm",
+            patch_file="kubernetes/argocd/argocd_cmd_cm_patch.yaml",
+            namespace="argocd",
+        )
 
 
 @app.command()
