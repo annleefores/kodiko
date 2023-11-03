@@ -115,8 +115,8 @@ def install_sysconfig() -> None:
     """
     Install System Config
     """
-    k = HelmCMD()
-    k.install(
+    h = HelmCMD()
+    h.install(
         release_name="system-config-main",
         HelmPath="kubernetes/system-config/system-config-main",
         ns="argocd",
@@ -128,8 +128,30 @@ def uninstall_sysconfig() -> None:
     """
     Uninstall System Config
     """
-    k = HelmCMD()
-    k.uninstall(release_name="system-config-main", ns="argocd")
+    h = HelmCMD()
+    h.uninstall(release_name="system-config-main", ns="argocd")
+
+
+@app.command()
+def deploy_app() -> None:
+    """
+    Deploy application
+    """
+    h = HelmCMD()
+    h.install(
+        release_name="backend",
+        HelmPath="kubernetes/application/application-main",
+        ns="argocd",
+    )
+
+
+@app.command()
+def delete_app() -> None:
+    """
+    Delete application
+    """
+    h = HelmCMD()
+    h.uninstall(release_name="backend", ns="argocd")
 
 
 @app.callback(invoke_without_command=True)

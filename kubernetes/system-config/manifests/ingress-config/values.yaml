@@ -1,0 +1,9 @@
+mainIngress:
+  host: '*.kodiko.xyz'
+
+nginxIngress:
+  host: api.kodiko.xyz
+  port: 80
+
+argocd:
+  host: argocd.kodiko.xyz

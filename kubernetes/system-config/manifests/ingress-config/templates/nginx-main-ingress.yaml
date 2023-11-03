@@ -18,7 +18,7 @@ metadata:
 spec:
   ingressClassName: alb
   rules:
-    - host: api.kodiko.xyz
+    - host: {{ .Values.nginxIngress.host }}
       http:
         paths:
           - pathType: Prefix
@@ -27,4 +27,4 @@ spec:
               service:
                 name: ingress-nginx-controller
                 port:
-                  number: 80
+                  number: {{ .Values.nginxIngress.port }}

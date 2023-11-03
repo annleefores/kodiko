@@ -1,0 +1,9 @@
+spec:
+  source:
+    branch: dev
+    path: kubernetes/application/backend
+    repoURL: https://github.com/annleefores/kodiko.git
+
+destination:
+  server: https://kubernetes.default.svc
+  ns: kodiko-backend

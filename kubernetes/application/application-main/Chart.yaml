@@ -1,0 +1,11 @@
+apiVersion: v2
+name: application-main
+description: Application main Helm chart
+
+type: application
+version: 0.1.0
+appVersion: "1.16.0"
+
+maintainers:
+  - name: Annlee Fores
+    email: annleetestmail@gmail.com

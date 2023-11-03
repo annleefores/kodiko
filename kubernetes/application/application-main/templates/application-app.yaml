@@ -10,12 +10,12 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: https://github.com/annleefores/kodiko.git
-    targetRevision: dev
-    path: kubernetes/application/helm-chart
+    repoURL: {{ .Values.spec.source.repoURL }}
+    targetRevision: {{ .Values.spec.source.branch }}
+    path: {{ .Values.spec.source.path }}
   destination:
-    server: https://kubernetes.default.svc
-    namespace: kodiko-backend
+    server: {{ .Values.destination.server }}
+    namespace: {{ .Values.destination.ns }}
   syncPolicy:
     automated:
         prune: true
