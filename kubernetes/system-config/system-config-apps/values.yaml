@@ -1,5 +1,5 @@
 # eks or local: boolean
-eks: true
+eks: false
 
 awsLBC:
   syncWave: "1"
