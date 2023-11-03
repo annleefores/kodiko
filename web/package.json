@@ -41,7 +41,7 @@
     "zod": "^3.22.2"
   },
   "devDependencies": {
-    "sst": "^2.32.2",
+    "sst": "2.33.0",
     "aws-cdk-lib": "2.101.1",
     "constructs": "10.2.69"
   }
