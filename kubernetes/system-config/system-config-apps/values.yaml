@@ -1,5 +1,5 @@
 # eks or local: boolean
-eks: false
+eks: true
 
 awsLBC:
   syncWave: "1"
@@ -40,10 +40,8 @@ nginx:
               containerPort:
                 http: 8080
                 https: 8081
-
               image:
                 allowPrivilegeEscalation: false
-
               service:
                 type: ClusterIP
   destination:
@@ -58,7 +56,6 @@ mainIngress:
       branch: dev
       path: kubernetes/system-config/manifests/ingress-config
       repoURL: https://github.com/annleefores/kodiko.git
-
   destination:
     server: https://kubernetes.default.svc
     ns: default
@@ -77,7 +74,6 @@ eso:
             installCRDs: true
             webhook:
               port: 9443
-
   destination:
     server: https://kubernetes.default.svc
     ns: external-secrets
