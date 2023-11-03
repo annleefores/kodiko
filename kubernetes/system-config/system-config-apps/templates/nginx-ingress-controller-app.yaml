@@ -1,4 +1,4 @@
-{{- with .Values.nginx}}
+{{- with .Values.nginx }}
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
@@ -37,7 +37,7 @@ spec:
               service:
                 type: {{ .controller.service.type }}
 
-        {{- end}}
+        {{- end }}
 
   destination:
     server:  {{ .destination.server }}
@@ -48,4 +48,4 @@ spec:
         selfHeal: true
     syncOptions:
     - CreateNamespace=true
-{{- end}} 
+{{- end }} 

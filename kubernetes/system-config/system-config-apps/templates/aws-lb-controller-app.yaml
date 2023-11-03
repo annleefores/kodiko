@@ -27,7 +27,7 @@ spec:
                 name: {{ .serviceAccount.name }}
             region: {{ .region }}
             vpcId: {{ .vpcId }}
-        {{- end}}
+        {{- end }}
   destination:
     server: {{ .destination.server }}
     namespace: {{ .destination.ns }}
@@ -35,5 +35,5 @@ spec:
     automated:
         prune: true
         selfHeal: true
-{{- end}}
-{{- end}}
+{{- end }}
+{{- end }}
