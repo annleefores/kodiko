@@ -24,18 +24,18 @@ spec:
         valuesObject:
             controller:
               extraArgs:
-                http-port: {{ controller.extraArgs.http-port }}
-                https-port: {{ controller.extraArgs.https-port }}
+                http-port: {{ .controller.extraArgs.http-port }}
+                https-port: {{ .controller.extraArgs.https-port }}
 
               containerPort:
-                http: {{ controller.containerPort.http }}
-                https: {{ controller.containerPort.https }}
+                http: {{ .controller.containerPort.http }}
+                https: {{ .controller.containerPort.https }}
 
               image:
-                allowPrivilegeEscalation: {{ controller.image.allowPrivilegeEscalation }}
+                allowPrivilegeEscalation: {{ .controller.image.allowPrivilegeEscalation }}
 
               service:
-                type: {{ controller.service.type }}
+                type: {{ .controller.service.type }}
 
         {{- end}}
 
