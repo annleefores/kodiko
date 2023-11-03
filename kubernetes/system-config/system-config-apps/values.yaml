@@ -1,10 +1,83 @@
-aws-lbc:
-
-eso:
-
-nginx:
-
-main-ingress:
-
 # eks or local: boolean
 eks: false
+
+aws-lbc:
+  syncWave: "1"
+  spec:
+    source:
+      targetRevision: v1.6.2
+      chart: aws-load-balancer-controller
+      repoURL: https://aws.github.io/eks-charts
+      helm:
+        releaseName: aws-load-balancer-controller
+        valuesObject:
+            clusterName: kodiko 
+            serviceAccount:
+                create: false
+                name: aws-load-balancer-controller
+            region: ap-south-1
+            # update EKS VPC ID
+            vpcId: 
+  destination:
+    server: https://kubernetes.default.svc
+    ns: kube-system
+
+
+nginx:
+  syncWave: "2"
+  spec:
+    source:
+      targetRevision: '4.8.3'
+      chart: ingress-nginx
+      repoURL: https://kubernetes.github.io/ingress-nginx
+      helm:
+        releaseName: ingress-nginx
+        valuesObject:
+            controller:
+              extraArgs:
+                http-port: 8080
+                https-port: 8081
+              containerPort:
+                http: 8080
+                https: 8081
+
+              image:
+                allowPrivilegeEscalation: false
+
+              service:
+                type: ClusterIP
+  destination:
+    server: https://kubernetes.default.svc
+    ns: ingress-nginx
+
+
+main-ingress:
+  syncWave: "3"
+  spec:
+    source:
+      branch: dev
+      path: kubernetes/system-config/manifests/ingress-config
+      repoURL: https://github.com/annleefores/kodiko.git
+
+  destination:
+    server: https://kubernetes.default.svc
+    ns: default
+
+
+eso:
+  syncWave: "4"
+  spec:
+    source:
+      targetRevision: '0.9.7'
+      chart: external-secrets
+      repoURL: https://charts.external-secrets.io
+      helm:
+        releaseName: external-secrets
+        valuesObject:
+            installCRDs: true
+            webhook:
+              port: 9443
+
+  destination:
+    server: https://kubernetes.default.svc
+    ns: external-secrets

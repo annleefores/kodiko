@@ -1,9 +1,10 @@
 {{- if .Values.eks }}
+{{- with .Values.main-ingress }}
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
   annotations:
-    argocd.argoproj.io/sync-wave: "3"
+    argocd.argoproj.io/sync-wave: {{ .syncWave }}
   name: main-ingress
   namespace: argocd
   finalizers:
@@ -13,14 +14,15 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: https://github.com/annleefores/kodiko.git
-    targetRevision: dev
-    path: kubernetes/system-config/manifests/main-ingress
+    repoURL: {{ .spec.source.repoURL }}
+    targetRevision: {{ .spec.source.branch }}
+    path: {{ .spec.source.path }}
   destination:
-    server: https://kubernetes.default.svc
-    namespace: default
+    server: {{ .destination.server }}
+    namespace: {{ .destination.ns }}
   syncPolicy:
     automated:
         prune: true
         selfHeal: true
+{{- end}}
 {{- end}}

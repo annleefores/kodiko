@@ -1,8 +1,9 @@
+{{- with .Values.nginx}}
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
   annotations:
-    argocd.argoproj.io/sync-wave: "2"
+    argocd.argoproj.io/sync-wave: {{ .syncWave }}
   name: ingress-nginx-controller
   namespace: argocd
   finalizers:
@@ -12,34 +13,39 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: https://kubernetes.github.io/ingress-nginx
-    targetRevision: '4.8.3'
-    chart: ingress-nginx
+    repoURL: {{ .spec.source.repoURL }}
+    targetRevision: {{ .spec.source.targetRevision }}
+    chart: {{ .spec.source.chart }}
     helm:
-        releaseName: ingress-nginx
+        releaseName: {{ .spec.source.helm.releaseName }}
+
+        {{- with .spec.source.helm.valuesObject }}
+
         valuesObject:
             controller:
               extraArgs:
-                http-port: 8080
-                https-port: 8081
+                http-port: {{ controller.extraArgs.http-port }}
+                https-port: {{ controller.extraArgs.https-port }}
 
               containerPort:
-                http: 8080
-                https: 8081
+                http: {{ controller.containerPort.http }}
+                https: {{ controller.containerPort.https }}
 
               image:
-                allowPrivilegeEscalation: false
+                allowPrivilegeEscalation: {{ controller.image.allowPrivilegeEscalation }}
 
               service:
-                type: ClusterIP
+                type: {{ controller.service.type }}
+
+        {{- end}}
 
   destination:
-    server: https://kubernetes.default.svc
-    namespace: ingress-nginx
+    server:  {{ .destination.server }}
+    namespace: {{ .destination.ns }}
   syncPolicy:
     automated:
         prune: true
         selfHeal: true
     syncOptions:
     - CreateNamespace=true
-    
+{{- end}} 

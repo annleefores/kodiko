@@ -1,9 +1,10 @@
 {{- if .Values.eks }}
+{{- with .Values.aws-lbc }}
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
   annotations:
-    argocd.argoproj.io/sync-wave: "1"
+    argocd.argoproj.io/sync-wave: {{ .syncWave }}
   name: aws-load-balancer-controller
   namespace: argocd
   finalizers:
@@ -13,23 +14,26 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: https://aws.github.io/eks-charts
-    targetRevision: v1.6.2
-    chart: aws-load-balancer-controller
+    repoURL: {{ .spec.source.repoURL }}
+    targetRevision: {{ .spec.source.targetRevision }}
+    chart: {{ .spec.source.chart }}
     helm:
-        releaseName: aws-load-balancer-controller
+        releaseName: {{ .spec.source.helm.releaseName }}
+        {{- with .spec.source.helm.valuesObject }}
         valuesObject:
-            clusterName: kodiko 
+            clusterName: {{ .clusterName }}
             serviceAccount:
-                create: false
-                name: aws-load-balancer-controller
-            region: ap-south-1
-            vpcId: vpc-081b27890186cbdad
+                create: {{ .serviceAccount.create }}
+                name: {{ .serviceAccount.name }}
+            region: {{ .region }}
+            vpcId: {{ .vpcId }}
+        {{- end}}
   destination:
-    server: https://kubernetes.default.svc
-    namespace: kube-system
+    server: {{ .destination.server }}
+    namespace: {{ .destination.ns }}
   syncPolicy:
     automated:
         prune: true
         selfHeal: true
+{{- end}}
 {{- end}}
