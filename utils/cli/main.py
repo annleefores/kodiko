@@ -4,12 +4,14 @@ from typing import Annotated
 import typer
 import os
 from helper.helper import execute, execute_kube, execute_build_push
+from helper.kube_helper import KubeCMD
 
 
 app = typer.Typer(
     add_completion=False, no_args_is_help=True, pretty_exceptions_enable=False
 )
 
+# set application home path
 path = os.path.abspath(os.path.join(__file__, "../../../"))
 os.chdir(path)
 
@@ -55,6 +57,50 @@ def push_cp() -> None:
 
     # build and push codepod-deploy image
     execute_build_push("deploy")
+
+
+@app.command()
+def install_argocd(
+    local: Annotated[bool, typer.Option(help="Patch SVC type for local argocd")] = False
+) -> None:
+    """
+    Install ArgoCD
+    """
+    k = KubeCMD()
+    k.create("ns", "argocd")
+    k.apply(
+        "https://raw.githubusercontent.com/argoproj/argo-cd/v2.8.4/manifests/install.yaml",
+        "argocd",
+    )
+    k.patch(
+        obj="cm",
+        obj_name="argocd-cm",
+        patch_file="kubernetes/argocd/argocd_cm_patch.yaml",
+        namespace="argocd",
+    )
+
+    if local:
+        k.patch(
+            obj="svc",
+            obj_name="argocd-server",
+            patch_file="kubernetes/argocd/argocd_svc_patch.yaml",
+            namespace="argocd",
+            strategy="merge",
+        )
+
+
+@app.command()
+def uninstall_argocd() -> None:
+    """
+    Uninstall ArgoCD
+    """
+    k = KubeCMD()
+    k.delete(
+        file_path="https://raw.githubusercontent.com/argoproj/argo-cd/v2.8.4/manifests/install.yaml",
+        namespace="argocd",
+    )
+
+    k.delete(obj="ns", obj_name="argocd")
 
 
 @app.callback(invoke_without_command=True)
