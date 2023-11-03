@@ -1,10 +1,10 @@
 {{- if .Values.eks }}
-{{- with .Values.aws-lbc }}
+{{- with .Values.awsLBC }}
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
   annotations:
-    argocd.argoproj.io/sync-wave: {{ .syncWave }}
+    argocd.argoproj.io/sync-wave: {{ quote .syncWave }}
   name: aws-load-balancer-controller
   namespace: argocd
   finalizers:

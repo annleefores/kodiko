@@ -1,10 +1,10 @@
 {{- if .Values.eks }}
-{{- with .Values.main-ingress }}
+{{- with .Values.mainIngress }}
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
   annotations:
-    argocd.argoproj.io/sync-wave: {{ .syncWave }}
+    argocd.argoproj.io/sync-wave: {{ quote .syncWave }}
   name: main-ingress
   namespace: argocd
   finalizers:

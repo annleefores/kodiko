@@ -1,11 +1,11 @@
 # eks or local: boolean
-eks: false
+eks: true
 
-aws-lbc:
+awsLBC:
   syncWave: "1"
   spec:
     source:
-      targetRevision: v1.6.2
+      targetRevision: 'v1.6.2'
       chart: aws-load-balancer-controller
       repoURL: https://aws.github.io/eks-charts
       helm:
@@ -51,7 +51,7 @@ nginx:
     ns: ingress-nginx
 
 
-main-ingress:
+mainIngress:
   syncWave: "3"
   spec:
     source:
