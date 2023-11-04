@@ -5,7 +5,7 @@ import subprocess
 from typing import Any, Dict, List
 
 
-class KubeBase:
+class Base:
     def __init__(self) -> None:
         self.cmd: List[str]
         self.cmd_start: str
@@ -19,6 +19,8 @@ class KubeBase:
         if ns != "":
             self.cmd += ["-n", ns]
 
+
+class KubeArgs(Base):
     def obj(self, obj: str, obj_name: str, type: str = ""):
         if type != "":
             self.cmd += [obj, type, obj_name]
@@ -34,14 +36,12 @@ class KubeBase:
     def patch_merge_stategy(self):
         self.cmd += ["--type", "merge"]
 
-    def from_literal(self, key: str, val: str):
-        self.cmd += [f"--from-literal={key}={val}"]
+    def from_literal(self, from_literal: Dict[str, str]):
+        for key, val in from_literal.items():
+            self.cmd.append(f"--from-literal={key}={val}")
 
 
-class HelmCMD(KubeBase):
-    def __init__(self, cmd: str = "helm") -> None:
-        self.cmd_start = cmd
-
+class HelmArgs(Base):
     def release_name(self, release_name: str):
         self.cmd.append(release_name)
 
@@ -49,9 +49,14 @@ class HelmCMD(KubeBase):
         if valueFile != "":
             self.cmd += ["--values", valueFile]
 
-    def setVal(self, key: str, val: str):
-        if val:
+    def setVal(self, keyVal: Dict[str, str]):
+        for key, val in keyVal.items():
             self.cmd += ["--set", f"{key}={val}"]
+
+
+class HelmCMD(HelmArgs):
+    def __init__(self, cmd: str = "helm") -> None:
+        self.cmd_start = cmd
 
     def install(
         self,
@@ -69,7 +74,7 @@ class HelmCMD(KubeBase):
         self.release_name(release_name)
         self.ns(ns)
         self.values(valFile)
-        self.setVal("dev", dev)
+        self.setVal({"dev": dev})
         self.cmd.append(f"./{HelmPath}")
         subprocess.run(self.cmd)
 
@@ -84,7 +89,7 @@ class HelmCMD(KubeBase):
         subprocess.run(self.cmd)
 
 
-class KubeCMD(KubeBase):
+class KubeCMD(KubeArgs):
     def __init__(self, cmd: str = "kubectl") -> None:
         self.cmd_start = cmd
 
@@ -102,8 +107,7 @@ class KubeCMD(KubeBase):
 
         self.method_init("create")
         self.obj(obj=obj, type=type, obj_name=obj_name)
-        for key, val in from_literal.items():
-            self.from_literal(key=key, val=val)
+        self.from_literal(from_literal=from_literal)
         self.ns(ns=ns)
         subprocess.run(self.cmd)
 
