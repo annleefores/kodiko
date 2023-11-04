@@ -1,8 +1,5 @@
-# type: ignore
-
+from typing import List
 import boto3
-
-client = boto3.client("iam")
 
 # Create an IAM user (kodiko) with ssm:GetParameter* permission
 # {
@@ -17,17 +14,27 @@ client = boto3.client("iam")
 #     ]
 # }
 
+client = boto3.client("iam")  # type: ignore
+
 username = "kodiko"
 
 
-def createAK():
+def createAK() -> List[str]:
     resp = client.create_access_key(UserName=username)
-    return resp.get("AccessKey")
+    access_key_data = resp.get("AccessKey")
+
+    if access_key_data:
+        return [
+            access_key_data["AccessKeyId"],
+            access_key_data["SecretAccessKey"],
+        ]
+    return ["NONE", "NONE"]
 
 
-def deleteAK():
-    access_key_list = client.list_access_keys(
-        UserName=username,
-    )
-    access_key = access_key_list.get("AccessKeyMetadata")[0]["AccessKeyId"]
-    resp = client.delete_access_key(UserName=username, AccessKeyId=access_key)
+# make sure access key is present before parsing it
+def deleteAK() -> None:
+    access_key_list = client.list_access_keys(UserName=username, MaxItems=1)
+
+    if access_key_list["AccessKeyMetadata"]:
+        access_key = access_key_list["AccessKeyMetadata"][0].get("AccessKeyId", "NONE")
+        client.delete_access_key(UserName=username, AccessKeyId=access_key)

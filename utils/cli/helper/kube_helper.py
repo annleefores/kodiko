@@ -1,8 +1,5 @@
-# import subprocess, os
-
-
 import subprocess
-from typing import Any, Dict, List
+from typing import Dict, List
 
 
 class Base:
@@ -15,38 +12,133 @@ class Base:
         self.cmd.append(self.cmd_start)
         self.cmd.append(method_name)
 
-    def ns(self, ns: str):
-        if ns != "":
+    def ns(self, ns: str | None = None):
+        if ns:
             self.cmd += ["-n", ns]
 
 
 class KubeArgs(Base):
-    def obj(self, obj: str, obj_name: str, type: str = ""):
-        if type != "":
-            self.cmd += [obj, type, obj_name]
-        else:
-            self.cmd += [obj, obj_name]
+    def obj(self, obj: str, obj_name: str, type: str | None = None):
+        objList = [obj, obj_name]
 
-    def file(self, file_path: str):
-        self.cmd += ["-f", file_path]
+        if type:
+            objList.insert(1, type)
 
-    def patch_file(self, patch_file: str):
-        self.cmd += ["--patch-file", patch_file]
+        self.cmd += objList
 
-    def patch_merge_stategy(self):
-        self.cmd += ["--type", "merge"]
+    def file(
+        self,
+        file_path: str,
+        option: str | None = None,
+    ):
+        """
+        option: \n
+        Default => -f \n
+        p => --patch-file
+
+        """
+        match option:
+            case "p":
+                opt_val = "--patch-file"
+            case _:
+                opt_val = "-f"
+
+        self.cmd += [opt_val, file_path]
+
+    def patch_merge_stategy(self, strategy: str):
+        """
+        strategy: \n
+        Default => merge \n
+        """
+        match strategy:
+            case _:
+                strategy_type = "merge"
+
+        self.cmd += ["--type", strategy_type]
 
     def from_literal(self, from_literal: Dict[str, str]):
         for key, val in from_literal.items():
             self.cmd.append(f"--from-literal={key}={val}")
 
 
+class KubeCMD(KubeArgs):
+    def __init__(self, cmd: str = "kubectl") -> None:
+        self.cmd_start = cmd
+
+    def create(
+        self,
+        obj: str,
+        obj_name: str,
+        type: str | None = None,
+        ns: str | None = None,
+        from_literal: Dict[str, str] = {},
+    ) -> None:
+        """
+        create for kubectl
+        """
+
+        self.method_init("create")
+        self.obj(obj=obj, type=type, obj_name=obj_name)
+        self.from_literal(from_literal=from_literal)
+        self.ns(ns=ns)
+        subprocess.run(self.cmd)
+
+    def apply(self, file_path: str, ns: str | None = None) -> None:
+        """
+        apply for kubectl
+        """
+        self.method_init("apply")
+        self.ns(ns)
+        self.file(file_path)
+        subprocess.run(self.cmd)
+
+    def delete(
+        self,
+        file_path: str | None = None,
+        obj: str = "",
+        obj_name: str = "",
+        ns: str | None = None,
+    ) -> None:
+        """
+        delete for kubectl
+        """
+        self.method_init("delete")
+
+        self.ns(ns)
+
+        if file_path:
+            self.file(file_path)
+        else:
+            self.obj(obj=obj, obj_name=obj_name)
+
+        subprocess.run(self.cmd)
+
+    def patch(
+        self,
+        obj: str,
+        obj_name: str,
+        patch_file: str,
+        ns: str | None = None,
+        strategy: str | None = None,
+    ) -> None:
+        """
+        patch for kubectl
+        """
+        self.method_init("patch")
+        self.ns(ns)
+        self.obj(obj=obj, obj_name=obj_name)
+        if strategy:
+            self.patch_merge_stategy(strategy)
+        self.file(option="p", file_path=patch_file)
+        subprocess.run(self.cmd)
+
+
 class HelmArgs(Base):
     def release_name(self, release_name: str):
         self.cmd.append(release_name)
 
-    def values(self, valueFile: str):
-        if valueFile != "":
+    def values(self, valueFile: str | None = None):
+        if valueFile:
             self.cmd += ["--values", valueFile]
 
     def setVal(self, keyVal: Dict[str, str]):
@@ -63,8 +155,8 @@ class HelmCMD(HelmArgs):
         release_name: str,
         HelmPath: str,
         dev: str,
-        valFile: str = "",
-        ns: str = "",
+        valFile: str | None = None,
+        ns: str | None = None,
     ) -> None:
         """
         install for helm
@@ -78,7 +170,7 @@ class HelmCMD(HelmArgs):
         self.cmd.append(f"./{HelmPath}")
         subprocess.run(self.cmd)
 
-    def uninstall(self, release_name: str, ns: str = "") -> None:
+    def uninstall(self, release_name: str, ns: str | None = None) -> None:
         """
         uninstall for helm
         """
@@ -86,76 +178,4 @@ class HelmCMD(HelmArgs):
         self.method_init("uninstall")
         self.release_name(release_name)
         self.ns(ns)
-        subprocess.run(self.cmd)
-
-
-class KubeCMD(KubeArgs):
-    def __init__(self, cmd: str = "kubectl") -> None:
-        self.cmd_start = cmd
-
-    def create(
-        self,
-        obj: str,
-        obj_name: str,
-        type: str = "",
-        ns: str = "",
-        from_literal: Dict[str, str] = {},
-    ) -> None:
-        """
-        create for kubectl
-        """
-
-        self.method_init("create")
-        self.obj(obj=obj, type=type, obj_name=obj_name)
-        self.from_literal(from_literal=from_literal)
-        self.ns(ns=ns)
-        subprocess.run(self.cmd)
-
-    def apply(self, file_path: str, namespace: str = "") -> None:
-        """
-        apply for kubectl
-        """
-        self.method_init("apply")
-        self.ns(namespace)
-        self.file(file_path)
-        subprocess.run(self.cmd)
-
-    def delete(
-        self,
-        file_path: str = "",
-        obj: str = "",
-        obj_name: str = "",
-        ns: str = "",
-    ) -> None:
-        """
-        delete for kubectl
-        """
-        self.method_init("delete")
-
-        self.ns(ns)
-
-        if file_path != "":
-            self.file(file_path)
-        else:
-            self.obj(obj=obj, obj_name=obj_name)
-
-        subprocess.run(self.cmd)
-
-    def patch(
-        self,
-        obj: str,
-        obj_name: str,
-        patch_file: str,
-        namespace: str = "",
-        strategy: Any = None,
-    ) -> None:
-        """
-        patch for kubectl
-        """
-        self.method_init("patch")
-        self.ns(namespace)
-        self.obj(obj=obj, obj_name=obj_name)
-        if strategy:
-            self.patch_merge_stategy()
-        self.patch_file(patch_file=patch_file)
         subprocess.run(self.cmd)
