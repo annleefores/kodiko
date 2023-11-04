@@ -5,6 +5,7 @@ import typer
 import os
 from helper.helper import execute, execute_kube, execute_build_push
 from helper.kube_helper import HelmCMD, KubeCMD
+from helper.boto3_helper import createAK, deleteAK
 
 
 app = typer.Typer(
@@ -61,17 +62,17 @@ def push_cp() -> None:
 
 
 @app.command()
-def install_argocd(
+def deploy_argocd(
     local: Annotated[bool, typer.Option(help="Patch SVC type for local argocd")] = False
 ) -> None:
     """
     Install ArgoCD
     """
     k = KubeCMD()
-    k.create("ns", "argocd")
+    k.create(obj="ns", obj_name="argocd")
     k.apply(
-        "https://raw.githubusercontent.com/argoproj/argo-cd/v2.8.4/manifests/install.yaml",
-        "argocd",
+        file_path="https://raw.githubusercontent.com/argoproj/argo-cd/v2.8.4/manifests/install.yaml",
+        namespace="argocd",
     )
     k.patch(
         obj="cm",
@@ -97,22 +98,24 @@ def install_argocd(
 
 
 @app.command()
-def uninstall_argocd() -> None:
+def delete_argocd() -> None:
     """
     Uninstall ArgoCD
     """
     k = KubeCMD()
     k.delete(
         file_path="https://raw.githubusercontent.com/argoproj/argo-cd/v2.8.4/manifests/install.yaml",
-        namespace="argocd",
+        ns="argocd",
     )
 
     k.delete(obj="ns", obj_name="argocd")
 
 
 @app.command()
-def install_sysconfig(
-    local: Annotated[bool, typer.Option(help="Patch SVC type for local argocd")] = False
+def deploy_config(
+    local: Annotated[
+        bool, typer.Option(help="Install system config for local cluster")
+    ] = False
 ) -> None:
     """
     Install System Config
@@ -122,12 +125,15 @@ def install_sysconfig(
         release_name="system-config-main",
         HelmPath="kubernetes/system-config/system-config-main",
         ns="argocd",
+        dev="true" if local else "false",
     )
 
 
 @app.command()
-def uninstall_sysconfig(
-    local: Annotated[bool, typer.Option(help="Patch SVC type for local argocd")] = False
+def delete_config(
+    local: Annotated[
+        bool, typer.Option(help="Install system config for local cluster")
+    ] = False
 ) -> None:
     """
     Uninstall System Config
@@ -137,25 +143,59 @@ def uninstall_sysconfig(
 
 
 @app.command()
-def deploy_app() -> None:
+def deploy_app(
+    local: Annotated[
+        bool, typer.Option(help="Install system config for local cluster")
+    ] = False
+) -> None:
     """
     Deploy application
     """
+    # deploy AWS creds secret for ESO
+    if local:
+        print("Creating AWS credentials")
+        k = KubeCMD()
+        cred = createAK()
+        aws_key, aws_secret = cred.get("AccessKeyId"), cred.get("SecretAccessKey")
+        k.create(
+            ns="kodiko-backend",
+            obj="secret",
+            type="generic",
+            obj_name="awssm-secret",
+            from_literal={"access-key": aws_key, "secret-access-key": aws_secret},
+        )
+
     h = HelmCMD()
     h.install(
         release_name="backend",
         HelmPath="kubernetes/application/application-main",
         ns="argocd",
+        dev="true" if local else "false",
     )
 
 
 @app.command()
-def delete_app() -> None:
+def delete_app(
+    local: Annotated[
+        bool, typer.Option(help="Install system config for local cluster")
+    ] = False
+) -> None:
     """
     Delete application
     """
     h = HelmCMD()
     h.uninstall(release_name="backend", ns="argocd")
+
+    # delete AWS creds secret for ESO
+    if local:
+        print("Deleting AWS credentials")
+        k = KubeCMD()
+        cred = deleteAK()
+        k.delete(
+            obj="secret",
+            obj_name="awssm-secret",
+            ns="kodiko-backend",
+        )
 
 
 @app.callback(invoke_without_command=True)
