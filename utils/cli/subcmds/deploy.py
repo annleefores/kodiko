@@ -1,6 +1,6 @@
 import typer
 from helper.kube_helper import HelmCMD, KubeCMD
-from helper.boto3_helper import createAK
+from helper.boto3_helper import createAK, get_eks_vpc
 from typing import Annotated, List
 
 deploy = typer.Typer()
@@ -57,6 +57,7 @@ def config(
         HelmPath="kubernetes/system-config/system-config-main",
         ns="argocd",
         dev="true" if local else "false",
+        keyVal={"vpcID": get_eks_vpc()},
     )
 
 

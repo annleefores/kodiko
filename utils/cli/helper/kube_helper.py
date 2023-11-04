@@ -157,6 +157,7 @@ class HelmCMD(HelmArgs):
         dev: str,
         valFile: str | None = None,
         ns: str | None = None,
+        keyVal: Dict[str, str] | None = None,
     ) -> None:
         """
         install for helm
@@ -167,6 +168,8 @@ class HelmCMD(HelmArgs):
         self.ns(ns)
         self.values(valFile)
         self.setVal({"dev": dev})
+        if keyVal:
+            self.setVal(keyVal=keyVal)
         self.cmd.append(f"./{HelmPath}")
         subprocess.run(self.cmd)
 

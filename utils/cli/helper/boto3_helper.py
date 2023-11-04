@@ -14,13 +14,13 @@ import boto3
 #     ]
 # }
 
-client = boto3.client("iam")  # type: ignore
+iam = boto3.client("iam")  # type: ignore
 
 username = "kodiko"
 
 
 def createAK() -> List[str]:
-    resp = client.create_access_key(UserName=username)
+    resp = iam.create_access_key(UserName=username)
     access_key_data = resp.get("AccessKey")
 
     if access_key_data:
@@ -33,8 +33,18 @@ def createAK() -> List[str]:
 
 # make sure access key is present before parsing it
 def deleteAK() -> None:
-    access_key_list = client.list_access_keys(UserName=username, MaxItems=1)
+    access_key_list = iam.list_access_keys(UserName=username, MaxItems=1)
 
     if access_key_list["AccessKeyMetadata"]:
         access_key = access_key_list["AccessKeyMetadata"][0].get("AccessKeyId", "NONE")
-        client.delete_access_key(UserName=username, AccessKeyId=access_key)
+        iam.delete_access_key(UserName=username, AccessKeyId=access_key)
+
+
+def get_eks_vpc() -> str:
+    eks_client = boto3.client("eks", region_name="ap-south-1")  # type: ignore
+    response = eks_client.describe_cluster(name="kodiko2")
+    resourcesVpcConfig = response["cluster"].get("resourcesVpcConfig")
+    if resourcesVpcConfig:
+        vpc_id = resourcesVpcConfig.get("vpcId", "NONE")
+        return vpc_id
+    return "NONE"

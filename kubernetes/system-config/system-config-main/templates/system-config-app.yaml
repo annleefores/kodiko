@@ -13,11 +13,19 @@ spec:
     repoURL: {{ .Values.spec.source.repoURL }}
     targetRevision: {{ .Values.spec.source.branch }}
     path: {{ .Values.spec.source.path }}
-    {{- if .Values.dev }}
     helm:
+      {{- if .Values.dev }}
       valueFiles:
       - dev-values.yaml
-    {{- end }}
+      {{- else }}
+      valuesObject:
+        awsLBC:
+          spec:
+            source:
+              helm:
+                valuesObject:
+                    vpcId: {{ .Values.vpcID }} 
+      {{- end }}
 
   destination:
     server: {{ .Values.destination.server }}

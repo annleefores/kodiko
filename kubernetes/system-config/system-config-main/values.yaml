@@ -10,3 +10,6 @@ spec:
 destination:
   server: https://kubernetes.default.svc
   ns: default
+
+# EKS Cluster VPC ID - update this via --set
+vpcID: 
