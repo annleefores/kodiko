@@ -1,5 +1,5 @@
 # prod or dev: bool
-dev: true
+dev: false
 
 spec:
   source:
