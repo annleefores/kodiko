@@ -20,7 +20,7 @@ spec:
   ingressClassName: alb
   tls:
   - hosts:
-    - {{ .Values.mainIngress.host }}
+    - {{ quote .Values.mainIngress.host }}
   defaultBackend:
     service:
       name: response-404
