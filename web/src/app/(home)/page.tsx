@@ -8,7 +8,8 @@ export default async function Home() {
   const session = await getServerSession();
 
   // temporary feature flag
-  const enable_button = process.env.ENABLE_BUTTON === "true" || false;
+  const enable_button =
+    process.env.NEXT_PUBLIC_ENABLE_BUTTON === "true" || false;
 
   return (
     <main className="flex flex-col items-center gap-y-16 mt-16">

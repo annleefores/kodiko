@@ -62,7 +62,7 @@ jobs:
           DOMAIN_NAME=${{ secrets.DOMAIN_NAME }}
           CERT_ARN=${{ secrets.CERT_ARN }}
           ENV_NAME=${{ secrets.ENV_NAME }}
-          ENABLE_BUTTON=${{ secrets.ENABLE_BUTTON }}
+          NEXT_PUBLIC_ENABLE_BUTTON=${{ secrets.NEXT_PUBLIC_ENABLE_BUTTON }}
           EOF
 
       - name: Build and deploy app
