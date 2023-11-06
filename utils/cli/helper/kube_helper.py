@@ -32,7 +32,7 @@ class KubeArgs(Base):
         option: str | None = None,
     ):
         """
-        option: \n
+        option:
         Default => -f \n
         p => --patch-file
 

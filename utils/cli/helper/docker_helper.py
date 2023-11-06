@@ -40,6 +40,9 @@ class DockerCMD(Base):
         version: str,
         build_file_path: str | None = None,
     ):
+        """
+        Build for docker
+        """
         self.method_init(method_name="build")
         self.file(file_path=dockerfile_path)
         self.tag(username=username, container_name=container_name, version=version)
@@ -59,6 +62,9 @@ class DockerCMD(Base):
         subprocess.run(self.cmd)
 
     def push(self, container_name: str, username: str, version: str):
+        """
+        Push for docker
+        """
         self.method_init(method_name="push")
         self.tag(username=username, container_name=container_name, version=version)
         subprocess.run(self.cmd)
