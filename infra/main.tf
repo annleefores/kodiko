@@ -28,10 +28,9 @@ module "vpc" {
 }
 
 module "auth" {
-  source                    = "./auth"
-  region                    = var.region
-  google_client_id          = var.google_client_id
-  google_client_secret      = var.google_client_secret
-  google_callback_url       = var.google_callback_url
-  local_google_callback_url = var.local_google_callback_url
+  source               = "./auth"
+  region               = var.region
+  google_client_id     = var.google_client_id
+  google_client_secret = var.google_client_secret
+  google_callback_url  = var.google_callback_url
 }
