@@ -4,7 +4,7 @@ dev: false
 spec:
   source:
     branch: dev
-    path: kubernetes/system-config/system-config-apps
+    path: kubernetes/system-config/apps
     repoURL: https://github.com/annleefores/kodiko.git
 
 destination:

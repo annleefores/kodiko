@@ -1,3 +1,4 @@
+{{- if .Values.eks }}
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
@@ -28,3 +29,4 @@ spec:
                 name: ingress-nginx-controller
                 port:
                   number: {{ .Values.nginxIngress.port }}
+{{- end }}

@@ -1,6 +1,6 @@
 apiVersion: v2
-name: system-config-ingress
-description: System config main ingress Helm Chart
+name: system-config-manifest
+description: System config manifests Helm Chart
 
 type: application
 version: 0.1.0

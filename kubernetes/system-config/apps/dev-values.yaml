@@ -25,3 +25,11 @@ eso:
   spec:
     source:
       targetRevision: '0.9.7'
+
+manifests:
+  syncWave: "3"
+  spec:
+    source:
+      helm:
+        valuesObject:
+            eks: false

@@ -1,5 +1,5 @@
 {{- if .Values.eks }}
-{{- with .Values.mainIngress }}
+{{- with .Values.manifests }}
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
@@ -17,6 +17,12 @@ spec:
     repoURL: {{ .spec.source.repoURL }}
     targetRevision: {{ .spec.source.branch }}
     path: {{ .spec.source.path }}
+    helm:
+        releaseName: manifests
+        {{- with .spec.source.helm.valuesObject }}
+        valuesObject:
+            eks: {{ .eks }}
+        {{- end }}
   destination:
     server: {{ .destination.server }}
     namespace: {{ .destination.ns }}

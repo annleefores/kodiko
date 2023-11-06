@@ -56,7 +56,7 @@ def config(
     h = HelmCMD()
     h.install(
         release_name="system-config-main",
-        HelmPath="kubernetes/system-config/system-config-main",
+        HelmPath="kubernetes/system-config/main",
         ns="argocd",
         dev="true" if local else "false",
         keyVal={"vpcID": get_eks_vpc()} if not local else None,
@@ -91,7 +91,7 @@ def app(
     h = HelmCMD()
     h.install(
         release_name="backend",
-        HelmPath="kubernetes/application/application-main",
+        HelmPath="kubernetes/application/main",
         ns="argocd",
         dev="true" if local else "false",
     )

@@ -7,3 +7,6 @@ nginxIngress:
 
 argocd:
   host: argocd.kodiko.xyz
+
+# eks or local: boolean
+eks: true

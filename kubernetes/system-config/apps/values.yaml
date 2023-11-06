@@ -48,21 +48,8 @@ nginx:
     server: https://kubernetes.default.svc
     ns: ingress-nginx
 
-
-mainIngress:
-  syncWave: "3"
-  spec:
-    source:
-      branch: dev
-      path: kubernetes/system-config/manifests/ingress-config
-      repoURL: https://github.com/annleefores/kodiko.git
-  destination:
-    server: https://kubernetes.default.svc
-    ns: default
-
-
 eso:
-  syncWave: "4"
+  syncWave: "3"
   spec:
     source:
       targetRevision: '0.9.7'
@@ -77,3 +64,21 @@ eso:
   destination:
     server: https://kubernetes.default.svc
     ns: external-secrets
+
+manifests:
+  syncWave: "4"
+  spec:
+    source:
+      branch: dev
+      path: kubernetes/system-config/manifests
+      repoURL: https://github.com/annleefores/kodiko.git
+      helm:
+        releaseName: manifests
+        valuesObject:
+            eks: true
+               
+  destination:
+    server: https://kubernetes.default.svc
+    ns: default
+
+
