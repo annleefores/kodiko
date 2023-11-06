@@ -57,7 +57,7 @@ def config(
         HelmPath="kubernetes/system-config/system-config-main",
         ns="argocd",
         dev="true" if local else "false",
-        keyVal={"vpcID": get_eks_vpc()},
+        keyVal={"vpcID": get_eks_vpc()} if not local else None,
     )
 
 

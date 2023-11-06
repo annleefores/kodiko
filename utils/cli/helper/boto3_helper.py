@@ -42,7 +42,7 @@ def deleteAK() -> None:
 
 def get_eks_vpc() -> str:
     eks_client = boto3.client("eks", region_name="ap-south-1")  # type: ignore
-    response = eks_client.describe_cluster(name="kodiko2")
+    response = eks_client.describe_cluster(name="kodiko")
     resourcesVpcConfig = response["cluster"].get("resourcesVpcConfig")
     if resourcesVpcConfig:
         vpc_id = resourcesVpcConfig.get("vpcId", "NONE")

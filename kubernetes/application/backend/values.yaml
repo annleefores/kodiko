@@ -3,6 +3,9 @@
 # dev or prod: bool
 dev: false
 
+# dev env host path to files
+hostPath:
+
 replicas: 2
 container:
   name: backend
