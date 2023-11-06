@@ -39,7 +39,7 @@ spec:
             # directory location on host
             path: {{ .Values.hostPath }}
             # this field is optional
-            type: Directory
+            type: DirectoryOrCreate
       {{- end  }}
 
 ---

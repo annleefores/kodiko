@@ -3,7 +3,7 @@
 # dev or prod: bool
 dev: true
 
-hostPath: /home/annlee/projects/kodiko/server/backend
+hostPath: /home/annlee/projects/kodiko/server/test
 
 replicas: 2
 container:
