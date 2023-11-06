@@ -9,4 +9,4 @@ def tunnel(on: bool = True):
             command, shell=True, stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT
         )
     else:
-        subprocess.run("killall ngrok".split(" "))
+        subprocess.run("killall ngrok", shell=True)
