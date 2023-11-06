@@ -3,6 +3,8 @@ from helper.kube_helper import HelmCMD, KubeCMD
 from helper.boto3_helper import createAK, get_eks_vpc
 from typing import Annotated, List
 
+from helper.ngrok_helper import tunnel
+
 deploy = typer.Typer()
 
 
@@ -83,6 +85,8 @@ def app(
             obj_name="awssm-secret",
             from_literal={"access-key": aws_key, "secret-access-key": aws_secret},
         )
+        print("creating ngrok tunnel")
+        tunnel()
 
     h = HelmCMD()
     h.install(

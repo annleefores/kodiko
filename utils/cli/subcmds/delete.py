@@ -2,6 +2,7 @@ import typer
 from typing import Annotated
 from helper.kube_helper import HelmCMD, KubeCMD
 from helper.boto3_helper import deleteAK
+from helper.ngrok_helper import tunnel
 
 delete = typer.Typer()
 
@@ -57,6 +58,8 @@ def app(
             obj_name="awssm-secret",
             ns="kodiko-backend",
         )
+        print("Killing ngrok tunnel")
+        tunnel(on=False)
 
 
 if __name__ == "__main__":
