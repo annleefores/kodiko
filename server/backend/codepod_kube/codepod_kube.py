@@ -172,7 +172,7 @@ def create_external_secret(name: str, prev_name: str):
         "metadata": {"name": name},
         "spec": {
             "refreshInterval": "0",
-            "secretStoreRef": {"name": "parameterstore", "kind": "SecretStore"},
+            "secretStoreRef": {"name": "parameterstore", "kind": "ClusterSecretStore"},
             "target": {
                 "name": name,
                 "template": {
