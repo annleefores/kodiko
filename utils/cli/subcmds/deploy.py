@@ -53,6 +53,20 @@ def config(
     """
     Deploy System Config
     """
+    # deploy AWS creds secret for ESO
+    if local:
+        print("Creating AWS credentials")
+        k = KubeCMD()
+        cred: List[str] = createAK()
+        aws_key, aws_secret = cred[0], cred[1]
+        k.create(
+            ns="default",
+            obj="secret",
+            type="generic",
+            obj_name="awssm-secret",
+            from_literal={"access-key": aws_key, "secret-access-key": aws_secret},
+        )
+
     h = HelmCMD()
     h.install(
         release_name="system-config-main",
@@ -72,19 +86,8 @@ def app(
     """
     Deploy Application
     """
-    # deploy AWS creds secret for ESO
+    # Launch ngrok tunnel for argocd
     if local:
-        print("Creating AWS credentials")
-        k = KubeCMD()
-        cred: List[str] = createAK()
-        aws_key, aws_secret = cred[0], cred[1]
-        k.create(
-            ns="kodiko-backend",
-            obj="secret",
-            type="generic",
-            obj_name="awssm-secret",
-            from_literal={"access-key": aws_key, "secret-access-key": aws_secret},
-        )
         print("creating ngrok tunnel")
         tunnel()
 

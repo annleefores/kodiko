@@ -35,6 +35,17 @@ def config(
     h = HelmCMD()
     h.uninstall(release_name="system-config-main", ns="argocd")
 
+    # delete AWS creds secret for ESO
+    if local:
+        print("Deleting AWS credentials")
+        k = KubeCMD()
+        deleteAK()
+        k.delete(
+            obj="secret",
+            obj_name="awssm-secret",
+            ns="default",
+        )
+
 
 @delete.command()
 def app(
@@ -48,16 +59,8 @@ def app(
     h = HelmCMD()
     h.uninstall(release_name="backend", ns="argocd")
 
-    # delete AWS creds secret for ESO
+    # Kill ngrok tunnel for argocd
     if local:
-        print("Deleting AWS credentials")
-        k = KubeCMD()
-        deleteAK()
-        k.delete(
-            obj="secret",
-            obj_name="awssm-secret",
-            ns="kodiko-backend",
-        )
         print("Killing ngrok tunnel")
         tunnel(on=False)
 
