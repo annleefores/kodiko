@@ -5,10 +5,7 @@ import os
 from typing import List, Dict
 
 
-if os.getenv("BACKEND_ENV") == "kube":
-    config.load_kube_config()
-else:
-    config.load_incluster_config()
+config.load_incluster_config()
 
 
 def create_pod(name: str, prev_name: str):

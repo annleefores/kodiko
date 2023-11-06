@@ -6,10 +6,14 @@ from jose.exceptions import JOSEError
 from jose.utils import base64url_decode
 
 # Download public keys
-response = requests.get(
-    f'https://cognito-idp.{os.getenv("REGION")}.amazonaws.com/{os.getenv("COGNITO_USER_POOL_ID")}/.well-known/jwks.json'
-)
-keys = response.json()["keys"]
+
+try:
+    response = requests.get(
+        f'https://cognito-idp.{os.getenv("REGION")}.amazonaws.com/{os.getenv("COGNITO_USER_POOL_ID")}/.well-known/jwks.json'
+    )
+    keys = response.json()["keys"]
+except ConnectionError as e:
+    raise Exception("Connections error", e)
 
 
 class CognitoJwtToken:
