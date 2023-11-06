@@ -60,7 +60,7 @@ def config(
         cred: List[str] = createAK()
         aws_key, aws_secret = cred[0], cred[1]
         k.create(
-            ns="default",
+            ns="external-secrets",
             obj="secret",
             type="generic",
             obj_name="awssm-secret",

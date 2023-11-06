@@ -43,7 +43,7 @@ def config(
         k.delete(
             obj="secret",
             obj_name="awssm-secret",
-            ns="default",
+            ns="external-secrets",
         )
 
 
