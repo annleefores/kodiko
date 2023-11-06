@@ -39,3 +39,53 @@ def codepod_base() -> None:
         username=username,
         version=version,
     )
+
+
+@push.command()
+def codepod() -> None:
+    """
+    Build and Push codepod images
+    """
+    d = DockerCMD()
+
+    username = "annleefores"
+    version = "1.0.0"
+    basePath = "server/codepod"
+
+    d.build(
+        dockerfile_path=f"{basePath}/Dockerfile",
+        container_name="codepod-prod",
+        username=username,
+        version=version,
+        build_file_path=basePath,
+    )
+    d.push(
+        container_name="codepod-prod",
+        username=username,
+        version=version,
+    )
+
+
+@push.command()
+def backend() -> None:
+    """
+    Build and Push backend images
+    """
+    d = DockerCMD()
+
+    username = "annleefores"
+    version = "1.0.0"
+    basePath = "server/backend"
+
+    d.build(
+        dockerfile_path=f"{basePath}/Dockerfile",
+        container_name="backend",
+        username=username,
+        version=version,
+        build_file_path=basePath,
+    )
+    d.push(
+        container_name="backend",
+        username=username,
+        version=version,
+    )

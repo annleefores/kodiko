@@ -18,8 +18,14 @@ class Base:
     ):
         self.cmd += ["-f", f"./{file_path}"]
 
+    def complete_image_name(self, username: str, container_name: str, version: str):
+        self.cmd.append(f"{username}/{container_name}:{version}")
+
     def tag(self, username: str, container_name: str, version: str):
-        self.cmd += ["-t", f"{username}/{container_name}:{version}"]
+        self.cmd.append("-t")
+        self.complete_image_name(
+            username=username, container_name=container_name, version=version
+        )
 
     def build_file_context(self, filePath: str):
         """
@@ -66,7 +72,9 @@ class DockerCMD(Base):
         Push for docker
         """
         self.method_init(method_name="push")
-        self.tag(username=username, container_name=container_name, version=version)
+        self.complete_image_name(
+            username=username, container_name=container_name, version=version
+        )
         subprocess.run(self.cmd)
 
     def run(self):
