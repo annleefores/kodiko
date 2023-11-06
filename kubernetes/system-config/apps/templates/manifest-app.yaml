@@ -4,12 +4,12 @@ kind: Application
 metadata:
   annotations:
     argocd.argoproj.io/sync-wave: {{ quote .syncWave }}
-  name: main-ingress
+  name: manifest
   namespace: argocd
   finalizers:
     - resources-finalizer.argocd.argoproj.io
   labels:
-    name: main-ingress
+    name: manifest
 spec:
   project: default
   source:
