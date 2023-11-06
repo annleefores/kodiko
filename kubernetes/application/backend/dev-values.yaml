@@ -19,6 +19,8 @@ imagePullPolicy: IfNotPresent
 
 type: ClusterIP
 
+ns: kodiko-backend
+
 # secret values retrieved from AWS parameter store using External Secrets Operator
 eso:
   UUID_NAMESPACE: /kodiko/backend/UUID_NAMESPACE
