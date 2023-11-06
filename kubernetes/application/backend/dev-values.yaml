@@ -3,7 +3,9 @@
 # dev or prod: bool
 dev: true
 
-hostPath: /home/annlee/projects/kodiko/server/test
+# make sure this path is added to file sharing in docker desktop
+# prefix with /host_mnt for docker desktop
+hostPath: /host_mnt/home/annlee/projects/kodiko/server/backend
 
 replicas: 2
 container:
