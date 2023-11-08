@@ -8,7 +8,7 @@ terraform {
 
   backend "s3" {
     bucket         = "annlee-s3-state"
-    key            = "kodiko/kodiko_vpc.tfstate"
+    key            = "kodiko/kodiko_jenkins.tfstate"
     region         = "us-east-1"
     dynamodb_table = "tf-state-db"
     encrypt        = true
@@ -21,22 +21,4 @@ terraform {
 provider "aws" {
   region = var.region
 }
-
-# Create a VPC
-resource "aws_vpc" "kodiko_vpc" {
-  cidr_block = var.vpc_cidr_block
-
-  tags = {
-    Name = var.vpc_name
-  }
-}
-
-resource "aws_internet_gateway" "kodiko-igw" {
-  vpc_id = aws_vpc.kodiko_vpc.id
-
-  tags = {
-    Name = var.vpc_name
-  }
-}
-
 

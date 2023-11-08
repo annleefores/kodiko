@@ -3,7 +3,7 @@ resource "aws_route_table" "kodiko_public_route_table" {
   vpc_id = aws_vpc.kodiko_vpc.id
 
   tags = {
-    Name = "${var.name}-publicRT"
+    Name = "${var.vpc_name}-publicRT"
   }
 }
 

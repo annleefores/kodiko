@@ -25,7 +25,7 @@ variable "vpc_azs" {
 
 }
 
-variable "name" {
+variable "vpc_name" {
   type    = string
   default = "kodiko"
 }

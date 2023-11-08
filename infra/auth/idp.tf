@@ -27,7 +27,7 @@ resource "aws_cognito_user_pool_client" "userpool_client" {
   refresh_token_validity               = 30
   enable_token_revocation              = true
   generate_secret                      = true
-  callback_urls                        = var.google_callback_url
+  callback_urls                        = [var.google_callback_url_main, var.google_callback_url_dev, var.google_callback_url_local]
   allowed_oauth_flows_user_pool_client = true
   allowed_oauth_flows                  = ["code"]
   allowed_oauth_scopes                 = ["email", "openid", "profile"]

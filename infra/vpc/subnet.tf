@@ -6,7 +6,7 @@ resource "aws_subnet" "kodiko_public_subnet_k8s" {
   map_public_ip_on_launch = true
 
   tags = {
-    Name = "${var.name}-public-k8s"
+    Name = "${var.vpc_name}-public-k8s"
   }
 }
 resource "aws_subnet" "kodiko_public_subnet_app" {
@@ -17,7 +17,7 @@ resource "aws_subnet" "kodiko_public_subnet_app" {
   map_public_ip_on_launch = true
 
   tags = {
-    Name = "${var.name}-public-app"
+    Name = "${var.vpc_name}-public-app"
   }
 }
 
@@ -30,6 +30,6 @@ resource "aws_subnet" "kodiko_private_subnet" {
   map_public_ip_on_launch = true
 
   tags = {
-    Name = "${var.name}-private"
+    Name = "${var.vpc_name}-private"
   }
 }
