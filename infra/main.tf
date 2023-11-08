@@ -33,13 +33,13 @@ module "vpc" {
   vpc_name                          = var.vpc_name
 }
 
-module "jenkins" {
-  source    = "./jenkins"
-  region    = var.region
-  vpc_id    = module.vpc.vpc_id
-  subnet_id = module.vpc.public_app_subnet_id
-  key_name  = var.key_name
-}
+# module "jenkins" {
+#   source    = "./jenkins"
+#   region    = var.region
+#   vpc_id    = module.vpc.vpc_id
+#   subnet_id = module.vpc.public_app_subnet_id
+#   key_name  = var.key_name
+# }
 
 module "auth" {
   source                    = "./auth"
