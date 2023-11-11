@@ -1,0 +1,19 @@
+pipeline {
+  agent {
+    docker {image 'python:3.10.12-buster'}
+  }
+
+  stages {
+    stage('Static Code Analysis') {
+      environment {
+        SONAR_URL = 
+      }
+      
+      steps {
+        withSonarQubeEnv('SonarQube backend') {
+                sh 'mvn clean package sonar:sonar'
+            }
+      }
+    }
+  }
+}
