@@ -10,13 +10,19 @@
 
 #### DevOps & Cloud
 - AWS
-- EKS
 - Terraform
-- Kubernetes
-- ArgoCD
-- Helm
 - Cognito
 - SST
+- GitHub Action (frontend)
+- Jenkins (backend and codepod)
+
+#### Kubernetes
+- EKS
+- Helm
+- ArgoCD
+- Kubernetes NGINX ingress controller
+- External Secrets Operator
+- AWS Load Balancer Controller
 
 #### Frontend
 - Next.js
