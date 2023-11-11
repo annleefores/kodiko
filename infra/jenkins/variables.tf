@@ -18,17 +18,17 @@ variable "subnet_id" {
 
 variable "ami_image_name" {
   type    = string
-  default = "al2023-ami-2023.2.20231030.1-kernel-6.1-x86_64"
+  default = "ubuntu/images/hvm-ssd/ubuntu-jammy-22.04-amd64-server-*"
 }
 
 variable "ami_owners" {
   type    = list(string)
-  default = ["137112412989"]
+  default = ["099720109477"]
 }
 
 variable "instance_type" {
   type    = string
-  default = "t2.micro"
+  default = "t2.large"
 
 }
 

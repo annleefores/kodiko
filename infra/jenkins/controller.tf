@@ -59,6 +59,7 @@ resource "aws_vpc_security_group_ingress_rule" "jenkins_sg_ingress_1" {
   }
 }
 
+
 resource "aws_vpc_security_group_ingress_rule" "jenkins_sg_ingress_2" {
   security_group_id = aws_security_group.jenkins_sg.id
 
@@ -70,6 +71,20 @@ resource "aws_vpc_security_group_ingress_rule" "jenkins_sg_ingress_2" {
 
   tags = {
     Name = "jenkins_sg_ingress_2"
+  }
+}
+
+resource "aws_vpc_security_group_ingress_rule" "jenkins_sg_ingress_3" {
+  security_group_id = aws_security_group.jenkins_sg.id
+
+  description = "Sonarqube"
+  cidr_ipv4   = "0.0.0.0/0"
+  from_port   = 9000
+  ip_protocol = "tcp"
+  to_port     = 9000
+
+  tags = {
+    Name = "jenkins_sg_ingress_3"
   }
 }
 
