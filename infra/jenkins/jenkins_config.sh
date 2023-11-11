@@ -10,6 +10,7 @@ sudo yum install -y docker
 sudo systemctl start docker
 sudo systemctl enable docker
 sudo usermod -aG docker ec2-user
+sudo usermod -aG docker jenkins
 
 # Install Jenkins
 # https://www.jenkins.io/doc/tutorials/tutorial-for-installing-jenkins-on-AWS/
