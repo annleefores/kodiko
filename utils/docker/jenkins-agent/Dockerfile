@@ -12,8 +12,9 @@ RUN apt update \
     "$(. /etc/os-release && echo "$VERSION_CODENAME")" stable" | \
     tee /etc/apt/sources.list.d/docker.list > /dev/null \
     && apt update \
-    && apt install -y --no-install-recommends docker-ce docker-buildx-plugin\
-    && apt-get remove -y --purge --autoremove curl gnupg
+    && apt install -y --no-install-recommends docker-ce-cli docker-buildx-plugin\
+    && apt-get remove -y --purge --autoremove curl gnupg 
+    # ca-certificates is needed for docker image pull authorization
 
 FROM base as build
 
