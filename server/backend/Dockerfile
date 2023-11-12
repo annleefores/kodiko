@@ -1,7 +1,7 @@
 # ref: https://medium.com/@albertazzir/blazing-fast-python-docker-builds-with-poetry-a78a66f5aed0
 
 ARG PYTHON_VERSION=3.10.12
-FROM python:${PYTHON_VERSION}-buster as build
+FROM python:${PYTHON_VERSION}-buster AS build
 
 ARG POETRY_VER=1.5.1
 RUN pip install poetry==${POETRY_VER}
@@ -23,7 +23,7 @@ RUN touch README.md
 RUN --mount=type=cache,target=$POETRY_CACHE_DIR poetry install --only main --no-root
 
 
-FROM python:${PYTHON_VERSION}-slim-buster as runtime
+FROM python:${PYTHON_VERSION}-slim-buster AS runtime
 
 WORKDIR /app
 
