@@ -3,8 +3,16 @@ FROM ubuntu:22.04 as base
 WORKDIR /home
 
 RUN apt update && \
-    apt install -y openjdk-17-jre
-
+    apt install -y ca-certificates curl gnupg && \
+    install -m 0755 -d /etc/apt/keyrings && \
+    curl -fsSL https://download.docker.com/linux/ubuntu/gpg | gpg --dearmor -o /etc/apt/keyrings/docker.gpg && \
+    chmod a+r /etc/apt/keyrings/docker.gpg && \
+    echo \
+    "deb [arch="$(dpkg --print-architecture)" signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
+    "$(. /etc/os-release && echo "$VERSION_CODENAME")" stable" | \
+    tee /etc/apt/sources.list.d/docker.list > /dev/null && \
+    apt update && \
+    apt install -y openjdk-17-jre docker-ce
 
 FROM base as build
 
@@ -19,4 +27,7 @@ RUN wget https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-s
 FROM base as main
 
 COPY --from=build /home/sonar-scanner-cli /home/sonar-scanner-cli
+
+
+
 
