@@ -3,13 +3,17 @@ pipeline {
     docker {image 'python:3.10.12-buster'}
   }
 
+
+
   stages {
     stage('Static Code Analysis') {
       steps{
-            withSonarQubeEnv(installationName: 'sq1', envOnly: true) {
-               sh "${env.SONAR_SCANNER_HOME}/bin/sonar-scanner -Dsonar.projectKey=kodiko -Dsonar.sources=. -Dsonar.host.url=${env.SONAR_HOST_URL} -Dsonar.login=${env.SONAR_AUTH_TOKEN}"
-            }
+        def scannerHome = tool 'sonar-scanner';
+        withSonarQubeEnv(installationName: 'sq1', envOnly: true) {
+            sh "${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=kodiko -Dsonar.sources=. -Dsonar.host.url=${env.SONAR_HOST_URL} -Dsonar.login=${env.SONAR_AUTH_TOKEN}"
         }
+      }
+
     }
     stage('Quality Gate') {
       steps{
