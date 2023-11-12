@@ -25,7 +25,7 @@ pipeline {
       }
     }
 
-    stage('backend container image build and push') {
+    stage('backend build and push') {
       environment {
         DOCKER_IMAGE = "annleefores/kodiko-backend:${BUILD_NUMBER}-${GIT_COMMIT}"
         // REGISTRY_CREDENTIALS = credentials('docker-cred')

@@ -1,4 +1,4 @@
-FROM ubuntu:22.04 as base
+FROM sapmachine:17.0.9-jre-ubuntu-22.04 as base
 
 WORKDIR /home
 
