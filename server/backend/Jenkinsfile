@@ -27,7 +27,9 @@ pipeline {
         // REGISTRY_CREDENTIALS = credentials('docker-cred')
       }
       steps{
-        def dockerImage = docker.build("${DOCKER_IMAGE}", "./server/backend")
+        script {
+          def dockerImage = docker.build("${DOCKER_IMAGE}", "./server/backend")
+        }
       }
     }
   }
