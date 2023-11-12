@@ -4,19 +4,30 @@ pipeline {
   }
 
   stages {
-    stage('SQ') {
+    
+    stage('sonarqube') {
     steps{
       withSonarQubeEnv(installationName: 'sq1') {
           sh "/home/sonar-scanner-cli/bin/sonar-scanner -Dsonar.projectKey=kodiko-backend -Dsonar.sources=server/backend -Dsonar.host.url=${env.SONAR_HOST_URL} -Dsonar.login=${env.SONAR_AUTH_TOKEN}"
+        }
       }
     }
-    }
 
-    stage('Quality Gate') {
+    stage('quality gate') {
       steps{
-       timeout(time: 2, unit: 'MINUTES') {
+       timeout(time: 5, unit: 'MINUTES') {
             waitForQualityGate abortPipeline: true
        }
+      }
+    }
+
+    stage('backend container image build and push') {
+      environment {
+        DOCKER_IMAGE = "annleefores/kodiko-backend:${BUILD_NUMBER}-${GIT_COMMIT}"
+        // REGISTRY_CREDENTIALS = credentials('docker-cred')
+      }
+      steps{
+        def dockerImage = docker.build("${DOCKER_IMAGE}", "./server/backend")
       }
     }
   }
