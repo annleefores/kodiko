@@ -4,8 +4,7 @@ pipeline {
   }
   environment {
         SCANNER_HOME = tool 'sonar-scanner'
-    }
-
+  }
 
   stages {
     stage('SQ') {
@@ -13,17 +12,15 @@ pipeline {
       withSonarQubeEnv(installationName: 'sq1') {
           sh "${SCANNER_HOME}/bin/sonar-scanner -Dsonar.projectKey=kodiko -Dsonar.source=. -Dsonar.host.url=${env.SONAR_HOST_URL} -Dsonar.login=${env.SONAR_AUTH_TOKEN}"
       }
-   }
-   }
+    }
+    }
 
     stage('Quality Gate') {
       steps{
        timeout(time: 2, unit: 'MINUTES') {
-            // Parameter indicates whether to set pipeline to UNSTABLE if Quality Gate fails
-            // true = set pipeline to UNSTABLE, false = don't
             waitForQualityGate abortPipeline: true
-        }
-        }
+       }
+      }
     }
   }
 }
