@@ -7,15 +7,12 @@ pipeline {
     }
 
 
-
   stages {
     stage('SQ') {
     steps{
-       script {
-           withSonarQubeEnv(installationName: 'sq1', envOnly: true) {
-               sh "${SCANNER_HOME}/bin/sonar-scanner -Dsonar.projectKey=kodiko -Dsonar.sources=. -Dsonar.host.url=${env.SONAR_HOST_URL} -Dsonar.login=${env.SONAR_AUTH_TOKEN}"
-           }
-       }
+      withSonarQubeEnv(installationName: 'sq1') {
+          sh "${SCANNER_HOME}/bin/sonar-scanner -Dsonar.projectKey=kodiko -Dsonar.source=. -Dsonar.host.url=${env.SONAR_HOST_URL} -Dsonar.login=${env.SONAR_AUTH_TOKEN}"
+      }
    }
    }
 
