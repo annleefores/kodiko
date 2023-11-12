@@ -6,14 +6,15 @@ pipeline {
   stages {
     stage('Static Code Analysis') {
       environment {
-        SONAR_URL = 
+        SONAR_URL = "http://13.232.189.247:9000"
       }
       
-      steps {
-        withSonarQubeEnv('SonarQube backend') {
-                sh 'mvn clean package sonar:sonar'
+      steps{
+            withCredentials([string(credentialsId: 'sonarqube', variable: 'SONAR_AUTH_TOKEN')]) {
+                sh ''' $SCANNER_HOME/bin/sonar-scanner  -Dsonar.url=${SONAR_URL} -Dsonar.login=${SONAR_AUTH_TOKEN} -Dsonar.projectName=kodiko -Dsonar.source=. '''
             }
-      }
+
+        }
     }
   }
 }
