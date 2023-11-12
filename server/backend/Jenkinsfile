@@ -7,7 +7,7 @@ pipeline {
     stage('SQ') {
     steps{
       withSonarQubeEnv(installationName: 'sq1') {
-          sh "/home/sonar-scanner-cli/bin/sonar-scanner -Dsonar.projectKey=kodiko -Dsonar.source=. -Dsonar.host.url=${env.SONAR_HOST_URL} -Dsonar.login=${env.SONAR_AUTH_TOKEN}"
+          sh "/home/sonar-scanner-cli/bin/sonar-scanner -Dsonar.projectKey=kodiko-backend -Dsonar.source=./server/backend -Dsonar.host.url=${env.SONAR_HOST_URL} -Dsonar.login=${env.SONAR_AUTH_TOKEN}"
       }
     }
     }
