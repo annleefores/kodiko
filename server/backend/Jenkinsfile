@@ -7,7 +7,7 @@ pipeline {
     stage('Static Code Analysis') {
       steps{
             withSonarQubeEnv(installationName: 'sq1', envOnly: true) {
-              println "${env.SONAR_HOST_URL} "
+               sh "${env.SONAR_SCANNER_HOME}/bin/sonar-scanner -Dsonar.projectKey=kodiko -Dsonar.sources=. -Dsonar.host.url=${env.SONAR_HOST_URL} -Dsonar.login=${env.SONAR_AUTH_TOKEN}"
             }
         }
     }
