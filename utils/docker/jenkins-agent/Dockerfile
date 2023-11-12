@@ -12,8 +12,8 @@ RUN apt update \
     "$(. /etc/os-release && echo "$VERSION_CODENAME")" stable" | \
     tee /etc/apt/sources.list.d/docker.list > /dev/null \
     && apt update \
-    && apt install -y docker-ce \
-    && apt-get remove -y --purge --autoremove curl ca-certificates gnupg
+    && apt install -y --no-install-recommends docker-ce docker-buildx-plugin\
+    && apt-get remove -y --purge --autoremove curl gnupg
 
 FROM base as build
 
