@@ -2,15 +2,18 @@ pipeline {
   agent {
     docker {image 'python:3.10.12-buster'}
   }
+  environment {
+        SCANNER_HOME = tool 'sonar-scanner'
+    }
+
 
 
   stages {
     stage('SQ') {
     steps{
        script {
-           def scannerHome = tool 'sonar-scanner';
            withSonarQubeEnv(installationName: 'sq1', envOnly: true) {
-               sh "${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=kodiko -Dsonar.sources=. -Dsonar.host.url=${env.SONAR_HOST_URL} -Dsonar.login=${env.SONAR_AUTH_TOKEN}"
+               sh "${SCANNER_HOME}/bin/sonar-scanner -Dsonar.projectKey=kodiko -Dsonar.sources=. -Dsonar.host.url=${env.SONAR_HOST_URL} -Dsonar.login=${env.SONAR_AUTH_TOKEN}"
            }
        }
    }
