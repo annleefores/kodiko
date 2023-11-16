@@ -60,7 +60,7 @@ pipeline {
       }
       steps{
         container('kaniko') {
-          sh "/kaniko/executor --context `pwd` --destination ${env.DOCKER_IMAGE}"
+          sh "/kaniko/executor --context ${env.WORKSPACE}/server/backend --destination ${env.DOCKER_IMAGE}"
       }
     }
   }
