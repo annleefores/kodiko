@@ -11,17 +11,18 @@ pipeline {
             command:
             - sleep
             args:
-            - 9999999
+            - 99d
             tty: true
             volumeMounts:
-            - name: kaniko-secret
+            - name: jenkins-docker-cfg
               mountPath: /kaniko/.docker
-            restartPolicy: Never
-            volumes:
-              - name: kaniko-secret
-                secret:
-                    secretName: dockercred
-                    items:
+          volumes:
+          - name: jenkins-docker-cfg
+            projected:
+              sources:
+              - secret:
+                  name: dockercred
+                  items:
                     - key: .dockerconfigjson
                       path: config.json
           - name: sonarqube
