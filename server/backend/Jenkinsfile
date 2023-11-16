@@ -1,40 +1,67 @@
 pipeline {
   agent {
-    docker {
-      image 'annleefores/jenkins-agent'
-      alwaysPull true
-      args '--user root -v /var/run/docker.sock:/var/run/docker.sock' // mount Docker socket to access the host's Docker daemon
-      }
+    kubernetes {
+      yaml '''
+        apiVersion: v1
+        kind: Pod
+        spec:
+          containers:
+          - name: kaniko
+            image: gcr.io/kaniko-project/executor:debug
+            command:
+            - sleep
+            args:
+            - 9999999
+            tty: true
+            volumeMounts:
+            - name: kaniko-secret
+              mountPath: /kaniko/.docker
+           restartPolicy: Never
+           volumes:
+            - name: kaniko-secret
+              secret:
+                  secretName: dockercred
+                  items:
+                  - key: .dockerconfigjson
+                    path: config.json
+          - name: sonarqube
+            image: annleefores/jenkins-sonarqube
+            command:
+            - sleep
+            args:
+            - 99d
+              '''
+    }
   }
 
   stages {
-    
-    stage('sonarqube') {
-    steps{
-      withSonarQubeEnv(installationName: 'sq1') {
-          sh "/home/sonar-scanner-cli/bin/sonar-scanner -Dsonar.projectKey=kodiko-backend -Dsonar.sources=server/backend -Dsonar.host.url=${env.SONAR_HOST_URL} -Dsonar.login=${env.SONAR_AUTH_TOKEN}"
-        }
-      }
-    }
+    // stage('sonarqube') {
+    // steps{
+    //   container('sonarqube') {
+    //       withSonarQubeEnv(installationName: 'sq1') {
+    //       sh "/home/sonar-scanner-cli/bin/sonar-scanner -Dsonar.projectKey=kodiko-backend -Dsonar.sources=server/backend -Dsonar.host.url=${env.SONAR_HOST_URL} -Dsonar.login=${env.SONAR_AUTH_TOKEN}"
+    //      }
+    //     }
+    //   }
+    // }
 
-    stage('quality gate') {
-      steps{
-       timeout(time: 5, unit: 'MINUTES') {
-            waitForQualityGate abortPipeline: true
-       }
-      }
-    }
+    // stage('quality gate') {
+    //   steps{
+    //    timeout(time: 5, unit: 'MINUTES') {
+    //         waitForQualityGate abortPipeline: true
+    //    }
+    //   }
+    // }
 
     stage('backend build and push') {
       environment {
         DOCKER_IMAGE = "annleefores/kodiko-backend:${BUILD_NUMBER}-${GIT_COMMIT}"
-        // REGISTRY_CREDENTIALS = credentials('docker-cred')
       }
       steps{
-        script {
-          def dockerImage = docker.build("${DOCKER_IMAGE}", "./server/backend")
-        }
+        container('kaniko') {
+          sh "/kaniko/executor --context `pwd` --destination ${env.DOCKER_IMAGE}"
       }
     }
   }
+}
 }
