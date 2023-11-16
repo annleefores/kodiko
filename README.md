@@ -14,7 +14,6 @@
 - Cognito
 - SST
 - GitHub Action (frontend)
-- Jenkins (backend and codepod)
 
 #### Kubernetes
 - EKS
@@ -23,6 +22,8 @@
 - Kubernetes NGINX ingress controller
 - External Secrets Operator
 - AWS Load Balancer Controller
+- Jenkins (backend and codepod)
+- Kaniko
 
 #### Frontend
 - Next.js
