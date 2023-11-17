@@ -1,0 +1,59 @@
+{{- with .Values.sonarqube }}
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  annotations:
+    argocd.argoproj.io/sync-wave: {{ quote .syncWave }}
+  name: sonarqube
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+  labels:
+    name: sonarqube
+spec:
+  project: default
+  source:
+    repoURL: {{ .spec.source.repoURL }}
+    targetRevision: {{ .spec.source.targetRevision }}
+    chart: {{ .spec.source.chart }}
+    helm:
+        releaseName: sonarqube
+        {{- with .spec.source.helm.valuesObject }}
+        valuesObject:
+            image:
+              repository: {{ .image.repository }}
+              tag: {{ .image.tag }}
+              pullPolicy: {{ .image.pullPolicy }}
+
+            service:
+              type: {{ .service.type }}
+              externalPort: {{ .service.externalPort }}
+              internalPort: {{ .service.internalPort }}
+              labels: {{ .service.labels }}
+              annotations: {{ .service.annotations }}
+
+            sonarWebContext: {{ .sonarWebContext }}
+
+            persistence:
+              enabled: {{ .persistence.enabled }}
+
+            readinessProbe:
+              failureThreshold: {{ .readinessProbe.failureThreshold }}
+
+            livenessProbe:
+              failureThreshold: {{ .livenessProbe.failureThreshold }}
+
+            startupProbe:
+              failureThreshold: {{ .startupProbe.failureThreshold }}
+        {{- end }}
+
+  destination:
+    server: {{ .destination.server }}
+    namespace: {{ .destination.ns }}
+  syncPolicy:
+    automated:
+        prune: true
+        selfHeal: true
+    syncOptions:
+    - CreateNamespace=true
+{{- end }}  
