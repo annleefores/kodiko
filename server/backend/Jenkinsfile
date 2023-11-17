@@ -54,7 +54,7 @@ pipeline {
       }
     }
 
-    stage('backend build and push') {
+    stage('build and push') {
       environment {
         DOCKER_IMAGE = "annleefores/kodiko-backend:${BUILD_NUMBER}-${GIT_COMMIT}"
       }
