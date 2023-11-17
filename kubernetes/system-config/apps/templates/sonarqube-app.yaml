@@ -30,7 +30,6 @@ spec:
               externalPort: {{ .service.externalPort }}
               internalPort: {{ .service.internalPort }}
               labels: {{ .service.labels }}
-              annotations: {{ .service.annotations }}
 
             sonarWebContext: {{ .sonarWebContext }}
 
