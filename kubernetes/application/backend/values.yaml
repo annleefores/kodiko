@@ -10,8 +10,8 @@ replicas: 2
 container:
   name: backend
   image:
-    name: annleefores/backend
-    version: 1.0.0
+    name: annleefores/kodiko-backend
+    version: latest
 memory: "128Mi"
 cpu: "500m"
 imagePullPolicy: IfNotPresent
