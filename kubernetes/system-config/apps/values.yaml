@@ -65,8 +65,83 @@ eso:
     server: https://kubernetes.default.svc
     ns: external-secrets
 
-manifests:
+jenkins:
   syncWave: "4"
+  spec:
+    source:
+      targetRevision: '4.8.3'
+      chart: jenkins
+      repoURL: https://charts.jenkins.io
+      helm:
+        releaseName: jenkins
+        valuesObject:
+          controller:
+            componentName: "jenkins-controller"
+            image: "annleefores/jenkins-controller"
+            tag: "latest"
+            imagePullPolicy: "Always"
+            numExecutors: 0
+
+            resources:
+              requests:
+                cpu: "500m"
+                memory: "512Mi"
+              limits:
+                cpu: "2000m"
+                memory: "4096Mi"
+            
+            servicePort: 8050
+            targetPort: 8080
+            serviceType: LoadBalancer
+            installPlugins: false
+
+  destination:
+    server: https://kubernetes.default.svc
+    ns: jenkins
+
+
+sonarqube:
+  syncWave: "4"
+  spec:
+    source:
+      targetRevision: '10.4.0'
+      chart: sonarqube
+      repoURL: https://SonarSource.github.io/helm-chart-sonarqube
+      helm:
+        releaseName: sonarqube
+        valuesObject:
+          image:
+            repository: sonarqube
+            tag: 10.3.0-community
+            pullPolicy: IfNotPresent
+
+          service:
+            type: LoadBalancer
+            externalPort: 9000
+            internalPort: 9000
+            labels:
+            annotations: {}
+
+          sonarWebContext: "/"
+
+          persistence:
+            enabled: true
+
+          readinessProbe:
+            failureThreshold: 10
+
+          livenessProbe:
+            failureThreshold: 10
+
+          startupProbe:
+            failureThreshold: 24
+
+  destination:
+    server: https://kubernetes.default.svc
+    ns: sonarqube
+
+manifests:
+  syncWave: "5"
   spec:
     source:
       branch: dev
@@ -80,5 +155,3 @@ manifests:
   destination:
     server: https://kubernetes.default.svc
     ns: default
-
-

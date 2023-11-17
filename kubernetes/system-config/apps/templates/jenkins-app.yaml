@@ -1,0 +1,55 @@
+{{- with .Values.jenkins }}
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  annotations:
+    argocd.argoproj.io/sync-wave: {{ quote .syncWave }}
+  name: jenkins
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+  labels:
+    name: jenkins
+spec:
+  project: default
+  source:
+    repoURL: {{ .spec.source.repoURL }}
+    targetRevision: {{ .spec.source.targetRevision }}
+    chart: {{ .spec.source.chart }}
+    helm:
+        releaseName: external-secrets
+        {{- with .spec.source.helm.valuesObject }}
+        valuesObject:
+          controller:
+            {{- with .controller }}
+            componentName: {{ .componentName }}
+            image: {{ .image }}
+            tag: {{ .tag }}
+            imagePullPolicy: {{ .imagePullPolicy }}
+            numExecutors: {{ .numExecutors }}
+
+            resources:
+              requests:
+                cpu: {{ .resources.requests.cpu }}
+                memory: {{ .resources.requests.memory }}
+              limits:
+                cpu: {{ .resources.limits.cpu }}
+                memory: {{ .resources.limits.memory }}
+            
+            servicePort: {{ .servicePort }}
+            targetPort: {{ .targetPort }}
+            serviceType: {{ .serviceType }}
+            installPlugins: {{ .installPlugins }}
+            {{- end }}  
+        {{- end }}  
+
+  destination:
+    server: {{ .destination.server }}
+    namespace: {{ .destination.ns }}
+  syncPolicy:
+    automated:
+        prune: true
+        selfHeal: true
+    syncOptions:
+    - CreateNamespace=true
+{{- end }}  
