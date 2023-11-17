@@ -6,6 +6,12 @@ pipeline {
         kind: Pod
         spec:
           containers:
+          - name: sonarqube
+            image: annleefores/jenkins-sonarqube
+            command:
+            - sleep
+            args:
+            - 99d
           - name: kaniko
             image: gcr.io/kaniko-project/executor:debug
             command:
@@ -25,12 +31,7 @@ pipeline {
                   items:
                     - key: .dockerconfigjson
                       path: config.json
-          - name: sonarqube
-            image: annleefores/jenkins-sonarqube
-            command:
-            - sleep
-            args:
-            - 99d
+
               '''
     }
   }
