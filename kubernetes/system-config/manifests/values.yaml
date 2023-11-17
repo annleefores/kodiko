@@ -7,13 +7,6 @@ nginxIngress:
 
 argocd:
   host: argocd.kodiko.xyz
-
-kaniko:
-  dockerUsername: /kodiko/backend/DOCKER_USERNAME
-  dockerSecret: /kodiko/backend/DOCKER_SECRET
-  dockerEmail: /kodiko/backend/DOCKER_EMAIL
-  registryHost: /kodiko/backend/DOCKER_REGISTRY_HOST
-  ns: jenkins
-
+hoo: hoo
 # eks or local: boolean
 eks: true
