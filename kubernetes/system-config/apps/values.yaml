@@ -120,7 +120,6 @@ sonarqube:
             externalPort: 9000
             internalPort: 9000
             labels:
-            annotations: {}
 
           sonarWebContext: "/"
 
