@@ -99,6 +99,17 @@ jenkins:
     server: https://kubernetes.default.svc
     ns: jenkins
 
+kaniko:
+  syncWave: "5"
+  spec:
+    source:
+      branch: dev
+      path: kubernetes/system-config/kaniko
+      repoURL: https://github.com/annleefores/kodiko.git
+               
+  destination:
+    server: https://kubernetes.default.svc
+    ns: jenkins
 
 manifests:
   syncWave: "5"
