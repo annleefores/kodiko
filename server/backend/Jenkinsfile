@@ -25,7 +25,7 @@ pipeline {
                   items:
                     - key: .dockerconfigjson
                       path: config.json
-          - name: sonarqube-cli
+          - name: sonarqube
             image: annleefores/jenkins-sonarqube
             command:
             - sleep
@@ -38,7 +38,7 @@ pipeline {
   stages {
     stage('sonarqube') {
     steps{
-      container('sonarqube-cli') {
+      container('sonarqube') {
           withSonarQubeEnv(installationName: 'sq1') {
           sh "/home/sonar-scanner-cli/bin/sonar-scanner -Dsonar.projectKey=kodiko-backend -Dsonar.sources=server/backend -Dsonar.host.url=${env.SONAR_HOST_URL} -Dsonar.login=${env.SONAR_AUTH_TOKEN}"
          }
