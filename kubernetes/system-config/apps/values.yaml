@@ -100,8 +100,24 @@ jenkins:
     ns: jenkins
 
 
+manifests:
+  syncWave: "5"
+  spec:
+    source:
+      branch: dev
+      path: kubernetes/system-config/manifests
+      repoURL: https://github.com/annleefores/kodiko.git
+      helm:
+        releaseName: manifests
+        valuesObject:
+            eks: true
+               
+  destination:
+    server: https://kubernetes.default.svc
+    ns: default
+
 sonarqube:
-  syncWave: "4"
+  syncWave: "6"
   spec:
     source:
       targetRevision: '10.3.0'
@@ -138,19 +154,3 @@ sonarqube:
   destination:
     server: https://kubernetes.default.svc
     ns: sonarqube
-
-manifests:
-  syncWave: "5"
-  spec:
-    source:
-      branch: dev
-      path: kubernetes/system-config/manifests
-      repoURL: https://github.com/annleefores/kodiko.git
-      helm:
-        releaseName: manifests
-        valuesObject:
-            eks: true
-               
-  destination:
-    server: https://kubernetes.default.svc
-    ns: default
