@@ -24,6 +24,7 @@
 - AWS Load Balancer Controller
 - Jenkins (backend and codepod)
 - Kaniko
+- Sonarqube
 
 #### Frontend
 - Next.js
