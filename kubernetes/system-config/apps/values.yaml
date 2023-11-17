@@ -104,7 +104,7 @@ sonarqube:
   syncWave: "4"
   spec:
     source:
-      targetRevision: '10.4.0'
+      targetRevision: '10.3.0'
       chart: sonarqube
       repoURL: https://SonarSource.github.io/helm-chart-sonarqube
       helm:
