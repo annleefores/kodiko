@@ -47,7 +47,7 @@ spec:
                     - script: |
                         jobarray = ['backend','codepod']
                         for(currentjob in jobarray)                                     
-                        pipelineJob('kodiko-$currentjob') {
+                        pipelineJob("kodiko-^${currentjob}") {
                           definition {
                             cpsScm {
                               scm {
@@ -58,12 +58,12 @@ spec:
                                   branch('*/dev')
                                 }
                               }
-                              scriptPath("server/$currentjob/Jenkinsfile")
+                              scriptPath("server/^${currentjob}/Jenkinsfile")
                               lightweight()
                             }
                           }
                         } 
-                        
+
             servicePort: {{ .servicePort }}
             targetPort: {{ .targetPort }}
             serviceType: {{ .serviceType }}
