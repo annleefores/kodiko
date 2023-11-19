@@ -40,11 +40,11 @@ spec:
               defaultConfig: true
               configScripts:
 
-                welcome_message: |
+                welcome-message: |
                   jenkins:
                     systemMessage: {{ .JCasC.systemMessage }}
                     
-                jenkins_credentails: |
+                jenkins-credentails: |
                   credentials:
                     system:
                       domainCredentials:
@@ -55,7 +55,7 @@ spec:
                               secret: {{ .JCasC.sonarqube.credentials.secret }}
                               description: {{ .JCasC.sonarqube.credentials.description }}
 
-                global_config: |
+                global-config: |
                   unclassified:
                     sonarglobalconfiguration:
                       buildWrapperEnabled: true
@@ -64,7 +64,7 @@ spec:
                           serverUrl: {{ .JCasC.sonarqube.installations.serverUrl }}
                           credentialsId: {{ .JCasC.sonarqube.installations.credentialsId }}
 
-                pipeline_job: | 
+                pipeline-job: | 
                   jobs:
                     - script: |
                         jobarray = {{ .JCasC.jobs.jobarray }}
