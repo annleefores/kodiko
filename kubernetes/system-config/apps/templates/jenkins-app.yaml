@@ -63,6 +63,9 @@ spec:
                         - name: {{ .JCasC.sonarqube.installations.name }}
                           serverUrl: {{ .JCasC.sonarqube.installations.serverUrl }}
                           credentialsId: {{ .JCasC.sonarqube.installations.credentialsId }}
+                    themeManager:
+                      disableUserThemes: true
+                      theme: "darkSystem"
 
                 pipeline-job: | 
                   jobs:
