@@ -45,7 +45,7 @@ spec:
                 pipeline-job: | 
                   jobs:
                     - script: >                                     
-                        pipelineJob('job-dsl-plugin') {
+                        pipelineJob('kodiko-backend') {
                           definition {
                             cpsScm {
                               scm {
@@ -56,7 +56,24 @@ spec:
                                   branch('*/dev')
                                 }
                               }
-                              scriptPath("server/backend/JenkinsFile")
+                              scriptPath("server/backend/Jenkinsfile")
+                              lightweight()
+                            }
+                          }
+                        } 
+                    - script: >                                     
+                        pipelineJob('kodiko-codepod') {
+                          definition {
+                            cpsScm {
+                              scm {
+                                git {
+                                  remote {
+                                    url('https://github.com/annleefores/kodiko.git')
+                                  }
+                                  branch('*/dev')
+                                }
+                              }
+                              scriptPath("server/codepod/Jenkinsfile")
                               lightweight()
                             }
                           }

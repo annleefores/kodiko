@@ -1,0 +1,69 @@
+pipeline {
+  agent {
+    kubernetes {
+      yaml '''
+        apiVersion: v1
+        kind: Pod
+        spec:
+          containers:
+          - name: sonarqube
+            image: annleefores/jenkins-sonarqube
+            command:
+            - sleep
+            args:
+            - 99d
+          - name: kaniko
+            image: gcr.io/kaniko-project/executor:debug
+            command:
+            - sleep
+            args:
+            - 99d
+            tty: true
+            volumeMounts:
+            - name: jenkins-docker-cfg
+              mountPath: /kaniko/.docker
+          volumes:
+          - name: jenkins-docker-cfg
+            projected:
+              sources:
+              - secret:
+                  name: dockercred
+                  items:
+                    - key: .dockerconfigjson
+                      path: config.json
+
+              '''
+    }
+  }
+
+  stages {
+    stage('sonarqube') {
+    steps{
+      container('sonarqube') {
+          withSonarQubeEnv(installationName: 'sq1') {
+          sh "/home/sonar-scanner-cli/bin/sonar-scanner -Dsonar.projectKey=kodiko-backend -Dsonar.sources=server/backend -Dsonar.host.url=${env.SONAR_HOST_URL} -Dsonar.login=${env.SONAR_AUTH_TOKEN}"
+         }
+        }
+      }
+    }
+
+    stage('quality gate') {
+      steps{
+       timeout(time: 5, unit: 'MINUTES') {
+            waitForQualityGate abortPipeline: true
+       }
+      }
+    }
+
+    stage('build and push') {
+      environment {
+        DOCKER_IMAGE = "annleefores/kodiko-codepod:${BUILD_NUMBER}-${GIT_COMMIT}"
+      }
+      steps{
+        container('kaniko') {
+          sh "/kaniko/executor --context ${env.WORKSPACE}/server/codepod --destination ${env.DOCKER_IMAGE}"
+      }
+    }
+  }
+}
+}
