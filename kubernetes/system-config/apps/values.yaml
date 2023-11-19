@@ -104,9 +104,6 @@ jenkins:
                   credentialsId: sonar_token
 
               jobs:
-                jobarray:
-                  - backend
-                  - codepod
                 repoURL: https://github.com/annleefores/kodiko.git
                 branch: '*/dev'
             
