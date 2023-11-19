@@ -35,7 +35,14 @@ spec:
               limits:
                 cpu: {{ .resources.limits.cpu }}
                 memory: {{ .resources.limits.memory }}
-            
+              
+              JCasC:
+                configScripts:
+                  welcome-message: |
+                    jenkins:
+                      systemMessage: Welcome to our CI\CD server.
+
+
             servicePort: {{ .servicePort }}
             targetPort: {{ .targetPort }}
             serviceType: {{ .serviceType }}
