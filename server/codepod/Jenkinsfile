@@ -41,7 +41,7 @@ pipeline {
     steps{
       container('sonarqube') {
           withSonarQubeEnv(installationName: 'sq1') {
-          sh "/home/sonar-scanner-cli/bin/sonar-scanner -Dsonar.projectKey=kodiko-backend -Dsonar.sources=server/backend -Dsonar.host.url=${env.SONAR_HOST_URL} -Dsonar.login=${env.SONAR_AUTH_TOKEN}"
+          sh "/home/sonar-scanner-cli/bin/sonar-scanner -Dsonar.projectKey=kodiko-codepod -Dsonar.sources=server/codepod -Dsonar.host.url=${env.SONAR_HOST_URL} -Dsonar.login=${env.SONAR_AUTH_TOKEN}"
          }
         }
       }
