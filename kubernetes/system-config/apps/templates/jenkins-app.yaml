@@ -22,6 +22,7 @@ spec:
         valuesObject:
           controller:
             {{- with .controller }}
+            jenkinsUrl: {{ .jenkinsUrl }}
             componentName: {{ .componentName }}
             image: {{ .image }}
             tag: {{ .tag }}

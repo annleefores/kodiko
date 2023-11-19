@@ -76,6 +76,7 @@ jenkins:
         releaseName: jenkins
         valuesObject:
           controller:
+            jenkinsUrl: "http://localhost:8050"
             componentName: "jenkins-controller"
             image: "annleefores/jenkins-controller"
             tag: "latest"
