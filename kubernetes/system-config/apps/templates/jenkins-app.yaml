@@ -39,9 +39,31 @@ spec:
             JCasC:
               defaultConfig: true
               configScripts:
+              
                 welcome-message: |
                   jenkins:
                     systemMessage: Welcome to Kodiko CI\CD server.  This Jenkins is configured and managed 'as code'.
+                    
+                jenkins-credentails: |
+                  credentials:
+                    system:
+                      domainCredentials:
+                        - credentials:
+                          - string:
+                              scope: GLOBAL
+                              id: "sonar_token"
+                              secret: "secret value"
+                              description: "Sonar token"
+
+                global-config: |
+                  unclassified:
+                    sonarglobalconfiguration:
+                      buildWrapperEnabled: true
+                      installations:
+                        - name: "sq1"
+                          serverUrl: "http://sonarqube-sonarqube.sonarqube.svc.cluster.local:9000"
+                          credentialsId: sonar_token
+
                 pipeline-job: | 
                   jobs:
                     - script: |
