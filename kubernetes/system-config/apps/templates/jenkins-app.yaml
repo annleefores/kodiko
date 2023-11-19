@@ -44,8 +44,10 @@ spec:
                     systemMessage: Welcome to Kodiko CI\CD server.  This Jenkins is configured and managed 'as code'.
                 pipeline-job: | 
                   jobs:
-                    - script: >                                     
-                        pipelineJob('kodiko-backend') {
+                    - script: |
+                        jobarray = ['backend','codepod']
+                        for(currentjob in jobarray)                                     
+                        pipelineJob('kodiko-$currentjob') {
                           definition {
                             cpsScm {
                               scm {
@@ -56,31 +58,12 @@ spec:
                                   branch('*/dev')
                                 }
                               }
-                              scriptPath("server/backend/Jenkinsfile")
+                              scriptPath("server/$currentjob/Jenkinsfile")
                               lightweight()
                             }
                           }
                         } 
-                    - script: >                                     
-                        pipelineJob('kodiko-codepod') {
-                          definition {
-                            cpsScm {
-                              scm {
-                                git {
-                                  remote {
-                                    url('https://github.com/annleefores/kodiko.git')
-                                  }
-                                  branch('*/dev')
-                                }
-                              }
-                              scriptPath("server/codepod/Jenkinsfile")
-                              lightweight()
-                            }
-                          }
-                        } 
-
-
-
+                        
             servicePort: {{ .servicePort }}
             targetPort: {{ .targetPort }}
             serviceType: {{ .serviceType }}
