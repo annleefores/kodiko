@@ -14,30 +14,15 @@ import boto3
 #     ]
 # }
 
-iam = boto3.client("iam")  # type: ignore
 
-username = "kodiko"
-
-
-def createAK() -> List[str]:
-    resp = iam.create_access_key(UserName=username)
-    access_key_data = resp.get("AccessKey")
-
-    if access_key_data:
-        return [
-            access_key_data["AccessKeyId"],
-            access_key_data["SecretAccessKey"],
-        ]
+# Make sure accesskey and secret is saved as stringlist, without any space between them. the separator must be a single comma
+def getAK() -> List[str]:
+    param = boto3.client("ssm", region_name="ap-south-1")  # type: ignore
+    response = param.get_parameter(Name="/kodiko/backend/ACCESS_CREDS")
+    access_val: str | None = response["Parameter"].get("Value")
+    if access_val:
+        return access_val.split(",")
     return ["NONE", "NONE"]
-
-
-# make sure access key is present before parsing it
-def deleteAK() -> None:
-    access_key_list = iam.list_access_keys(UserName=username, MaxItems=1)
-
-    if access_key_list["AccessKeyMetadata"]:
-        access_key = access_key_list["AccessKeyMetadata"][0].get("AccessKeyId", "NONE")
-        iam.delete_access_key(UserName=username, AccessKeyId=access_key)
 
 
 def get_eks_vpc() -> str:
