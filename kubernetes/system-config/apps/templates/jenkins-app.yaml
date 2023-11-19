@@ -67,7 +67,7 @@ spec:
                 pipeline_job: | 
                   jobs:
                     - script: |
-                        jobarray = {{ .JCasC.jobs.jobarray.}}
+                        jobarray = {{ .JCasC.jobs.jobarray }}
                         for(currentjob in jobarray)                                     
                         pipelineJob("kodiko-^${currentjob}") {
                           definition {

@@ -99,9 +99,9 @@ jenkins:
                   secret: "secret value"
                   description: "Sonar token"
                 installations:
-                  - name: "sq1"
-                    serverUrl: "http://sonarqube-sonarqube.sonarqube.svc.cluster.local:9000"
-                    credentialsId: sonar_token
+                  name: "sq1"
+                  serverUrl: "http://sonarqube-sonarqube.sonarqube.svc.cluster.local:9000"
+                  credentialsId: sonar_token
 
               jobs:
                 jobarray: ['backend','codepod']
