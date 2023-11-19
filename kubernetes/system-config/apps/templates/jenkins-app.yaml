@@ -39,35 +39,35 @@ spec:
             JCasC:
               defaultConfig: true
               configScripts:
-              
-                welcome-message: |
+
+                welcome_message: |
                   jenkins:
-                    systemMessage: Welcome to Kodiko CI\CD server.  This Jenkins is configured and managed 'as code'.
+                    systemMessage: {{ .JCasC.systemMessage }}
                     
-                jenkins-credentails: |
+                jenkins_credentails: |
                   credentials:
                     system:
                       domainCredentials:
                         - credentials:
                           - string:
                               scope: GLOBAL
-                              id: "sonar_token"
-                              secret: "secret value"
-                              description: "Sonar token"
+                              id: {{ .JCasC.sonarqube.credentials.id }}
+                              secret: {{ .JCasC.sonarqube.credentials.secret }}
+                              description: {{ .JCasC.sonarqube.credentials.description }}
 
-                global-config: |
+                global_config: |
                   unclassified:
                     sonarglobalconfiguration:
                       buildWrapperEnabled: true
                       installations:
-                        - name: "sq1"
-                          serverUrl: "http://sonarqube-sonarqube.sonarqube.svc.cluster.local:9000"
-                          credentialsId: sonar_token
+                        - name: {{ .JCasC.sonarqube.installations.name }}
+                          serverUrl: {{ .JCasC.sonarqube.installations.serverUrl }}
+                          credentialsId: {{ .JCasC.sonarqube.installations.credentialsId }}
 
-                pipeline-job: | 
+                pipeline_job: | 
                   jobs:
                     - script: |
-                        jobarray = ['backend','codepod']
+                        jobarray = {{ .JCasC.jobs.jobarray.}}
                         for(currentjob in jobarray)                                     
                         pipelineJob("kodiko-^${currentjob}") {
                           definition {
@@ -75,9 +75,9 @@ spec:
                               scm {
                                 git {
                                   remote {
-                                    url('https://github.com/annleefores/kodiko.git')
+                                    url({{ quote .JCasC.jobs.repoURL }})
                                   }
-                                  branch('*/dev')
+                                  branch({{ quote .JCasC.jobs.branch }})
                                 }
                               }
                               scriptPath("server/^${currentjob}/Jenkinsfile")

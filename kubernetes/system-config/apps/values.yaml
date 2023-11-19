@@ -89,6 +89,24 @@ jenkins:
               limits:
                 cpu: "2000m"
                 memory: "4096Mi"
+
+            JCasC:
+              systemMessage: Welcome to Kodiko CI\CD server.  This Jenkins is configured and managed 'as code'.
+              
+              sonarqube:
+                credentials:
+                  id: "sonar_token"
+                  secret: "secret value"
+                  description: "Sonar token"
+                installations:
+                  - name: "sq1"
+                    serverUrl: "http://sonarqube-sonarqube.sonarqube.svc.cluster.local:9000"
+                    credentialsId: sonar_token
+
+              jobs:
+                jobarray: ['backend','codepod']
+                repoURL: https://github.com/annleefores/kodiko.git
+                branch: '*/dev'
             
             servicePort: 8050
             targetPort: 8080
