@@ -75,9 +75,9 @@ spec:
                               scm {
                                 git {
                                   remote {
-                                    url({{ quote .JCasC.jobs.repoURL }})
+                                    url({{ squote .JCasC.jobs.repoURL }})
                                   }
-                                  branch({{ quote .JCasC.jobs.branch }})
+                                  branch({{ squote .JCasC.jobs.branch }})
                                 }
                               }
                               scriptPath("server/^${currentjob}/Jenkinsfile")
