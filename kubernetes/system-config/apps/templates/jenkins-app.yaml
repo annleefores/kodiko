@@ -36,12 +36,12 @@ spec:
                 cpu: {{ .resources.limits.cpu }}
                 memory: {{ .resources.limits.memory }}
               
-              JCasC:
-                defaultConfig: true
-                configScripts:
-                  welcome-message: |
-                    jenkins:
-                      systemMessage: Welcome to our CI\CD server.  This Jenkins is configured and managed 'as code'.
+            JCasC:
+              defaultConfig: true
+              configScripts:
+                welcome-message: |
+                  jenkins:
+                    systemMessage: Welcome to our CI\CD server.  This Jenkins is configured and managed 'as code'.
 
 
 
