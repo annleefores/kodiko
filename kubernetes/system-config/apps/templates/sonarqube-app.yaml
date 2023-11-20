@@ -19,31 +19,31 @@ spec:
     helm:
         releaseName: sonarqube
         {{- with .spec.source.helm.valuesObject }}
-        valuesObject:
-            image:
-              repository: {{ .image.repository }}
-              tag: {{ .image.tag }}
-              pullPolicy: {{ .image.pullPolicy }}
+        # valuesObject:
+        #     image:
+        #       repository: {{ .image.repository }}
+        #       tag: {{ .image.tag }}
+        #       pullPolicy: {{ .image.pullPolicy }}
 
-            service:
-              type: {{ .service.type }}
-              externalPort: {{ .service.externalPort }}
-              internalPort: {{ .service.internalPort }}
-              labels: {{ .service.labels }}
+        #     service:
+        #       type: {{ .service.type }}
+        #       externalPort: {{ .service.externalPort }}
+        #       internalPort: {{ .service.internalPort }}
+        #       labels: {{ .service.labels }}
 
-            sonarWebContext: {{ .sonarWebContext }}
+        #     sonarWebContext: {{ .sonarWebContext }}
 
-            persistence:
-              enabled: {{ .persistence.enabled }}
+        #     persistence:
+        #       enabled: {{ .persistence.enabled }}
 
-            readinessProbe:
-              failureThreshold: {{ .readinessProbe.failureThreshold }}
+        #     readinessProbe:
+        #       failureThreshold: {{ .readinessProbe.failureThreshold }}
 
-            livenessProbe:
-              failureThreshold: {{ .livenessProbe.failureThreshold }}
+        #     livenessProbe:
+        #       failureThreshold: {{ .livenessProbe.failureThreshold }}
 
-            startupProbe:
-              failureThreshold: {{ .startupProbe.failureThreshold }}
+        #     startupProbe:
+        #       failureThreshold: {{ .startupProbe.failureThreshold }}
         {{- end }}
 
   destination:
