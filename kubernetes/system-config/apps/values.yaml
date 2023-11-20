@@ -122,7 +122,7 @@ kaniko:
   spec:
     source:
       branch: dev
-      path: kubernetes/system-config/kaniko
+      path: kubernetes/system-config/ext-secrets/kaniko-docker-extsecret.yaml
       repoURL: https://github.com/annleefores/kodiko.git
                
   destination:
@@ -148,7 +148,7 @@ manifests:
 sonarqube:
   syncWave: "6"
   spec:
-    source:
+    sources:
       targetRevision: '10.3.0'
       chart: sonarqube
       repoURL: https://SonarSource.github.io/helm-chart-sonarqube
@@ -175,6 +175,14 @@ sonarqube:
 
           startupProbe:
             failureThreshold: 24
+          
+          account:
+            adminPasswordSecretName: sonarqube-passwd-secret
+
+      extRepoURL: https://github.com/annleefores/kodiko.git
+      extBranch: dev
+      extPath: kubernetes/system-config/ext-secrets/sonarqube-passwd-extsecret.yaml
+    
 
   destination:
     server: https://kubernetes.default.svc
