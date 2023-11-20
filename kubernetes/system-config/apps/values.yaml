@@ -164,7 +164,6 @@ sonarqube:
             type: LoadBalancer
             externalPort: 9000
             internalPort: 9000
-            labels:
 
           sonarWebContext: "/"
 
