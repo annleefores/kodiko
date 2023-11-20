@@ -1,5 +1,5 @@
-from ast import Tuple
-from typing import Dict
+
+from typing import Dict, Tuple
 import requests
 from dotenv import load_dotenv
 import os
