@@ -10,9 +10,9 @@ load_dotenv()
 class SonarPostHook:
     def __init__(
         self,
-        jenkins_sonar_webhook: str = "http://jenkins.jenkins.svc.cluster.local:8080/sonarqube-webhook",
-        sonarqube_url: str = "http://sonarqube-sonarqube.sonarqube.svc.cluster.local:9000",
-        name: str = "jenkins",
+        jenkins_sonar_webhook: str,
+        sonarqube_url: str,
+        name: str,
     ) -> None:
         self.token = ""
         self.jenkins_sonar_webhook = jenkins_sonar_webhook
@@ -89,10 +89,15 @@ class SonarPostHook:
 
 if __name__ == "__main__":
     hook = SonarPostHook(
-        jenkins_sonar_webhook=os.getenv("JENKINS_SONAR_WEBHOOK") or "",
-        name=os.getenv("NAME") or "",
-        sonarqube_url="http://localhost:9000",
+        jenkins_sonar_webhook=os.getenv(
+            "JENKINS_SONAR_WEBHOOK",
+            "http://jenkins.jenkins.svc.cluster.local:8080/sonarqube-webhook",
+        ),
+        name=os.getenv("NAME", "jenkins"),
+        sonarqube_url=os.getenv(
+            "SONAR_URL", "http://sonarqube-sonarqube.sonarqube.svc.cluster.local:9000"
+        ),
     )
-    # hook.update_sonar_password()
-    # hook.get_sonar_token()
+    hook.update_sonar_password()
+    hook.get_sonar_token()
     hook.create_sonar_webhook()
