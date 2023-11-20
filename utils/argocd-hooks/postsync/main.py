@@ -27,26 +27,14 @@ class SonarPostHook:
         self,
         url: str,
         http_method: str = "post",
-        auth: Tuple | None = None,
         data: Dict[str, str] | None = None,
+        auth: Tuple | None = None,
     ):
         try:
             req = getattr(requests, http_method)
-            resp = req(url=url, data=data, auth=auth or self.sonarqube_auth)
-            resp_dict = resp.json()
-            if "errors" in resp_dict:
-                print(resp_dict["errors"][0]["msg"])
-                resp.raise_for_status()  # This will raise an HTTPError if the response was an HTTP error
-            else:
-                return resp_dict
-        except requests.exceptions.HTTPError as errh:
-            print("HTTP Error:", errh)
-        except requests.exceptions.ConnectionError as errc:
-            print("Error Connecting:", errc)
-        except requests.exceptions.Timeout as errt:
-            print("Timeout Error:", errt)
+            return req(url=url, data=data, auth=auth if auth else self.sonarqube_auth)
         except requests.exceptions.RequestException as err:
-            print("Something Else:", err)
+            print("RequestException Else:", err)
 
     def update_sonar_password(self):
         url = f"{self.sonarqube_url}/api/users/change_password"
@@ -55,16 +43,23 @@ class SonarPostHook:
             "password": self.sonarqube_auth[1],
             "previousPassword": "admin",
         }
+
         try:
-            self.req(url=url, data=data, auth=("admin", "admin"))
-        except Exception as e:
-            print("Password already changed!", e)
+            resp = self.req(url=url, data=data, auth=("admin", "admin"))
+            if resp.status_code == 204:
+                print("Password changed!")
+            elif resp.status_code == 401:
+                print("Password already changed!")
+        except requests.exceptions.RequestException as e:
+            print("RequestException", e)
 
     def get_sonar_token(self):
         url = f"{self.sonarqube_url}/api/user_tokens/generate"
         data = {"name": self.name}
-        resp = self.req(url=url, data=data)
-        if resp:
+        resp = self.req(url=url, data=data).json()
+        if "errors" in resp:
+            print(resp["errors"][0]["msg"])
+        else:
             print("Token created!")
             return resp.get("token")
 
@@ -73,7 +68,7 @@ class SonarPostHook:
         returns true if the url webhook does not exist
         """
         url = f"{self.sonarqube_url}/api/webhooks/list"
-        webhooks = self.req(url=url, http_method="get")
+        webhooks = self.req(url=url, http_method="get").json()
         if webhooks:
             for i in webhooks.get("webhooks"):
                 if i.get("url") == self.jenkins_sonar_webhook:
@@ -86,7 +81,8 @@ class SonarPostHook:
             # if not create a new webhook
             url = f"{self.sonarqube_url}/api/webhooks/create"
             data = {"name": self.name, "url": self.jenkins_sonar_webhook}
-            print(self.req(url=url, data=data))
+            print("Webhook created!")
+            print(self.req(url=url, data=data).json())
         else:
             print("Webhook already exists!")
 
@@ -95,7 +91,8 @@ if __name__ == "__main__":
     hook = SonarPostHook(
         jenkins_sonar_webhook=os.getenv("JENKINS_SONAR_WEBHOOK") or "",
         name=os.getenv("NAME") or "",
+        sonarqube_url="http://localhost:9000",
     )
-    hook.update_sonar_password()
-    hook.get_sonar_token()
+    # hook.update_sonar_password()
+    # hook.get_sonar_token()
     hook.create_sonar_webhook()
