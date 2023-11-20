@@ -122,7 +122,7 @@ kaniko:
   spec:
     source:
       branch: dev
-      path: kubernetes/system-config/ext-secrets/kaniko-docker-extsecret.yaml
+      path: kubernetes/system-config/ext-secrets/kaniko
       repoURL: https://github.com/annleefores/kodiko.git
                
   destination:
@@ -181,7 +181,7 @@ sonarqube:
 
       extRepoURL: https://github.com/annleefores/kodiko.git
       extBranch: dev
-      extPath: kubernetes/system-config/ext-secrets/sonarqube-passwd-extsecret.yaml
+      extPath: kubernetes/system-config/ext-secrets/sonarqube
     
 
   destination:
