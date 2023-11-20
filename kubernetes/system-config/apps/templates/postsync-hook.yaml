@@ -1,0 +1,22 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  generateName: create-sonarqube-webhook-
+  annotations:
+    argocd.argoproj.io/hook: PostSync
+    argocd.argoproj.io/hook-delete-policy: HookSucceeded
+spec:
+  template:
+    spec:
+      containers:
+      - name: sonarqube-webhook
+        image: curlimages/curl
+        command:
+          - "curl"
+          - "-X"
+          - "POST"
+          - "-u"
+          - "admin:admin"
+          - "http://sonarqube-sonarqube.sonarqube.svc.cluster.local:9000/api/webhooks/create?name=jenkins&url=http://jenkins.jenkins.svc.cluster.local:8050/sonarqube-webhook"
+      restartPolicy: Never
+  backoffLimit: 2
