@@ -14,7 +14,9 @@ spec:
         envFrom:
         - secretRef:
             name: postsync-hook-secret
+        imagePullPolicy: IfNotPresent
       restartPolicy: Never
+
   backoffLimit: 2
 ---
 apiVersion: external-secrets.io/v1beta1
