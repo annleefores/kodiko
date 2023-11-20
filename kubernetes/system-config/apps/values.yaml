@@ -68,7 +68,7 @@ eso:
 jenkins:
   syncWave: "4"
   spec:
-    source:
+    sources:
       targetRevision: '4.8.3'
       chart: jenkins
       repoURL: https://charts.jenkins.io
@@ -113,18 +113,10 @@ jenkins:
             serviceType: LoadBalancer
             installPlugins: false
 
-  destination:
-    server: https://kubernetes.default.svc
-    ns: jenkins
+      extRepoURL: https://github.com/annleefores/kodiko.git
+      extBranch: dev
+      extPath: kubernetes/system-config/ext-secrets/kaniko
 
-kaniko:
-  syncWave: "5"
-  spec:
-    source:
-      branch: dev
-      path: kubernetes/system-config/ext-secrets/kaniko
-      repoURL: https://github.com/annleefores/kodiko.git
-               
   destination:
     server: https://kubernetes.default.svc
     ns: jenkins
@@ -175,14 +167,6 @@ sonarqube:
 
           startupProbe:
             failureThreshold: 24
-          
-          account:
-            adminPasswordSecretName: sonarqube-passwd-secret
-
-      extRepoURL: https://github.com/annleefores/kodiko.git
-      extBranch: dev
-      extPath: kubernetes/system-config/ext-secrets/sonarqube
-    
 
   destination:
     server: https://kubernetes.default.svc

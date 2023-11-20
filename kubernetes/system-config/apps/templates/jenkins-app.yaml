@@ -12,93 +12,97 @@ metadata:
     name: jenkins
 spec:
   project: default
-  source:
-    repoURL: {{ .spec.source.repoURL }}
-    targetRevision: {{ .spec.source.targetRevision }}
-    chart: {{ .spec.source.chart }}
-    helm:
-        releaseName: jenkins
-        {{- with .spec.source.helm.valuesObject }}
-        valuesObject:
-          controller:
-            {{- with .controller }}
-            jenkinsUrl: {{ .jenkinsUrl }}
-            componentName: {{ .componentName }}
-            image: {{ .image }}
-            tag: {{ .tag }}
-            imagePullPolicy: {{ .imagePullPolicy }}
-            numExecutors: {{ .numExecutors }}
+  sources:
+    - repoURL: {{ .spec.sources.repoURL }}
+      targetRevision: {{ .spec.sources.targetRevision }}
+      chart: {{ .spec.sources.chart }}
+      helm:
+          releaseName: jenkins
+          {{- with .spec.sources.helm.valuesObject }}
+          valuesObject:
+            controller:
+              {{- with .controller }}
+              jenkinsUrl: {{ .jenkinsUrl }}
+              componentName: {{ .componentName }}
+              image: {{ .image }}
+              tag: {{ .tag }}
+              imagePullPolicy: {{ .imagePullPolicy }}
+              numExecutors: {{ .numExecutors }}
 
-            resources:
-              requests:
-                cpu: {{ .resources.requests.cpu }}
-                memory: {{ .resources.requests.memory }}
-              limits:
-                cpu: {{ .resources.limits.cpu }}
-                memory: {{ .resources.limits.memory }}
-              
-            JCasC:
-              defaultConfig: true
-              configScripts:
+              resources:
+                requests:
+                  cpu: {{ .resources.requests.cpu }}
+                  memory: {{ .resources.requests.memory }}
+                limits:
+                  cpu: {{ .resources.limits.cpu }}
+                  memory: {{ .resources.limits.memory }}
+                
+              JCasC:
+                defaultConfig: true
+                configScripts:
 
-                welcome-message: |
-                  jenkins:
-                    systemMessage: {{ .JCasC.systemMessage }}
-                    
-                jenkins-credentails: |
-                  credentials:
-                    system:
-                      domainCredentials:
-                        - credentials:
-                          - string:
-                              scope: GLOBAL
-                              id: {{ .JCasC.sonarqube.credentials.id }}
-                              secret: {{ .JCasC.sonarqube.credentials.secret }}
-                              description: {{ .JCasC.sonarqube.credentials.description }}
+                  welcome-message: |
+                    jenkins:
+                      systemMessage: {{ .JCasC.systemMessage }}
+                      
+                  jenkins-credentails: |
+                    credentials:
+                      system:
+                        domainCredentials:
+                          - credentials:
+                            - string:
+                                scope: GLOBAL
+                                id: {{ .JCasC.sonarqube.credentials.id }}
+                                secret: {{ .JCasC.sonarqube.credentials.secret }}
+                                description: {{ .JCasC.sonarqube.credentials.description }}
 
-                global-config: |
-                  unclassified:
-                    sonarglobalconfiguration:
-                      buildWrapperEnabled: true
-                      installations:
-                        - name: {{ .JCasC.sonarqube.installations.name }}
-                          serverUrl: {{ .JCasC.sonarqube.installations.serverUrl }}
-                          credentialsId: {{ .JCasC.sonarqube.installations.credentialsId }}
+                  global-config: |
+                    unclassified:
+                      sonarglobalconfiguration:
+                        buildWrapperEnabled: true
+                        installations:
+                          - name: {{ .JCasC.sonarqube.installations.name }}
+                            serverUrl: {{ .JCasC.sonarqube.installations.serverUrl }}
+                            credentialsId: {{ .JCasC.sonarqube.installations.credentialsId }}
 
-                dark-theme: |
-                  appearance:
-                    themeManager:
-                      disableUserThemes: true
-                      theme: "darkSystem" 
+                  dark-theme: |
+                    appearance:
+                      themeManager:
+                        disableUserThemes: true
+                        theme: "darkSystem" 
 
-                pipeline-job: | 
-                  jobs:
-                    - script: |
-                        jobarray = ['backend', 'codepod']
-                        for(currentjob in jobarray)                                     
-                        pipelineJob("kodiko-^${currentjob}") {
-                          definition {
-                            cpsScm {
-                              scm {
-                                git {
-                                  remote {
-                                    url({{ squote .JCasC.jobs.repoURL }})
+                  pipeline-job: | 
+                    jobs:
+                      - script: |
+                          jobarray = ['backend', 'codepod']
+                          for(currentjob in jobarray)                                     
+                          pipelineJob("kodiko-^${currentjob}") {
+                            definition {
+                              cpsScm {
+                                scm {
+                                  git {
+                                    remote {
+                                      url({{ squote .JCasC.jobs.repoURL }})
+                                    }
+                                    branch({{ squote .JCasC.jobs.branch }})
                                   }
-                                  branch({{ squote .JCasC.jobs.branch }})
                                 }
+                                scriptPath("server/^${currentjob}/Jenkinsfile")
+                                lightweight()
                               }
-                              scriptPath("server/^${currentjob}/Jenkinsfile")
-                              lightweight()
                             }
-                          }
-                        } 
+                          } 
 
-            servicePort: {{ .servicePort }}
-            targetPort: {{ .targetPort }}
-            serviceType: {{ .serviceType }}
-            installPlugins: {{ .installPlugins }}
-            {{- end }}  
-        {{- end }}  
+              servicePort: {{ .servicePort }}
+              targetPort: {{ .targetPort }}
+              serviceType: {{ .serviceType }}
+              installPlugins: {{ .installPlugins }}
+              {{- end }}  
+          {{- end }}  
+
+    - repoURL: {{ .spec.sources.extRepoURL }}
+      path: {{ .spec.sources.extPath }}
+      targetRevision: {{ .spec.sources.extBranch }}
 
   destination:
     server: {{ .destination.server }}

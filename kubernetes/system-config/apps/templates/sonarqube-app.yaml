@@ -44,9 +44,6 @@ spec:
               account:
                 adminPasswordSecretName: {{ .account.adminPasswordSecretName }}
           {{- end }}
-    - repoURL: {{ .spec.sources.extRepoURL }}
-      path: {{ .spec.sources.extPath }}
-      targetRevision: {{ .spec.sources.extBranch }}
 
   destination:
     server: {{ .destination.server }}
