@@ -75,7 +75,6 @@ class SonarPostHook:
 
 
 if __name__ == "__main__":
-    print(os.getenv("JENKINS_SONAR_WEBHOOK"))
     hook = SonarPostHook(
         jenkins_sonar_webhook=os.getenv("JENKINS_SONAR_WEBHOOK") or "",
         name=os.getenv("NAME") or "",

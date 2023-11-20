@@ -8,6 +8,7 @@ import subcmds.delete as delete
 import subcmds.push as push
 import subcmds.local as local
 
+
 app = typer.Typer(
     add_completion=False, no_args_is_help=True, pretty_exceptions_enable=False
 )

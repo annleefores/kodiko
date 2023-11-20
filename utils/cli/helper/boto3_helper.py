@@ -15,14 +15,27 @@ import boto3
 # }
 
 
-# Make sure accesskey and secret is saved as stringlist, without any space between them. the separator must be a single comma
-def getAK() -> List[str]:
-    param = boto3.client("ssm", region_name="ap-south-1")  # type: ignore
-    response = param.get_parameter(Name="/kodiko/backend/ACCESS_CREDS")
-    access_val: str | None = response["Parameter"].get("Value")
-    if access_val:
-        return access_val.split(",")
-    return ["NONE", "NONE"]
+class SSM:
+    def __init__(self) -> None:
+        self.param = boto3.client("ssm", region_name="ap-south-1")  # type: ignore
+
+    def get_val(self, name: str):
+        response = self.param.get_parameter(Name=name)
+        val: str | None = response["Parameter"].get("Value")
+        return val
+
+    # Make sure accesskey and secret is saved as stringlist, without any space between them. the separator must be a single comma
+    def getAK(self) -> List[str]:
+        val = self.get_val(name="/kodiko/backend/ACCESS_CREDS")
+        if val:
+            return val.split(",")
+        return ["NONE", "NONE"]
+
+    def get_sonar_passwd(self) -> str:
+        val = self.get_val(name="/kodiko/backend/local/SONAR_PASSWORD")
+        if val:
+            return val
+        return "NONE"
 
 
 def get_eks_vpc() -> str:

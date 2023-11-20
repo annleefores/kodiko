@@ -1,6 +1,6 @@
 import typer
 from helper.kube_helper import HelmCMD, KubeCMD
-from helper.boto3_helper import get_eks_vpc, getAK
+from helper.boto3_helper import get_eks_vpc, SSM
 from typing import Annotated, List
 
 from helper.ngrok_helper import tunnel
@@ -54,10 +54,13 @@ def config(
     Deploy System Config
     """
     # deploy AWS creds secret for ESO
+    ssm = SSM()
+
     if local:
         print("Creating AWS credentials secret")
         k = KubeCMD()
-        cred: List[str] = getAK()
+
+        cred: List[str] = ssm.getAK()
         aws_key, aws_secret = cred[0], cred[1]
         k.create(
             ns="external-secrets",
