@@ -52,7 +52,7 @@ class SonarPostHook:
         url = f"{self.sonarqube_url}/api/users/change_password"
         data = {
             "login": "admin",
-            "password": self.sonarqube_auth.index(1),
+            "password": self.sonarqube_auth[1],
             "previousPassword": "admin",
         }
         try:
