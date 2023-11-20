@@ -1,3 +1,4 @@
+from ast import Tuple
 from typing import Dict
 import requests
 from dotenv import load_dotenv
@@ -17,17 +18,21 @@ class SonarPostHook:
         self.jenkins_sonar_webhook = jenkins_sonar_webhook
         self.name = name
         self.sonarqube_url = sonarqube_url
-        self.sonarqube_passwd = (
+        self.sonarqube_auth = (
             os.getenv("SONAR_USERNAME"),
             os.getenv("SONAR_PASSWORD"),
         )
 
     def req(
-        self, url: str, http_method: str = "post", data: Dict[str, str] | None = None
+        self,
+        url: str,
+        http_method: str = "post",
+        auth: Tuple | None = None,
+        data: Dict[str, str] | None = None,
     ):
         try:
             req = getattr(requests, http_method)
-            resp = req(url=url, data=data, auth=self.sonarqube_passwd)
+            resp = req(url=url, data=data, auth=auth or self.sonarqube_auth)
             resp_dict = resp.json()
             if "errors" in resp_dict:
                 print(resp_dict["errors"][0]["msg"])
@@ -43,7 +48,19 @@ class SonarPostHook:
         except requests.exceptions.RequestException as err:
             print("Something Else:", err)
 
-    def get_token(self):
+    def update_sonar_password(self):
+        url = f"{self.sonarqube_url}/api/users/change_password"
+        data = {
+            "login": "admin",
+            "password": self.sonarqube_auth.index(1),
+            "previousPassword": "admin",
+        }
+        try:
+            self.req(url=url, data=data, auth=("admin", "admin"))
+        except Exception as e:
+            print("Password already changed!", e)
+
+    def get_sonar_token(self):
         url = f"{self.sonarqube_url}/api/user_tokens/generate"
         data = {"name": self.name}
         resp = self.req(url=url, data=data)
@@ -51,7 +68,7 @@ class SonarPostHook:
             print("Token created!")
             return resp.get("token")
 
-    def check_webhook(self) -> bool:
+    def check_sonar_webhook(self) -> bool:
         """
         returns true if the url webhook does not exist
         """
@@ -63,9 +80,9 @@ class SonarPostHook:
                     return False
         return True
 
-    def create_webhook(self) -> None:
+    def create_sonar_webhook(self) -> None:
         # check if there's already a webhook for the same url
-        if self.check_webhook():
+        if self.check_sonar_webhook():
             # if not create a new webhook
             url = f"{self.sonarqube_url}/api/webhooks/create"
             data = {"name": self.name, "url": self.jenkins_sonar_webhook}
@@ -79,5 +96,6 @@ if __name__ == "__main__":
         jenkins_sonar_webhook=os.getenv("JENKINS_SONAR_WEBHOOK") or "",
         name=os.getenv("NAME") or "",
     )
-    hook.get_token()
-    hook.create_webhook()
+    hook.update_sonar_password()
+    hook.get_sonar_token()
+    hook.create_sonar_webhook()
