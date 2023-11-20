@@ -56,9 +56,9 @@ class SonarPostHook:
         returns true if the url webhook does not exist
         """
         url = f"{self.sonarqube_url}/api/webhooks/list"
-        webhooks = self.req(url=url, http_method="get").get("webhooks")
+        webhooks = self.req(url=url, http_method="get")
         if webhooks:
-            for i in webhooks:
+            for i in webhooks.get("webhooks"):
                 if i.get("url") == self.jenkins_sonar_webhook:
                     return False
         return True
@@ -75,9 +75,10 @@ class SonarPostHook:
 
 
 if __name__ == "__main__":
+    print(os.getenv("JENKINS_SONAR_WEBHOOK"))
     hook = SonarPostHook(
         jenkins_sonar_webhook=os.getenv("JENKINS_SONAR_WEBHOOK") or "",
         name=os.getenv("NAME") or "",
     )
-    hook.create_webhook()
     hook.get_token()
+    hook.create_webhook()

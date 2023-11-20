@@ -14,7 +14,7 @@ spec:
         envFrom:
         - secretRef:
             name: postsync-hook-secret
-      restartPolicy: OnFailure
+      restartPolicy: Never
   backoffLimit: 2
 ---
 apiVersion: external-secrets.io/v1beta1
