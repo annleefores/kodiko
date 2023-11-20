@@ -12,38 +12,38 @@ metadata:
     name: sonarqube
 spec:
   project: default
-  sources:
-    - repoURL: {{ .spec.sources.repoURL }}
-      targetRevision: {{ .spec.sources.targetRevision }}
-      chart: {{ .spec.sources.chart }}
-      helm:
-          releaseName: sonarqube
-          {{- with .spec.sources.helm.valuesObject }}
-          valuesObject:
-              image:
-                tag: {{ .image.tag }}
-                pullPolicy: {{ .image.pullPolicy }}
+  source:
+    repoURL: {{ .spec.source.repoURL }}
+    targetRevision: {{ .spec.source.targetRevision }}
+    chart: {{ .spec.source.chart }}
+    helm:
+        releaseName: sonarqube
+        {{- with .spec.source.helm.valuesObject }}
+        valuesObject:
+            image:
+              tag: {{ .image.tag }}
+              pullPolicy: {{ .image.pullPolicy }}
 
-              service:
-                type: {{ .service.type }}
+            service:
+              type: {{ .service.type }}
 
-              sonarWebContext: {{ .sonarWebContext }}
+            sonarWebContext: {{ .sonarWebContext }}
 
-              persistence:
-                enabled: {{ .persistence.enabled }}
+            persistence:
+              enabled: {{ .persistence.enabled }}
 
-              readinessProbe:
-                failureThreshold: {{ .readinessProbe.failureThreshold }}
+            readinessProbe:
+              failureThreshold: {{ .readinessProbe.failureThreshold }}
 
-              livenessProbe:
-                failureThreshold: {{ .livenessProbe.failureThreshold }}
+            livenessProbe:
+              failureThreshold: {{ .livenessProbe.failureThreshold }}
 
-              startupProbe:
-                failureThreshold: {{ .startupProbe.failureThreshold }}
-              
-              account:
-                adminPasswordSecretName: {{ .account.adminPasswordSecretName }}
-          {{- end }}
+            startupProbe:
+              failureThreshold: {{ .startupProbe.failureThreshold }}
+            
+            account:
+              adminPasswordSecretName: {{ .account.adminPasswordSecretName }}
+        {{- end }}
 
   destination:
     server: {{ .destination.server }}

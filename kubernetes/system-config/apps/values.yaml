@@ -140,7 +140,7 @@ manifests:
 sonarqube:
   syncWave: "6"
   spec:
-    sources:
+    source:
       targetRevision: '10.3.0'
       chart: sonarqube
       repoURL: https://SonarSource.github.io/helm-chart-sonarqube
