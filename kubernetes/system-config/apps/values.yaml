@@ -156,7 +156,6 @@ sonarqube:
         releaseName: sonarqube
         valuesObject:
           image:
-            repository: sonarqube
             tag: 10.3.0-community
             pullPolicy: IfNotPresent
 

@@ -20,10 +20,9 @@ spec:
         releaseName: sonarqube
         {{- with .spec.source.helm.valuesObject }}
         valuesObject:
-            # image:
-            #   repository: {{ .image.repository }}
-            #   tag: {{ .image.tag }}
-            #   pullPolicy: {{ .image.pullPolicy }}
+            image:
+              tag: {{ .image.tag }}
+              pullPolicy: {{ .image.pullPolicy }}
 
             service:
               type: {{ .service.type }}
