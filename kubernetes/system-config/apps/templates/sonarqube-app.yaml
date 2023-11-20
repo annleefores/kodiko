@@ -25,10 +25,8 @@ spec:
             #   tag: {{ .image.tag }}
             #   pullPolicy: {{ .image.pullPolicy }}
 
-            # service:
-            #   type: {{ .service.type }}
-            #   externalPort: {{ .service.externalPort }}
-            #   internalPort: {{ .service.internalPort }}
+            service:
+              type: {{ .service.type }}
 
             sonarWebContext: {{ .sonarWebContext }}
 
