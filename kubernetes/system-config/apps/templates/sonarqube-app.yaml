@@ -40,9 +40,6 @@ spec:
 
             startupProbe:
               failureThreshold: {{ .startupProbe.failureThreshold }}
-            
-            account:
-              adminPasswordSecretName: {{ .account.adminPasswordSecretName }}
         {{- end }}
 
   destination:
