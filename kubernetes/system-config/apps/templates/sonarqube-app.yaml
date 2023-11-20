@@ -20,17 +20,17 @@ spec:
         releaseName: sonarqube
         {{- with .spec.source.helm.valuesObject }}
         valuesObject:
-        #     image:
-        #       repository: {{ .image.repository }}
-        #       tag: {{ .image.tag }}
-        #       pullPolicy: {{ .image.pullPolicy }}
+            # image:
+            #   repository: {{ .image.repository }}
+            #   tag: {{ .image.tag }}
+            #   pullPolicy: {{ .image.pullPolicy }}
 
-        #     service:
-        #       type: {{ .service.type }}
-        #       externalPort: {{ .service.externalPort }}
-        #       internalPort: {{ .service.internalPort }}
+            # service:
+            #   type: {{ .service.type }}
+            #   externalPort: {{ .service.externalPort }}
+            #   internalPort: {{ .service.internalPort }}
 
-        #     sonarWebContext: {{ .sonarWebContext }}
+            sonarWebContext: {{ .sonarWebContext }}
 
             persistence:
               enabled: {{ .persistence.enabled }}
