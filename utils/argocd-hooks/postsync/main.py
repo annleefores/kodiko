@@ -127,7 +127,7 @@ if __name__ == "__main__":
         name=NAME,
         sonarqube_url=SONAR_URL,
     )
-    # hook.update_sonar_password()
+    hook.update_sonar_password()
     hook.get_sonar_token()
     hook.create_sonar_webhook()
     hook.update_jenkins_sonar_token()
