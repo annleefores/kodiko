@@ -1,10 +1,24 @@
-
 from typing import Dict, Tuple
 import requests
 from dotenv import load_dotenv
 import os
+from api4jenkins import Jenkins
 
 load_dotenv()
+
+JENKINS_URL = os.getenv("JENKINS_URL", "http://jenkins.jenkins.svc.cluster.local:8050")
+SONAR_URL = os.getenv(
+    "SONAR_URL", "http://sonarqube-sonarqube.sonarqube.svc.cluster.local:9000"
+)
+JENKINS_USERNAME = os.getenv("JENKINS_USERNAME", "admin")
+JENKINS_PASSWORD = os.getenv("JENKINS_PASSWORD", "NONE")
+JENKINS_SONAR_WEBHOOK = os.getenv(
+    "JENKINS_SONAR_WEBHOOK",
+    "http://jenkins.jenkins.svc.cluster.local:8080/sonarqube-webhook",
+)
+NAME = os.getenv("NAME", "jenkins")
+
+j = Jenkins(JENKINS_URL, auth=(JENKINS_USERNAME, JENKINS_PASSWORD))
 
 
 class SonarPostHook:
@@ -61,7 +75,7 @@ class SonarPostHook:
             print(resp["errors"][0]["msg"])
         else:
             print("Token created!")
-            return resp.get("token")
+            self.token = resp.get("token")
 
     def check_sonar_webhook(self) -> bool:
         """
@@ -86,18 +100,28 @@ class SonarPostHook:
         else:
             print("Webhook already exists!")
 
+    def update_jenkins_sonar_token(self) -> None:
+        domain = j.credentials.get("_")  # get global domain
+        credential = domain.get("sonar_token")
+        xml = f"""<org.jenkinsci.plugins.plaincredentials.impl.StringCredentialsImpl plugin="plain-credentials">
+            <scope>GLOBAL</scope>
+            <id>sonar_token</id>
+            <description>Sonar token</description>
+            <secret>
+                {self.token}
+            </secret>
+            </org.jenkinsci.plugins.plaincredentials.impl.StringCredentialsImpl>
+        """
+        credential.configure(xml)
+
 
 if __name__ == "__main__":
     hook = SonarPostHook(
-        jenkins_sonar_webhook=os.getenv(
-            "JENKINS_SONAR_WEBHOOK",
-            "http://jenkins.jenkins.svc.cluster.local:8080/sonarqube-webhook",
-        ),
-        name=os.getenv("NAME", "jenkins"),
-        sonarqube_url=os.getenv(
-            "SONAR_URL", "http://sonarqube-sonarqube.sonarqube.svc.cluster.local:9000"
-        ),
+        jenkins_sonar_webhook=JENKINS_SONAR_WEBHOOK,
+        name=NAME,
+        sonarqube_url=SONAR_URL,
     )
     hook.update_sonar_password()
     hook.get_sonar_token()
     hook.create_sonar_webhook()
+    hook.update_jenkins_sonar_token()

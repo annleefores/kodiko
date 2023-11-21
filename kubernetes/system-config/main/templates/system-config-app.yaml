@@ -25,6 +25,13 @@ spec:
               helm:
                 valuesObject:
                     vpcId: {{ .Values.vpcID }} 
+        jenkins:
+          spec:
+            sources:
+              helm:
+                valuesObject:
+                  controller:
+                    adminPassword: {{ .Values.JenkinsAdminPassword }}
       {{- end }}
 
   destination:

@@ -83,6 +83,8 @@ jenkins:
             imagePullPolicy: "Always"
             numExecutors: 0
 
+            adminPassword:
+
             resources:
               requests:
                 cpu: "500m"

@@ -71,12 +71,15 @@ def config(
         )
 
     h = HelmCMD()
+    keyVal = {"JenkinsAdminPassword": ssm.get_jenkins_passwd()}
+    if not local:
+        keyVal["vpcID"] = get_eks_vpc()
     h.install(
         release_name="system-config-main",
         HelmPath="kubernetes/system-config/main",
         ns="argocd",
         dev="true" if local else "false",
-        keyVal={"vpcID": get_eks_vpc()} if not local else None,
+        keyVal=keyVal,
     )
 
 

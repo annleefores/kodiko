@@ -40,6 +40,8 @@ spec:
         SONAR_PASSWORD: "{{ `{{ .SONAR_PASSWORD }}` }}"
         JENKINS_SONAR_WEBHOOK: "{{ `{{ .JENKINS_SONAR_WEBHOOK }}` }}"
         NAME: "{{ `{{ .NAME }}` }}"
+        JENKINS_USERNAME: "{{ `{{ .JENKINS_USERNAME }}` }}"
+        JENKINS_PASSWORD: "{{ `{{ .JENKINS_PASSWORD }}` }}"
 
   data:
   - secretKey: SONAR_USERNAME
@@ -54,3 +56,9 @@ spec:
   - secretKey: NAME
     remoteRef:
       key: /kodiko/backend/local/NAME
+  - secretKey: JENKINS_USERNAME
+    remoteRef:
+      key: /kodiko/backend/local/JENKINS_USERNAME
+  - secretKey: JENKINS_PASSWORD
+    remoteRef:
+      key: /kodiko/backend/local/JENKINS_PASSWORD
