@@ -71,8 +71,10 @@ def config(
         )
 
     h = HelmCMD()
+    print("Adding Jenkins Admin Password")
     keyVal = {"JenkinsAdminPassword": ssm.get_jenkins_passwd()}
     if not local:
+        print("Adding EKS VPC ID")
         keyVal["vpcID"] = get_eks_vpc()
     h.install(
         release_name="system-config-main",
