@@ -29,9 +29,6 @@ spec:
               imagePullPolicy: {{ .imagePullPolicy }}
               numExecutors: {{ .numExecutors }}
 
-              # adminPassword: {{ .adminPassword }}
-              adminPassword: admin
-
               resources:
                 requests:
                   cpu: {{ .resources.requests.cpu }}

@@ -13,5 +13,3 @@ destination:
 
 # EKS Cluster VPC ID - update this via --set
 vpcID: 
-# JenkinsAdminPassword - update this via --set
-JenkinsAdminPassword: 

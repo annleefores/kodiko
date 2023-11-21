@@ -31,12 +31,6 @@ class SSM:
             return val.split(",")
         return ["NONE", "NONE"]
 
-    def get_jenkins_passwd(self) -> str:
-        val = self.get_val(name="/kodiko/backend/local/JENKINS_PASSWORD")
-        if val:
-            return val
-        return "NONE"
-
 
 def get_eks_vpc() -> str:
     eks_client = boto3.client("eks", region_name="ap-south-1")  # type: ignore
