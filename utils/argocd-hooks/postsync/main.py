@@ -106,13 +106,14 @@ class SonarPostHook:
         xml = f"""<org.jenkinsci.plugins.plaincredentials.impl.StringCredentialsImpl plugin="plain-credentials">
             <scope>GLOBAL</scope>
             <id>sonar_token</id>
-            <description>Sonar token</description>
+            <description>Sonar token 2</description>
             <secret>
                 {self.token}
             </secret>
             </org.jenkinsci.plugins.plaincredentials.impl.StringCredentialsImpl>
         """
         credential.configure(xml)
+        print("Jenkins sonarqube token updated!")
 
 
 if __name__ == "__main__":
