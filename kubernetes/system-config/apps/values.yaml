@@ -83,6 +83,11 @@ jenkins:
             imagePullPolicy: "Always"
             numExecutors: 0
 
+            admin:
+              existingSecret: jenkins-admin-secret
+              userKey: JENKINS_USERNAME
+              passwordKey: JENKINS_PASSWORD
+
             resources:
               requests:
                 cpu: "500m"
@@ -115,7 +120,7 @@ jenkins:
 
       extRepoURL: https://github.com/annleefores/kodiko.git
       extBranch: dev
-      extPath: kubernetes/system-config/ext-secrets/kaniko
+      extPath: kubernetes/system-config/ext-secrets/jenkins
 
   destination:
     server: https://kubernetes.default.svc
