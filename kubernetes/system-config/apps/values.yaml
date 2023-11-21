@@ -83,6 +83,7 @@ jenkins:
             imagePullPolicy: "Always"
             numExecutors: 0
 
+            # Update via --set
             adminPassword:
 
             resources:
