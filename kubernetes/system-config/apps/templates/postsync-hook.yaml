@@ -10,7 +10,7 @@ spec:
     spec:
       containers:
       - name: postsync-hook-job
-        image: annleefores/config-postsync-hook:1.0.0
+        image: annleefores/config-postsync-hook
         envFrom:
         - secretRef:
             name: postsync-hook-secret

@@ -68,8 +68,14 @@ class SonarPostHook:
             print("RequestException", e)
 
     def get_sonar_token(self):
+        # Delete previous token
+        delete_url = f"{self.sonarqube_url}/api/user_tokens/revoke"
         url = f"{self.sonarqube_url}/api/user_tokens/generate"
         data = {"name": self.name}
+
+        self.req(url=delete_url, data=data)
+
+        # Create new token
         resp = self.req(url=url, data=data).json()
         if "errors" in resp:
             print(resp["errors"][0]["msg"])
@@ -103,13 +109,12 @@ class SonarPostHook:
     def update_jenkins_sonar_token(self) -> None:
         domain = j.credentials.get("_")  # get global domain
         credential = domain.get("sonar_token")
+        # Make sure alignment for XML is correct
         xml = f"""<org.jenkinsci.plugins.plaincredentials.impl.StringCredentialsImpl plugin="plain-credentials">
             <scope>GLOBAL</scope>
             <id>sonar_token</id>
-            <description>Sonar token 2</description>
-            <secret>
-                {self.token}
-            </secret>
+            <description>Sonar token</description>
+            <secret>{self.token}</secret>
             </org.jenkinsci.plugins.plaincredentials.impl.StringCredentialsImpl>
         """
         credential.configure(xml)
@@ -122,7 +127,7 @@ if __name__ == "__main__":
         name=NAME,
         sonarqube_url=SONAR_URL,
     )
-    hook.update_sonar_password()
+    # hook.update_sonar_password()
     hook.get_sonar_token()
     hook.create_sonar_webhook()
     hook.update_jenkins_sonar_token()
