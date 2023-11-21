@@ -71,7 +71,6 @@ def config(
         )
 
     h = HelmCMD()
-    print("Adding Jenkins Admin Password")
     keyVal = {}
     if not local:
         print("Adding EKS VPC ID")
