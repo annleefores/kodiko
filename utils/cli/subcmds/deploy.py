@@ -3,8 +3,6 @@ from helper.kube_helper import HelmCMD, KubeCMD
 from helper.boto3_helper import get_eks_vpc, SSM
 from typing import Annotated, List
 
-from helper.ngrok_helper import tunnel
-
 deploy = typer.Typer()
 
 
@@ -96,7 +94,6 @@ def app(
     # Launch ngrok tunnel for argocd
     if local:
         print("creating ngrok tunnel")
-        tunnel()
 
     h = HelmCMD()
     h.install(

@@ -57,11 +57,6 @@ def app(
     h = HelmCMD()
     h.uninstall(release_name="backend", ns="argocd")
 
-    # Kill ngrok tunnel for argocd
-    if local:
-        print("Killing ngrok tunnel")
-        tunnel(on=False)
-
 
 if __name__ == "__main__":
     delete()
