@@ -1,7 +1,6 @@
 import typer
 from typing import Annotated
 from helper.kube_helper import HelmCMD, KubeCMD
-from helper.ngrok_helper import tunnel
 
 delete = typer.Typer()
 
