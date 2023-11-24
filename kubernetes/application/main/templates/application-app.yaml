@@ -3,6 +3,8 @@ kind: Application
 metadata:
   name: backend
   namespace: argocd
+  annotations:
+	  argocd-image-updater.argoproj.io/image-list: annleefores/kodiko-backend
   finalizers:
     - resources-finalizer.argocd.argoproj.io
   labels:
