@@ -1,0 +1,31 @@
+{{- with .Values.imageUpdater }}
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  annotations:
+    argocd.argoproj.io/sync-wave: {{ quote .syncWave }}
+  name: argocd-image-updater
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+  labels:
+    name: argocd-image-updater
+spec:
+  project: default
+  sources:
+    - repoURL: {{ .spec.sources.repoURL }}
+      targetRevision: {{ .spec.sources.targetRevision }}
+      chart: {{ .spec.sources.chart }}
+      helm:
+          releaseName: jenkins
+
+  destination:
+    server: {{ .destination.server }}
+    namespace: {{ .destination.ns }}
+  syncPolicy:
+    automated:
+        prune: true
+        selfHeal: true
+    syncOptions:
+    - CreateNamespace=true
+{{- end }}  

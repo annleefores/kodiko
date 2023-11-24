@@ -109,6 +109,20 @@ jenkins:
     server: https://kubernetes.default.svc
     ns: jenkins
 
+imageUpdater:
+  syncWave: "5"
+  spec:
+    sources:
+      targetRevision: '0.9.1'
+      chart: argocd-image-updater
+      repoURL: https://argoproj.github.io/argo-helm
+      helm:
+        releaseName: argocd-image-updater
+
+  destination:
+    server: https://kubernetes.default.svc
+    ns: argocd
+
 manifests:
   syncWave: "5"
   spec:
