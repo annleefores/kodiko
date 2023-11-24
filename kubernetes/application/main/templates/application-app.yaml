@@ -4,7 +4,7 @@ metadata:
   name: backend
   namespace: argocd
   annotations:
-    argocd-image-updater.argoproj.io/image-list: annleefores/kodiko-backend:1.0.x
+    argocd-image-updater.argoproj.io/image-list: annleefores/kodiko-backend:~1.0
     argocd-image-updater.argoproj.io/write-back-method: git:secret:argocd/argocd-image-updater-secret
   finalizers:
     - resources-finalizer.argocd.argoproj.io
