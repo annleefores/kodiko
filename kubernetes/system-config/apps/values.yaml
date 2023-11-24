@@ -122,6 +122,10 @@ imageUpdater:
             config:
               logLevel: "debug"
 
+      extRepoURL: https://github.com/annleefores/kodiko.git
+      extBranch: dev
+      extPath: kubernetes/system-config/ext-secrets/argocd-image-updater
+
   destination:
     server: https://kubernetes.default.svc
     ns: argocd
