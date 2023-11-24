@@ -1,3 +1,0 @@
-# disable tls for local cluster
-data:
-  server.insecure: "true"

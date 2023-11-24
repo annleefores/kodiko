@@ -1,20 +1,23 @@
+{{- with .Values.main }}
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: {{ .Release.Name }}
+  annotations:
+    argocd.argoproj.io/sync-wave: {{ quote .syncWave }}
+  name: {{ $.Release.Name }}
   namespace: argocd
   finalizers:
     - resources-finalizer.argocd.argoproj.io
   labels:
-    name: {{ .Release.Name }}
+    name: {{ $.Release.Name }}
 spec:
   project: default
   source:
-    repoURL: {{ .Values.spec.source.repoURL }}
-    targetRevision: {{ .Values.spec.source.branch }}
-    path: {{ .Values.spec.source.path }}
+    repoURL: {{ .spec.source.repoURL }}
+    targetRevision: {{ .spec.source.branch }}
+    path: {{ .spec.source.path }}
     helm:
-      {{- if .Values.dev }}
+      {{- if $.Values.dev }}
       valueFiles:
       - dev-values.yaml
       {{- else }}
@@ -24,14 +27,14 @@ spec:
             source:
               helm:
                 valuesObject:
-                    vpcId: {{ .Values.vpcID }} 
+                    vpcId: {{ $.Values.vpcID }} 
       {{- end }}
 
   destination:
-    server: {{ .Values.destination.server }}
-    namespace: {{ .Values.destination.ns }}
+    server: {{ .destination.server }}
+    namespace: {{ .destination.ns }}
   syncPolicy:
     automated:
         prune: true
         selfHeal: true
-    
+{{- end }}   

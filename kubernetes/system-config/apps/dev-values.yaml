@@ -2,7 +2,7 @@
 eks: false
 
 nginx:
-  syncWave: "1"
+  syncWave: "2"
   spec:
     source:
       targetRevision: '4.8.3'
@@ -20,11 +20,6 @@ nginx:
               service:
                 type: LoadBalancer
 
-eso:
-  syncWave: "2"
-  spec:
-    source:
-      targetRevision: '0.9.7'
 
 manifests:
   syncWave: "3"

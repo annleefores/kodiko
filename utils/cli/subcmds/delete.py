@@ -13,10 +13,13 @@ def argocd(
     Delete ArgoCD
     """
     k = KubeCMD()
-    k.delete(
-        file_path="https://raw.githubusercontent.com/argoproj/argo-cd/v2.8.4/manifests/install.yaml",
-        ns="argocd",
-    )
+    h = HelmCMD()
+
+    h.uninstall(release_name="argocd", ns="argocd")
+    # k.delete(
+    #     file_path="https://raw.githubusercontent.com/argoproj/argo-cd/v2.8.4/manifests/install.yaml",
+    #     ns="argocd",
+    # )
 
     k.delete(obj="ns", obj_name="argocd")
 

@@ -14,31 +14,24 @@ def argocd(
     Deploy ArgoCD
     """
     k = KubeCMD()
+    h = HelmCMD()
     k.create(obj="ns", obj_name="argocd")
-    k.apply(
-        file_path="https://raw.githubusercontent.com/argoproj/argo-cd/v2.8.4/manifests/install.yaml",
-        ns="argocd",
-    )
-    k.patch(
-        obj="cm",
-        obj_name="argocd-cm",
-        patch_file="kubernetes/argocd/argocd_cm_patch.yaml",
-        ns="argocd",
-    )
 
     if local:
-        k.patch(
-            obj="svc",
-            obj_name="argocd-server",
-            patch_file="kubernetes/argocd/argocd_svc_patch.yaml",
+        h.install(
+            release_name="argocd",
+            repo="argo/argo-cd",
+            valFile="kubernetes/argocd/dev-values.yaml",
             ns="argocd",
-            strategy="merge",
+            ChartVersion="5.51.4",
         )
-        k.patch(
-            obj="cm",
-            obj_name="argocd-cmd-params-cm",
-            patch_file="kubernetes/argocd/argocd_cmd_cm_patch.yaml",
+    else:
+        h.install(
+            release_name="argocd",
+            repo="argo/argo-cd",
+            valFile="kubernetes/argocd/values.yaml",
             ns="argocd",
+            ChartVersion="5.51.4",
         )
 
 
@@ -51,8 +44,21 @@ def config(
     """
     Deploy System Config
     """
-    # deploy AWS creds secret for ESO
+    h = HelmCMD()
     ssm = SSM()
+
+    keyVal = {}
+    if not local:
+        print("Adding EKS VPC ID")
+        keyVal["vpcID"] = get_eks_vpc()
+    h.install(
+        release_name="system-config-main",
+        HelmPath="kubernetes/system-config/main",
+        ns="argocd",
+        dev="true" if local else "false",
+        keyVal=keyVal,
+    )
+    # deploy AWS creds secret for ESO
 
     if local:
         print("Creating AWS credentials secret")
@@ -67,19 +73,6 @@ def config(
             obj_name="awssm-secret",
             from_literal={"access-key": aws_key, "secret-access-key": aws_secret},
         )
-
-    h = HelmCMD()
-    keyVal = {}
-    if not local:
-        print("Adding EKS VPC ID")
-        keyVal["vpcID"] = get_eks_vpc()
-    h.install(
-        release_name="system-config-main",
-        HelmPath="kubernetes/system-config/main",
-        ns="argocd",
-        dev="true" if local else "false",
-        keyVal=keyVal,
-    )
 
 
 @deploy.command()

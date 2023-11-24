@@ -2,7 +2,7 @@
 eks: true
 
 awsLBC:
-  syncWave: "1"
+  syncWave: "2"
   spec:
     source:
       targetRevision: 'v1.6.2'
@@ -24,7 +24,7 @@ awsLBC:
 
 
 nginx:
-  syncWave: "2"
+  syncWave: "3"
   spec:
     source:
       targetRevision: '4.8.3'
@@ -47,23 +47,6 @@ nginx:
   destination:
     server: https://kubernetes.default.svc
     ns: ingress-nginx
-
-eso:
-  syncWave: "3"
-  spec:
-    source:
-      targetRevision: '0.9.7'
-      chart: external-secrets
-      repoURL: https://charts.external-secrets.io
-      helm:
-        releaseName: external-secrets
-        valuesObject:
-            installCRDs: true
-            webhook:
-              port: 9443
-  destination:
-    server: https://kubernetes.default.svc
-    ns: external-secrets
 
 jenkins:
   syncWave: "4"

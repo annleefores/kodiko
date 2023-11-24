@@ -153,11 +153,13 @@ class HelmCMD(HelmArgs):
     def install(
         self,
         release_name: str,
-        HelmPath: str,
-        dev: str,
+        HelmPath: str | None = None,
+        repo: str | None = None,
+        dev: str | None = None,
         valFile: str | None = None,
         ns: str | None = None,
         keyVal: Dict[str, str] | None = None,
+        ChartVersion: str | None = None,
     ) -> None:
         """
         install for helm
@@ -165,12 +167,20 @@ class HelmCMD(HelmArgs):
 
         self.method_init("install")
         self.release_name(release_name)
+        if repo:
+            self.cmd.append(repo)
         self.ns(ns)
         self.values(valFile)
-        self.setVal({"dev": dev})
+        if dev:
+            self.setVal({"dev": dev})
         if keyVal:
             self.setVal(keyVal=keyVal)
-        self.cmd.append(f"./{HelmPath}")
+
+        if HelmPath:
+            self.cmd.append(f"./{HelmPath}")
+
+        if ChartVersion:
+            self.cmd += ["--version", ChartVersion]
         subprocess.run(self.cmd)
 
     def uninstall(self, release_name: str, ns: str | None = None) -> None:

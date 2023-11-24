@@ -1,15 +1,37 @@
 # prod or dev: bool
 dev: false
-
-spec:
-  source:
-    branch: dev
-    path: kubernetes/system-config/apps
-    repoURL: https://github.com/annleefores/kodiko.git
-
-destination:
-  server: https://kubernetes.default.svc
-  ns: default
-
 # EKS Cluster VPC ID - update this via --set
 vpcID: 
+
+eso:
+  syncWave: "1"
+  spec:
+    source:
+      targetRevision: '0.9.7'
+      chart: external-secrets
+      repoURL: https://charts.external-secrets.io
+      helm:
+        releaseName: external-secrets
+        valuesObject:
+            installCRDs: true
+            webhook:
+              port: 9443
+  destination:
+    server: https://kubernetes.default.svc
+    ns: external-secrets
+    
+main:
+  syncWave: "2"
+  spec:
+    source:
+      branch: dev
+      path: kubernetes/system-config/apps
+      repoURL: https://github.com/annleefores/kodiko.git
+
+  destination:
+    server: https://kubernetes.default.svc
+    ns: default
+
+
+
+
