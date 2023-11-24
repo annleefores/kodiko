@@ -12,7 +12,7 @@ container:
   name: backend
   image:
     name: annleefores/kodiko-backend
-    version: 8-265851e741ccc791bb689c2db3085afcca9388fc
+    version: '1.0.0'
 memory: "128Mi"
 cpu: "500m"
 imagePullPolicy: IfNotPresent
