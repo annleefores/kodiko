@@ -17,7 +17,7 @@ spec:
       targetRevision: {{ .spec.sources.targetRevision }}
       chart: {{ .spec.sources.chart }}
       helm:
-          releaseName: jenkins
+          releaseName: argocd-image-updater
           {{- with .spec.sources.helm.valuesObject }}
           valuesObject:
             config:
