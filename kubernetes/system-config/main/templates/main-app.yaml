@@ -4,12 +4,12 @@ kind: Application
 metadata:
   annotations:
     argocd.argoproj.io/sync-wave: {{ quote .syncWave }}
-  name: {{ $.Release.Name }}
+  name: system-config-main-app
   namespace: argocd
   finalizers:
     - resources-finalizer.argocd.argoproj.io
   labels:
-    name: {{ $.Release.Name }}
+    name: system-config-main-app
 spec:
   project: default
   source:
