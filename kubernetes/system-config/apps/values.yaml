@@ -118,6 +118,9 @@ imageUpdater:
       repoURL: https://argoproj.github.io/argo-helm
       helm:
         releaseName: argocd-image-updater
+        valuesObject:
+            config:
+              logLevel: "debug"
 
   destination:
     server: https://kubernetes.default.svc

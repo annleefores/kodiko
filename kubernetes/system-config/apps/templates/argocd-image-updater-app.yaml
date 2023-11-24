@@ -18,7 +18,12 @@ spec:
       chart: {{ .spec.sources.chart }}
       helm:
           releaseName: jenkins
-
+          {{- with .spec.sources.helm.valuesObject }}
+          valuesObject:
+            config:
+              logLevel: {{ .config.logLevel }}
+          {{- end }}
+          
   destination:
     server: {{ .destination.server }}
     namespace: {{ .destination.ns }}
