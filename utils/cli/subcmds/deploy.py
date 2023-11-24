@@ -85,9 +85,6 @@ def app(
     """
     Deploy Application
     """
-    # Launch ngrok tunnel for argocd
-    if local:
-        print("creating ngrok tunnel")
 
     h = HelmCMD()
     h.install(
