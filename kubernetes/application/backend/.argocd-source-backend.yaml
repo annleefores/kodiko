@@ -3,7 +3,7 @@ helm:
   - name: backend.image.name
     value: annleefores/kodiko-backend
     forcestring: false
-  - name: backend.image.version
+  - name: backend.image.tag
     value: 1.0.3
     forcestring: false
   - name: image.name
