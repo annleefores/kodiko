@@ -2,6 +2,12 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ .Release.Name }}-deploy
+  annotations:
+    configmap.reloader.stakater.com/reload: "backend-configmap"
+spec:
+  template: 
+    metadata:
+
 spec:
   replicas: {{ .Values.replicas }}
   selector:
