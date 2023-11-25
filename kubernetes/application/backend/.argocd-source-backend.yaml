@@ -4,5 +4,5 @@ helm:
     value: annleefores/kodiko-backend
     forcestring: true
   - name: backend.image.tag
-    value: 1.0.6
+    value: 1.0.7
     forcestring: true
