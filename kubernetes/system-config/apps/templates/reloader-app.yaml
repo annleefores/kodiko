@@ -1,0 +1,40 @@
+{{- with .Values.reloader }}
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  annotations:
+    argocd.argoproj.io/sync-wave: {{ quote .syncWave }}
+  name: reloader
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+  labels:
+    name: reloader
+spec:
+  project: default
+  sources:
+    - repoURL: {{ .spec.sources.repoURL }}
+      targetRevision: {{ .spec.sources.targetRevision }}
+      chart: {{ .spec.sources.chart }}
+      helm:
+          releaseName: {{ .spec.sources.helm.releaseName }}
+          {{- with .spec.sources.helm.valuesObject }}
+          valuesObject:
+            reloader:
+              watchGlobally: {{ .reloader.watchGlobally }}
+              isArgoRollouts: {{ .reloader.isArgoRollouts }}
+              reloadOnCreate: {{ .reloader.reloadOnCreate }}
+              syncAfterRestart: {{ .reloader.syncAfterRestart }}
+              ignoreSecrets: {{ .reloader.ignoreSecrets }}
+          {{- end }}
+          
+  destination:
+    server: {{ .destination.server }}
+    namespace: {{ .destination.ns }}
+  syncPolicy:
+    automated:
+        prune: true
+        selfHeal: true
+    syncOptions:
+    - CreateNamespace=true
+{{- end }}  

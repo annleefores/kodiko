@@ -130,8 +130,29 @@ imageUpdater:
     server: https://kubernetes.default.svc
     ns: argocd
 
+reloader:
+  syncWave: "6"
+  spec:
+    sources:
+      targetRevision: '1.0.51'
+      chart: stakater/reloader
+      repoURL: https://stakater.github.io/stakater-charts
+      helm:
+        releaseName: reloader
+        valuesObject:
+          reloader:
+            watchGlobally: false
+            isArgoRollouts: true
+            reloadOnCreate: true
+            syncAfterRestart: true
+            ignoreSecrets: true
+
+  destination:
+    server: https://kubernetes.default.svc
+    ns: kodiko-backend
+
 manifests:
-  syncWave: "5"
+  syncWave: "6"
   spec:
     source:
       branch: dev
@@ -147,7 +168,7 @@ manifests:
     ns: default
 
 sonarqube:
-  syncWave: "6"
+  syncWave: "7"
   spec:
     source:
       targetRevision: '10.3.0'
