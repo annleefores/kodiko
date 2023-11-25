@@ -57,7 +57,7 @@ pipeline {
 
     stage('build and push') {
       environment {
-        DOCKER_IMAGE = "annleefores/kodiko-backend:${BUILD_NUMBER}-${GIT_COMMIT}"
+        DOCKER_IMAGE = "annleefores/kodiko-backend:${env.SEMVER_STRING}"
       }
       steps{
         container('kaniko') {
