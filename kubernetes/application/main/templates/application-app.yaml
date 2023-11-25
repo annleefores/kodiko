@@ -6,6 +6,8 @@ metadata:
   annotations:
     argocd-image-updater.argoproj.io/image-list: annleefores/kodiko-backend:~1.0
     argocd-image-updater.argoproj.io/write-back-method: git:secret:argocd/argocd-image-updater-secret
+    argocd-image-updater.argoproj.io/backend.helm.image-name: backend.image.name
+    argocd-image-updater.argoproj.io/backend.helm.image-tag: backend.image.tag
   finalizers:
     - resources-finalizer.argocd.argoproj.io
   labels:
@@ -18,11 +20,6 @@ spec:
     path: {{ .Values.spec.source.path }}
     {{- if .Values.dev }}
     helm:
-      parameters:
-        - name: backend.image.name
-          value: annleefores/kodiko-backend
-        - name: backend.image.tag
-          value: 1.0.3
       valueFiles:
       - dev-values.yaml
     {{- end }}
