@@ -1,9 +1,9 @@
 helm:
   parameters:
-  - name: container.image.name
+  - name: backend.image.name
     value: annleefores/kodiko-backend
     forcestring: false
-  - name: container.image.version
+  - name: backend.image.version
     value: 1.0.3
     forcestring: false
   - name: image.name
