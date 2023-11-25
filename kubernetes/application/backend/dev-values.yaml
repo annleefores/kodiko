@@ -31,8 +31,9 @@ eso:
 
 cm:
   codepod:
-    image: annleefores/kodiko-codepod
-    tag: 1.0.0
+    image:
+      name: annleefores/kodiko-codepod
+      tag: 1.0.0
 
 
 

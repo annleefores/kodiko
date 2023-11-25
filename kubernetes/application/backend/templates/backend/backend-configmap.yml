@@ -4,5 +4,5 @@ metadata:
   name: backend-configmap
 data:
   ENV: PROD
-  CODEPOD_IMAGE: {{ .Values.cm.codepod.image }}
-  CODEPOD_TAG: {{ .Values.cm.codepod.tag }}
+  CODEPOD_IMAGE: {{ .Values.cm.codepod.image.name }}
+  CODEPOD_TAG: {{ .Values.cm.codepod.image.tag }}
