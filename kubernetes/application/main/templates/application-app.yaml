@@ -21,7 +21,7 @@ spec:
       parameters:
         - name: backend.image.name
           value: annleefores/kodiko-backend
-        - name: backend.image.version
+        - name: backend.image.tag
           value: 1.0.3
       valueFiles:
       - dev-values.yaml
