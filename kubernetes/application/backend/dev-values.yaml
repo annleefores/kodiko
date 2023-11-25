@@ -29,6 +29,11 @@ eso:
   COGNITO_USER_POOL_ID: /kodiko/backend/COGNITO_USER_POOL_ID
   COGNITO_CLIENT_ID: /kodiko/backend/COGNITO_CLIENT_ID
 
+cm:
+  codepod:
+    image: annleefores/kodiko-codepod
+    tag: 1.0.0
+
 
 
 
