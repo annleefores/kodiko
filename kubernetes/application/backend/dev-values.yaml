@@ -8,11 +8,11 @@ dev: true
 hostPath: /host_mnt/home/annlee/projects/kodiko/server/backend
 
 replicas: 2
-container:
+backend:
   name: backend
   image:
     name: annleefores/kodiko-backend
-    version: '1.0.0'
+    tag: '1.0.0'
 memory: "128Mi"
 cpu: "500m"
 imagePullPolicy: IfNotPresent

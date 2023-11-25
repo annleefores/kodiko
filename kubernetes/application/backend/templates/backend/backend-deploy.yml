@@ -14,8 +14,8 @@ spec:
     spec:
       serviceAccountName: {{ .Values.serviceAccountName }}
       containers:
-        - name: {{ .Values.container.name }}
-          image: {{ .Values.container.image.name }}:{{ .Values.container.image.version }}
+        - name: {{ .Values.backend.name }}
+          image: {{ .Values.backend.image.name }}:{{ .Values.backend.image.tag }}
           resources:
             limits:
               memory: {{ .Values.memory | quote }}
