@@ -20,6 +20,11 @@ spec:
     path: {{ .Values.spec.source.path }}
     {{- if .Values.dev }}
     helm:
+      parameters:
+        - name: container.image.name
+          value: annleefores/kodiko-backend
+        - name: container.image.version
+          value: 1.0.3
       valueFiles:
       - dev-values.yaml
     {{- end }}
