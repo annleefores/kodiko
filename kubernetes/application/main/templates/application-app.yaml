@@ -10,6 +10,7 @@ metadata:
     argocd-image-updater.argoproj.io/backend.helm.image-tag: backend.image.tag
     argocd-image-updater.argoproj.io/codepod.helm.image-name: cm.codepod.image.name
     argocd-image-updater.argoproj.io/codepod.helm.image-tag: cm.codepod.image.tag
+    argocd-image-updater.argoproj.io/codepod.force-update: "true"
   finalizers:
     - resources-finalizer.argocd.argoproj.io
   labels:
