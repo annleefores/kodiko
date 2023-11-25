@@ -1,11 +1,5 @@
 helm:
   parameters:
-  - name: backend.image.name
-    value: annleefores/kodiko-backend
-    forcestring: false
-  - name: backend.image.tag
-    value: 1.0.3
-    forcestring: false
   - name: image.name
     value: annleefores/kodiko-backend
     forcestring: true
