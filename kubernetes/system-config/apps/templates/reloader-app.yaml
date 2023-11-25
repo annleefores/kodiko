@@ -22,9 +22,9 @@ spec:
           valuesObject:
             reloader:
               watchGlobally: {{ .reloader.watchGlobally }}
-              isArgoRollouts: {{ .reloader.isArgoRollouts }}
-              reloadOnCreate: {{ .reloader.reloadOnCreate }}
-              syncAfterRestart: {{ .reloader.syncAfterRestart }}
+              # isArgoRollouts: {{ .reloader.isArgoRollouts }}
+              # reloadOnCreate: {{ .reloader.reloadOnCreate }}
+              # syncAfterRestart: {{ .reloader.syncAfterRestart }}
               ignoreSecrets: {{ .reloader.ignoreSecrets }}
           {{- end }}
           
