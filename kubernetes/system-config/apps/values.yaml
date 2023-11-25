@@ -135,7 +135,7 @@ reloader:
   spec:
     sources:
       targetRevision: 'v1.0.51'
-      chart: stakater/reloader
+      chart: reloader
       repoURL: https://stakater.github.io/stakater-charts
       helm:
         releaseName: reloader
