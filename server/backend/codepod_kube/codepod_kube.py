@@ -7,7 +7,7 @@ from typing import List, Dict
 
 config.load_incluster_config()
 
-namespace = os.getenv("NAMESPACE") or "kodiko-codepod"
+namespace = os.getenv("NAMESPACE", "kodiko-codepod")
 
 
 def create_pod(name: str, prev_name: str):
@@ -27,7 +27,7 @@ def create_pod(name: str, prev_name: str):
         containers=[
             client.V1Container(
                 name="codepod",
-                image="annleefores/codepod-prod:1.0.0",
+                image=f'{os.getenv("CODEPOD_IMAGE")}:{os.getenv("CODEPOD_TAG")}',
                 ports=[client.V1ContainerPort(container_port=5000)],
                 image_pull_policy="IfNotPresent",
                 resources=client.V1ResourceRequirements(
