@@ -10,5 +10,5 @@ helm:
     value: annleefores/kodiko-codepod
     forcestring: true
   - name: cm.codepod.image.tag
-    value: 1.0.3
+    value: 1-e7d6a41e9cfae7c5838422387b2216b25ca790f9
     forcestring: true
