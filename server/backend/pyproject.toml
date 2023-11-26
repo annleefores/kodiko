@@ -17,6 +17,7 @@ python-jose = {extras = ["cryptography"], version = "^3.3.0"}
 types-python-jose = "^3.3.4.8"
 types-requests = "2.31.0.5"
 kubernetes-typed = "^18.20.0"
+python-semantic-release = "^8.3.0"
 
 [build-system]
 requires = ["poetry-core"]
