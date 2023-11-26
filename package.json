@@ -1,0 +1,22 @@
+{
+  "name": "kodiko",
+  "version": "1.0.0",
+  "description": "<p align=\"center\">   <img src=\"web/public/kodiko-logo-text.png\" alt=\"kodiko logo\" style=\"width: 300px;\"></img> </p>",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "prepare": "husky install"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "husky": "^8.0.0"
+  },
+  "dependencies": {
+    "@commitlint/cli": "^18.4.3",
+    "@commitlint/config-conventional": "^18.4.3"
+  }
+}
