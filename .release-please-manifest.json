@@ -1,3 +1,4 @@
 {
-  "server/backend": "0.1.0"
+  "server/backend": "0.1.0",
+  "server/codepod": "0.1.0"
 }
