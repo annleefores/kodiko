@@ -1,6 +1,6 @@
 {
   "name": "kodiko",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "<p align=\"center\">   <img src=\"web/public/kodiko-logo-text.png\" alt=\"kodiko logo\" style=\"width: 300px;\"></img> </p>",
   "main": "index.js",
   "directories": {
