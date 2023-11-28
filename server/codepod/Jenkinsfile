@@ -55,9 +55,22 @@ pipeline {
       }
     }
 
+        stage('get tag') {
+      steps{
+        script {
+          def codepodVersion = sh(script: "git tag -l 'kodiko-backend-*' --sort='-version:refname' | head -n1 | awk -F'-' '{print \$3}'", returnStdout: true).trim()
+          echo "Current tag: ${codepodVersion}"
+        
+          // Set the version as an environment variable
+          env.VERSION = codepodVersion
+
+        }
+      }
+    }
+
     stage('build and push') {
       environment {
-        DOCKER_IMAGE = "annleefores/kodiko-codepod:${BUILD_NUMBER}-${GIT_COMMIT}"
+        DOCKER_IMAGE = "annleefores/kodiko-codepod:${VERSION}"
       }
       steps{
         container('kaniko') {
