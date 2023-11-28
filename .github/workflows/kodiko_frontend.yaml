@@ -6,11 +6,6 @@ on:
         - main
         paths:
         - "web/**"
-    pull_request:
-        branches:
-        - main
-        paths:
-        - "web/**"
 
 permissions:
   id-token: write # This is required for requesting the JWT
