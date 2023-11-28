@@ -94,7 +94,7 @@ jenkins:
 
               jobs:
                 repoURL: https://github.com/annleefores/kodiko.git
-                branch: '*/dev'
+                branch: '*/main'
             
             servicePort: 8050
             targetPort: 8080
