@@ -4,7 +4,7 @@ metadata:
   name: backend
   namespace: argocd
   annotations:
-    argocd-image-updater.argoproj.io/image-list: backend=annleefores/kodiko-backend:~0.1, codepod=annleefores/kodiko-codepod:~0.1
+    argocd-image-updater.argoproj.io/image-list: backend=annleefores/kodiko-backend:~v0.1, codepod=annleefores/kodiko-codepod:~v0.1
     argocd-image-updater.argoproj.io/write-back-method: git:secret:argocd/argocd-image-updater-secret
     argocd-image-updater.argoproj.io/backend.helm.image-name: backend.image.name
     argocd-image-updater.argoproj.io/backend.helm.image-tag: backend.image.tag
