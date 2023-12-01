@@ -36,6 +36,9 @@ pipeline {
     }
   }
 
+  // Only run when there is file changes in specified folder
+  when { changeset 'server/backend/**/*' } 
+
   stages {
     stage('sonarqube') {
     steps{
