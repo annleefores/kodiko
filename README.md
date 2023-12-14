@@ -14,6 +14,7 @@
 - Cognito
 - SST
 - GitHub Action (frontend)
+- release-please (semantic versioning)
 
 #### Kubernetes
 - EKS
@@ -25,6 +26,8 @@
 - Jenkins (backend and codepod)
 - Kaniko
 - Sonarqube
+- Reloader
+- ArgoCD Image Updater
 
 #### Frontend
 - Next.js
