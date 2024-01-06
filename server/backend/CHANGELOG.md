@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.3](https://github.com/annleefores/kodiko/compare/kodiko-backend-v0.1.2...kodiko-backend-v0.1.3) (2023-12-01)
+
+
+### Bug Fixes
+
+* configure changeset for backend pipeline ([86bb419](https://github.com/annleefores/kodiko/commit/86bb41932d7f54d026b06c202cdbdba977cd703f))
+
 ## [0.1.2](https://github.com/annleefores/kodiko/compare/kodiko-backend-v0.1.1...kodiko-backend-v0.1.2) (2023-11-28)
 
 
