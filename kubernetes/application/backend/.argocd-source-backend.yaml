@@ -4,7 +4,7 @@ helm:
     value: annleefores/kodiko-backend
     forcestring: true
   - name: backend.image.tag
-    value: v0.1.2
+    value: v0.1.3
     forcestring: true
   - name: cm.codepod.image.name
     value: annleefores/kodiko-codepod
