@@ -19,7 +19,7 @@ export default async function Home() {
         </div>
         <div>
           <p className="font-semibold text-lg text-neutral-200">
-            A simple Cloud IDE
+            A super simple Cloud IDE
           </p>
         </div>
       </div>
